@@ -5,9 +5,9 @@
 class Database {
 
 public:
-	void showProjects() {};
-	void listStudents() {};
-	void listStaff() {};
+	void showProjects();
+	void listStudents();
+	void listStaff();
 
 private:
 	std::vector<Student> studentDB;

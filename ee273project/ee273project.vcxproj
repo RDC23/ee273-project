@@ -148,7 +148,7 @@
   <ItemGroup>
     <ClInclude Include="inc\Database.h" />
     <ClInclude Include="inc\Project.h" />
-    <ClInclude Include="inc\Strategy.h" />
+    <ClInclude Include="inc\AllocationStrategy.h" />
     <ClInclude Include="inc\User.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

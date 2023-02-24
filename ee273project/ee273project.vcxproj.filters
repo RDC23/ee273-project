@@ -29,7 +29,7 @@
     <ClInclude Include="inc\Database.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Strategy.h">
+    <ClInclude Include="inc\AllocationStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
