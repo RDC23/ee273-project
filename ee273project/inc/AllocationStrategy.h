@@ -1,12 +1,15 @@
 #pragma once
 #include "User.h"
 
-//https://refactoring.guru/design-patterns/strategy/cpp/example
-//encapsulates different allocate strategies for runtime flexibility for admin class + decoupling of algorithm from class that uses it
-
+//encapsulates different allocate strategies for runtime flexibility for admin class + decoupling of algorithm from class that uses 
 class AllocationStrategy {
 
 public:
+	enum Strategy {    //enum used for saving the strategy to csv. Analagous to using a unique ID for the other classes.
+		GALESHAPELY,
+		SIMPLE
+	};
+
 	virtual void allocate() = 0;
 };
 

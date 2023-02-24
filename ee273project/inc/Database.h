@@ -5,6 +5,8 @@
 class Database {
 
 public:
+	Database(); //implement logic to 'load' the database from a csv file
+	virtual ~Database();
 	void showProjects();
 	void listStudents();
 	void listStaff();
@@ -16,5 +18,4 @@ private:
 
 	//provide the Admin with direct access to all attributes of Student and Supervisor
 	friend class Admin;
-
 };

@@ -5,6 +5,7 @@ class Project {
 public:
 	Project(std::string description, int capacity);
 	Project(std::string description, int capacity, int supervisorID, int studentID, ...); //for object construction from csv - only one supervisor but N students ...
+	virtual ~Project(); //no need to free memory as database object manages lifetime of the Student, Supervisors etc
 	std::string getDescription();
 	int getMaxCapacity();
 	std::vector<Student*> getStudents(); //possibly return this by const ref? Force other classes to use add/remove methods for encapsulation
