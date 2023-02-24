@@ -29,5 +29,8 @@
     <ClInclude Include="inc\Database.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Strategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
