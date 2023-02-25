@@ -11,7 +11,7 @@ public:
 
 
 private:
-	Database* database{ nullptr };
+	Database database{ nullptr };
 
 
 };
