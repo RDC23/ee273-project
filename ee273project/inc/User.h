@@ -18,7 +18,7 @@ public:
 	void setID(int id);
 
 private:
-	std::string name;
+	std::string full_name;
 	std::string password;
 	int myID;
 };

@@ -35,5 +35,8 @@
     <ClInclude Include="inc\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\DatabaseManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
