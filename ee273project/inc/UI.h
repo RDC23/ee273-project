@@ -20,20 +20,20 @@ public:
 	virtual std::string getOptionName() = 0;
 	virtual void doSomething() = 0;
 
-private:
-	DatabaseManager dbm; //all interfaces need controlled access to the database
+protected:
+	DatabaseManager dbm; //all interfaces need controlled access to the database view all projects for example
 
 };
 
 class StudentUI : public UserUI {
 
 public:
-	StudentUI(Student* myStudent, DatabaseManager& database); //call parent contructor and pass the database parameter
+	StudentUI(Student* myStudent, DatabaseManager& dbm); //call parent contructor and pass the database parameter
 	void displayUI() override;  //custom message + iterate through options vector and display choices with number
 	int getNumOptions() override; //allows main to handle user input (check option is in valid range without hardcoding this
 	std::string getOptionName() override;
 	void doSomething() override; //handles user choice via switch case and calls appropriate function to do action (functions below)
-	void selectProject();
+	void addProjectToPreferences();
 	void removeProject();
 	void viewMyProjects();
 	void findOutMoreProject();
@@ -48,27 +48,57 @@ private:
 		{"View my project preferences", 3},
 		{"Find out more about a project", 4},
 		{"Re-order my project preferences", 5},
-		{"Exit application", 6}
+		{"Check my assigned project", 6},
+		{"Exit application", 7}
 	};
 
 };
 
-class SupervisorUI : public UserUI { //finish implementation as above...
+class SupervisorUI : public UserUI { 
 
 public:
-	SupervisorUI(Supervisor* mySupervisor, DatabaseManager& database); //call parent constructor
+	SupervisorUI(Supervisor* mySupervisor, DatabaseManager& dbm); //call parent constructor
 	void displayUI() override;
 	int getNumOptions() override;
 	std::string getOptionName() override;
 	void doSomething() override;
+	void showProjectsOversee();
+	void editProjectMetadata();
 	
 private:
 	Supervisor* mySupervisor{ nullptr };
 
 	std::vector<std::pair<std::string, int>> options = {
-		{"Show my projects", 1}
+		{"Show projects I am overseeing", 1},
+		{"Edit a project metadata", 2}
 	};
 
 };
 
-//repeat for admin and their options...
+class AdminUI : public UserUI {
+
+public:
+	AdminUI(Admin* admin, DatabaseManager& dbm); //call parent constructor
+	void displayUI() override;
+	int getNumOptions() override;
+	std::string getOptionName() override;
+	void doSomething() override;
+	void automaticAllocate();
+	void swapAllocationStrategy();
+	void editStudent();
+	void editStaff();
+	void editProject();
+
+private:
+	Admin* myAdmin{ nullptr };
+
+	std::vector<std::pair<std::string, int>> options = {
+		{"Perform automatic allocation", 1},
+		{"Swap allocation strategy", 2},
+		{"Edit a student's data", 3},
+		{"Edit a staff member's data", 4},
+		{"Edit a project's data", 5}
+	};
+
+
+};

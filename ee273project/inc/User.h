@@ -38,9 +38,9 @@ public:
 	void setAllocatedProject(Project* to_allocate);
 
 private:
-	std::vector<Project*> projects_choices;
 	std::string degree;
 	Project* allocated;
+	std::vector<Project*> projects_choices;
 };
 
 class Supervisor :public User {
@@ -51,7 +51,6 @@ public:
 	virtual ~Supervisor();
 	void setDepartment(std::string department_name);
 	void addProjectWorkload(Project* project_to_add);
-	void removeProjectWorkload(Project* project_to_remove);
 	std::string getDepartment();
 	const std::vector<Project*>& getProjectsOversee();
 

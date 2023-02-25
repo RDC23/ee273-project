@@ -8,10 +8,6 @@ class DatabaseManager {
 public:
 	DatabaseManager(Database& myDatabase);
 	virtual ~DatabaseManager();
-	Student* findStudentInDB(int ID);
-	Student* findStudentInDB(std::string full_name);
-	Project* findProject(int module_code);
-	Project* findProject(std::string proj_name);
 
 
 private:
