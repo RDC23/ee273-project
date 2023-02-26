@@ -2,6 +2,8 @@
 #include "User.h"
 
 //encapsulates different allocate strategies for runtime flexibility for admin class + decoupling of algorithm from class that uses 
+//https://refactoring.guru/design-patterns/strategy/cpp/example
+
 class AllocationStrategy {
 
 public:

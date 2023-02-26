@@ -6,12 +6,13 @@
 class DatabaseManager {
 
 public:
-	DatabaseManager(Database& myDatabase);
+	DatabaseManager(Database* myDatabase);
 	virtual ~DatabaseManager();
+	//add methods
 
 
 private:
-	Database database{ nullptr };
+	Database* database{ nullptr };
 
 
 };
