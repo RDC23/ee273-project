@@ -18,7 +18,7 @@ public:
 	virtual void displayUI() = 0;
 	virtual int getNumOptions() = 0;
 	virtual std::string getOptionName() = 0;
-	virtual void doSomething() = 0;
+	virtual void doSomething(int choice) = 0;
 
 protected:
 	DatabaseManager* dbm; //all interfaces need controlled access to the database view all projects for example
@@ -78,7 +78,7 @@ private:
 class AdminUI : public UserUI {
 
 public:
-	AdminUI(Admin* admin, DatabaseManager* dbm, , Database* db); //call parent constructor
+	AdminUI(Admin* admin, DatabaseManager* dbm, Database* db); //call parent constructor
 	void displayUI() override;
 	int getNumOptions() override;
 	std::string getOptionName() override;
