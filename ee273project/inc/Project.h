@@ -9,15 +9,15 @@ public:
 	std::string getDescription();
 	int getMaxCapacity();
 	std::vector<Student*> getStudents(); //possibly return this by const ref? Force other classes to use add/remove methods for encapsulation
-	Supervisor* getSupervisor();
-	std::string getTitle();
-	int getModuleCode();
-	void setTitle(std::string title);
-	void setModuleCode(int module_code);
-	void setDesciption(std::string new_description);
+	Supervisor* getSupervisor() { return this->supervisor; }
+	std::string getTitle() { return this->title; }
+	int getModuleCode() { return this->module_code; }
+	void setTitle(std::string title) { this->title = title; }
+	void setModuleCode(int module_code) { this->module_code = module_code; }
+	void setDesciption(std::string new_description) { this->description = new_description; }
 	void addStudent(Student* to_add);
 	void removeStudent(Student* to_remove);
-	void setSupervisor(Supervisor* supervisor);
+	void setSupervisor(Supervisor* supervisor) { this->supervisor = supervisor; }
 	bool isFull();
 
 private:
