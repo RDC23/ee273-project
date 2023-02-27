@@ -86,7 +86,7 @@ public:
 	void automaticAllocate();
 	void swapAllocationStrategy();
 	void editStudent();
-	void editStaff();
+	void editSupervisor();
 	void editProject();
 
 private:
@@ -96,7 +96,7 @@ private:
 		{"Perform automatic allocation", 1},
 		{"Swap allocation strategy", 2},
 		{"Edit a student's data", 3},
-		{"Edit a staff member's data", 4},
+		{"Edit a supervisors's data", 4},
 		{"Edit a project's data", 5}
 	};
 
