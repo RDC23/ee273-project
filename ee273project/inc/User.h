@@ -10,13 +10,12 @@ class User  {
 public:
 	User(std::string name, std::string password, int id);
 	virtual ~User(); //important so that correct destructor is called for derived classes
-	std::string getName() { return this->full_name; }
-	std::string getPassword() { return this->password; }
-	int getID() { return this->myID; }
-	void setName(std::string name) { this->full_name = name; }
-	void setPassword(std::string password) { this->password = password; }
-	void setID(int id) {this->myID = id;}
-
+	std::string getName();
+	std::string getPassword();
+	int getID();
+	void setName(std::string name);
+	void setPassword(std::string password);
+	void setID(int id);
 private:
 	std::string full_name;
 	std::string password;
@@ -32,10 +31,10 @@ public:
 	void displayProjectChoices();	
 	void displayAllocatedProject();
 	const std::vector<Project*>& getProjectChoices(); //again, make const ref as the client code shouldn't directly modify this?
-	std::string getDegree() { return this->degree; }
-	Project* getAllocatedProject() { return this->allocated; }
+	std::string getDegree();
+	Project* getAllocatedProject();
 	void addProjectToPreferences(Project* project);
-	void setAllocatedProject(Project* to_allocate) { this->allocated = to_allocate; }
+	void setAllocatedProject(Project* to_allocate);
 
 private:
 	std::string degree;
@@ -51,9 +50,8 @@ public:
 	virtual ~Supervisor();
 	void setDepartment(std::string department_name) { this->department = department_name; }
 	void addProjectWorkload(Project* project_to_add);
-	std::string getDepartment() { return this->department; }
-	const std::vector<Project*>& getProjectsOversee() { return this->projects_oversee; }
-
+	std::string getDepartment();
+	const std::vector<Project*>& getProjectsOversee();
 private:
 	std::string department;
 	std::vector<Project*> projects_oversee;
@@ -65,8 +63,8 @@ class Admin :public User {
 public:
 	Admin(std::string name, std::string password, int id, AllocationStrategy::Strategy strat);
 	virtual ~Admin(); //do DELETE the strategy object as admin controls this lifecycle
-	void setAllocationStrategy(AllocationStrategy* strategy) { this->allocate_strategy = strategy; }
-	AllocationStrategy* getAlloactionStrategy() { return this->allocate_strategy; }
+	void setAllocationStrategy(AllocationStrategy* strategy);
+	AllocationStrategy* getAlloactionStrategy();
 
 private:
 	AllocationStrategy* allocate_strategy{ nullptr };
