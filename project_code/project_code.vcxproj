@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Project.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>

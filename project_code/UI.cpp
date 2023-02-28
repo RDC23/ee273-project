@@ -107,3 +107,17 @@ void StudentUI::viewMyProjectChoices() {
 	this->myStudent->displayProjectChoices();
 	std::cout << "\n";
 }
+
+void StudentUI::findOutMoreProject() {
+
+}
+
+void StudentUI::reOrderProjects() {
+
+}
+
+
+void StudentUI::viewAssignedProject() {
+
+
+}

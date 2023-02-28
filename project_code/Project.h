@@ -1,4 +1,7 @@
 #pragma once
+#include <vector>
+#include <string>
+#include "Project.h"
 
 class Student;
 class Supervisor;
@@ -27,7 +30,7 @@ private:
 	std::string title;
 	int module_code;
 	std::string description;
-	int maxCapacity;
+	int maxCapacity{ 0 };
 	std::vector<Student*> students;
-	Supervisor* supervisor;
+	Supervisor* supervisor{ nullptr };
 };
