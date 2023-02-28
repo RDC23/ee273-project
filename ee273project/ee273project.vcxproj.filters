@@ -18,24 +18,27 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="inc\UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\User.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\Project.h">
+    <ClInclude Include="inc\AllocationStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\Database.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\AllocationStrategy.h">
+    <ClInclude Include="inc\DatabaseManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Project.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\DatabaseManager.h">
+    <ClInclude Include="inc\User.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

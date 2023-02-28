@@ -32,7 +32,7 @@ public:
 	void displayUI() override;  //custom message + iterate through options vector and display choices with number
 	int getNumOptions() override; //allows main to handle user input (check option is in valid range without hardcoding this
 	std::string getOptionName() override;
-	void doSomething() override; //handles user choice via switch case and calls appropriate function to do action (functions below)
+	void doSomething(int choice) override; //handles user choice via switch case and calls appropriate function to do action (functions below)
 	void addProjectToPreferences();
 	void removeProject();
 	void viewMyProjects();
@@ -61,7 +61,7 @@ public:
 	void displayUI() override;
 	int getNumOptions() override;
 	std::string getOptionName() override;
-	void doSomething() override;
+	void doSomething(int choice) override;
 	void showProjectsOversee();
 	void editProjectMetadata();
 	
@@ -82,7 +82,7 @@ public:
 	void displayUI() override;
 	int getNumOptions() override;
 	std::string getOptionName() override;
-	void doSomething() override;
+	void doSomething(int choice) override;
 	void automaticAllocate();
 	void swapAllocationStrategy();
 	void editStudent();
@@ -99,6 +99,5 @@ private:
 		{"Edit a supervisors's data", 4},
 		{"Edit a project's data", 5}
 	};
-
 
 };

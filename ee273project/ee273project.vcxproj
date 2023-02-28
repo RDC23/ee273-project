@@ -144,12 +144,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="inc\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\AllocationStrategy.h" />
     <ClInclude Include="inc\Database.h" />
     <ClInclude Include="inc\DatabaseManager.h" />
     <ClInclude Include="inc\Project.h" />
-    <ClInclude Include="inc\AllocationStrategy.h" />
     <ClInclude Include="inc\UI.h" />
     <ClInclude Include="inc\User.h" />
   </ItemGroup>
