@@ -17,7 +17,7 @@ public:
 	UserUI(DatabaseManager* dbm);
 	virtual void displayUI() = 0;
 	virtual int getNumOptions() = 0;
-	virtual std::string getOptionName() = 0;
+	virtual std::string getOptionName(int choice) = 0;
 	virtual void doSomething(int choice) = 0;
 
 protected:
@@ -31,7 +31,7 @@ public:
 	StudentUI(Student* myStudent, DatabaseManager* dbm); //call parent contructor and pass the database parameter
 	void displayUI() override;  //custom message + iterate through options vector and display choices with number
 	int getNumOptions() override; //allows main to handle user input (check option is in valid range without hardcoding this
-	std::string getOptionName() override;
+	std::string getOptionName(int choice) override;
 	void doSomething(int choice) override; //handles user choice via switch case and calls appropriate function to do action (functions below)
 	void addProjectToPreferences();
 	void removeProject();
@@ -60,7 +60,7 @@ public:
 	SupervisorUI(Supervisor* mySupervisor, DatabaseManager* dbm); //call parent constructor
 	void displayUI() override;
 	int getNumOptions() override;
-	std::string getOptionName() override;
+	std::string getOptionName(int choice) override;
 	void doSomething(int choice) override;
 	void showProjectsOversee();
 	void editProjectMetadata();
@@ -81,7 +81,7 @@ public:
 	AdminUI(Admin* admin, DatabaseManager* dbm, Database* db); //call parent constructor
 	void displayUI() override;
 	int getNumOptions() override;
-	std::string getOptionName() override;
+	std::string getOptionName(int choice) override;
 	void doSomething(int choice) override;
 	void automaticAllocate();
 	void swapAllocationStrategy();
