@@ -26,11 +26,11 @@ class Student :public User {
 
 public:
 	Student(std::string name, std::string password, int id, std::string degree); //call the User constructor
-	Student(std::string name, std::string password, int id, std::string degree, int allocatedID, ...); //constructor for reading from csv
+	Student(const std::string& cvsline); //constructor for reading from csv
 	virtual ~Student(); //no need to free memory as lifetime of pointed to object managed by Database	
 	void displayAllocatedProject();
 	void displayProjectChoices();
-	const std::vector<Project*>& getProjectChoices(); //again, make const ref as the client code shouldn't directly modify this?
+	const std::vector<Project*>&getProjectChoices(); //again, make const ref as the client code shouldn't directly modify this? // changed to pointer to add preferences
 	std::string getDegree();
 	Project* getAllocatedProject();
 	void addProjectToPreferences(Project* project);
