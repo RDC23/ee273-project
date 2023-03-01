@@ -8,6 +8,7 @@
 class User  { 
 
 public:
+	User();
 	User(std::string name, std::string password, int id);
 	virtual ~User(); //important so that correct destructor is called for derived classes
 	std::string getName();
@@ -30,9 +31,11 @@ public:
 	virtual ~Student(); //no need to free memory as lifetime of pointed to object managed by Database	
 	void displayAllocatedProject();
 	void displayProjectChoices();
-	const std::vector<Project*>&getProjectChoices(); //again, make const ref as the client code shouldn't directly modify this? // changed to pointer to add preferences
+	std::vector<Project*>*getProjectChoices(); //again, make const ref as the client code shouldn't directly modify this? // changed to pointer to add preferences
 	std::string getDegree();
 	Project* getAllocatedProject();
+	std::vector<Project*>::iterator findProject(Project* to_find);
+	std::vector<Project*>::iterator findProject(std::string project_name); //get project pointer to access in vector
 	void addProjectToPreferences(Project* project);
 	void setAllocatedProject(Project* to_allocate);
 	void removeProjectFromPreferences(Project* to_remove);

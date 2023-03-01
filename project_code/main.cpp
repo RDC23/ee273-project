@@ -1,9 +1,10 @@
 #include <iostream>
-
+#include "User.h"
 
 
 
 int main() {
-	std::cout << "test";
-	
+	Project lmao = Project("shits and giggles", 12345, "for shits and giggles", 0);
+	Student Kishan = Student("Kishan Maharaj", "12345", 202129516, "MENG EEE");
+	Kishan.displayProjectChoices();
 }

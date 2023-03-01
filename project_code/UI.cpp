@@ -66,7 +66,7 @@ void StudentUI::doSomething(int choice) {
 
 void StudentUI::addProjectToPreferences() {
 	//ensure that there is still room to add another preference
-	if (!(std::size(this->myStudent->getProjectChoices()) < (this->dbm)->getProjectPickLimit()) ){
+	if (!(this->myStudent->getProjectChoices()->size() < (this->dbm)->getProjectPickLimit())) {
 		std::cout << "You don't have space to make another project selection! The maximum number "
 			"of choices is " << (this->dbm)->getProjectPickLimit() << std::endl;
 		return;
