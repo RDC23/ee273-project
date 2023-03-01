@@ -139,7 +139,6 @@ void StudentUI::removeProject(){
 void StudentUI::viewMyProjectChoices() {
 	std::cout << "Current selected projects are:\n " << std::endl;
 	myStudent->displayMyProjectChoices();
-	std::cout << "\n";
 }
 
 void StudentUI::findOutMoreProject() {
@@ -183,5 +182,9 @@ void StudentUI::reOrderProjects() {
 	
 
 void StudentUI::viewAssignedProject() {
+	if (myStudent->getAllocatedProject() == nullptr) {
+		std::cout << "You have not yet been allocated any project by a supervisor." << std::endl;
+		return;
+	}
 	std::cout << "You have been assigned to \"" << myStudent->getAllocatedProject() << "\"." << std::endl;
 }

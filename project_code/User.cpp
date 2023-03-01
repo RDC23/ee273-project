@@ -34,8 +34,11 @@ Student::Student(std::string name, std::string password, int id, std::string deg
 Student::~Student() = default;
 
 void Student::displayMyProjectChoices() {
+	if (getMyProjectChoices().size() == 0) {
+		std::cout << "No projects have been added to your preferences list yet." << std::endl;
+	}
 	for (auto n : this->getMyProjectChoices()) {
-		std::cout << n->getTitle();
+		std::cout << n->getTitle() << std::endl;
 	}
 }
 
