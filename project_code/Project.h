@@ -34,3 +34,14 @@ private:
 	std::vector<Student*> students;
 	Supervisor* supervisor{ nullptr };
 };
+
+class hasTitle {
+public:
+	hasTitle(std::string const& name) :name(name) {}
+	bool operator()(Project* const& p) {
+		return (p->getTitle() == name);
+	}
+private:
+	std::string name;
+
+};

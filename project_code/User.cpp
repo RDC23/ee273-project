@@ -1,5 +1,8 @@
 #include "User.h"
 #include <vector>
+
+User::User() = default;
+
 User::User(std::string name, std::string password, int id) {
 	this ->full_name = name;
 	this->password = password;
@@ -28,17 +31,21 @@ Student::Student(std::string name, std::string password, int id, std::string deg
 	this->degree = degree;
 }
 
-Student::Student(const std::string& csvline) {
-
-	//TODO
-
-
-}
 Student::~Student() = default;
-void Student::displayAllocatedProject() {}
-void Student::displayMyProjectChoices() {}
 
-std::vector<Project*>& Student::getProjectChoices() {
+void Student::displayAllocatedProject() {}
+
+void Student::displayMyProjectChoices() {
+	std::cout << this->getAllocatedProject();
+}
+
+void Student::displayMyProjectChoices() {
+	for (auto n : this->getMyProjectChoices()) {
+		std::cout << n->getTitle();
+	}
+}
+
+std::vector<Project*>& Student::getMyProjectChoices() {
 	return this->projects_choices;
 }
 std::string Student::getDegree() {
@@ -47,19 +54,41 @@ std::string Student::getDegree() {
 Project* Student::getAllocatedProject() {
 	return this->allocated;
 }
+
+Project* Student::findProject(Project* to_find) { //double check this
+	auto& my_projects = this->getMyProjectChoices();
+	for (auto& proj : my_projects) {
+		if (proj == to_find) {
+			return proj;
+		}
+	}
+	return nullptr;
+}
+
+
 void Student::addProjectToPreferences(Project* project) {
 
-	this->projects_choices.push_back(project); // not sure why this is accessible? It is a member function so can access class members
+	this->getMyProjectChoices().push_back(project);
+
 }
 void Student::setAllocatedProject(Project* to_allocate) {
 
 	this->allocated = to_allocate;
 }
-void Student::removeProjectFromPreferences(Project* to_remove) {
-	
-	
-	
+
+bool Student::hasProject(std::string project_name){
+	for (auto n : this->getMyProjectChoices()) {
+
+		if (n->getTitle() == project_name) {
+			return true;
+		}
+	}
+	return false;
 }
-void Student::removeProjectFromPreferences(std::string to_remove) {}
-bool Student::hasProject(std::string project_name) {}
+
+void Student::removeProjectFromPreferences(std::string to_remove) {
+	auto& myproj = this->getMyProjectChoices();
+	myproj.erase(std::remove(myproj.begin(), myproj.end(), to_remove), myproj.end());
+}
+
 
