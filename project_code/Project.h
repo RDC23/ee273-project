@@ -27,21 +27,13 @@ public:
 	bool isFull();
 
 private:
-	std::string title;
-	int module_code;
-	std::string description;
+	std::string title{ "" };
+	int module_code{ 0 };
+	std::string description{ "" };
 	int maxCapacity{ 0 };
 	std::vector<Student*> students;
 	Supervisor* supervisor{ nullptr };
 };
 
-class hasTitle {
-public:
-	hasTitle(std::string const& name) :name(name) {}
-	bool operator()(Project* const& p) {
-		return (p->getTitle() == name);
-	}
-private:
-	std::string name;
 
-};
+

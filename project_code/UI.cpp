@@ -20,7 +20,7 @@ void StudentUI::displayUI() {
 
 int StudentUI::getNumOptions() {
 	//allows main to validate the choice of doSomething() entered by the user
-	return (this->options).size();
+	return int((this->options).size());
 }
 
 std::string StudentUI::getOptionName(int choice) {

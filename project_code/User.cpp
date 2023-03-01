@@ -33,12 +33,6 @@ Student::Student(std::string name, std::string password, int id, std::string deg
 
 Student::~Student() = default;
 
-void Student::displayAllocatedProject() {}
-
-void Student::displayMyProjectChoices() {
-	std::cout << this->getAllocatedProject();
-}
-
 void Student::displayMyProjectChoices() {
 	for (auto n : this->getMyProjectChoices()) {
 		std::cout << n->getTitle();
@@ -86,9 +80,13 @@ bool Student::hasProject(std::string project_name){
 	return false;
 }
 
+// erase remove idiom Scott Meyers effective c++
+// Meyers, Scott (2001). Effective STL: 50 Specific Ways to Improve Your Use of the Standard Template Library. Addison-Wesley.
 void Student::removeProjectFromPreferences(std::string to_remove) {
 	auto& myproj = this->getMyProjectChoices();
-	myproj.erase(std::remove(myproj.begin(), myproj.end(), to_remove), myproj.end());
+	myproj.erase(std::remove_if(myproj.begin(), myproj.end(), [&](Project* project) {
+		return project->getTitle() == to_remove;
+		}), myproj.end());
 }
 
 
