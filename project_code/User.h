@@ -29,8 +29,8 @@ public:
 	Student(const std::string& cvsline); //constructor for reading from csv
 	virtual ~Student(); //no need to free memory as lifetime of pointed to object managed by Database	
 	void displayAllocatedProject();
-	void displayProjectChoices();
-	const std::vector<Project*>&getProjectChoices(); //again, make const ref as the client code shouldn't directly modify this? // changed to pointer to add preferences
+	void displayMyProjectChoices();
+    std::vector<Project*>& getProjectChoices(); 
 	std::string getDegree();
 	Project* getAllocatedProject();
 	void addProjectToPreferences(Project* project);
@@ -41,7 +41,7 @@ public:
 
 private:
 	std::string degree;
-	Project* allocated;
+	Project* allocated{ nullptr };
 	std::vector<Project*> projects_choices;
 };
 

@@ -24,10 +24,7 @@ void User::setID(int id) {
 	this->myID = id;
 }
 
-Student::Student(std::string name, std::string password, int id, std::string degree) { //unsure how to resolve?
-	this->setName(name);
-	this->setPassword(password);
-	this->setID(id);
+Student::Student(std::string name, std::string password, int id, std::string degree) : User(name, password, id) { 
 	this->degree = degree;
 }
 
@@ -38,8 +35,8 @@ Student::Student(const std::string& csvline) {
 
 }
 Student::~Student() = default;
-void Student::displayAllocatedProject();
-void Student::displayProjectChoices();
+void Student::displayAllocatedProject() {}
+void Student::displayMyProjectChoices() {}
 
 std::vector<Project*>& Student::getProjectChoices() {
 	return this->projects_choices;
@@ -52,7 +49,7 @@ Project* Student::getAllocatedProject() {
 }
 void Student::addProjectToPreferences(Project* project) {
 
-	this->projects_choices.push_back(project); // not sure why this is accessible?
+	this->projects_choices.push_back(project); // not sure why this is accessible? It is a member function so can access class members
 }
 void Student::setAllocatedProject(Project* to_allocate) {
 
@@ -63,6 +60,6 @@ void Student::removeProjectFromPreferences(Project* to_remove) {
 	
 	
 }
-void Student::removeProjectFromPreferences(std::string to_remove);
-bool Student::hasProject(std::string project_name);
+void Student::removeProjectFromPreferences(std::string to_remove) {}
+bool Student::hasProject(std::string project_name) {}
 

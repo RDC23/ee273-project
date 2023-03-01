@@ -36,7 +36,7 @@ public:
 	void doSomething(int choice) override; 
 	void addProjectToPreferences();
 	void removeProject();
-	void viewMyProjectChoices();
+	void viewMyProjectChoices(); //show the ranking of preference i.e. first in vector is 1st choice
 	void findOutMoreProject();
 	void reOrderProjects();
 	void viewAssignedProject();
@@ -103,3 +103,6 @@ private:
 	};
 
 };
+
+//Utility UI functions
+
