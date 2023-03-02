@@ -109,3 +109,4 @@ bool Project::isFull() {
 	return (std::size(this->students) >= this->maxCapacity);
 }
 
+

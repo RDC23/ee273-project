@@ -29,10 +29,12 @@ public:
 	Student(std::string name, std::string password, int id, std::string degree); //call the User constructor
 	Student(const std::string& cvsline); //constructor for reading from csv
 	virtual ~Student(); //no need to free memory as lifetime of pointed to object managed by Database	
+	void Deserialise(const std::string& csvline);
 	void displayAllocatedProject();
 	void displayMyProjectChoices();
     std::vector<Project*>& getMyProjectChoices(); 
 	std::string getDegree();
+	std::string setDegree(std::string degree);
 	Project* getAllocatedProject();
 	Project* findProject(Project* to_find);
 	Project* findProject(std::string project_name); //get project pointer to access in vector
@@ -52,18 +54,18 @@ class Supervisor :public User {
 
 public:
 	Supervisor(std::string name, std::string password, int id, std::string department); //call User constructor
-	Supervisor(std::string name, std::string password, int id, std::string department, ...); //constructor for reading from csv - ... = unknown num parameters
+	Supervisor(const std::string& csvline); //constructor for reading from csv - ... = unknown num parameters
 	virtual ~Supervisor();
-	void setDepartment(std::string department_name) { this->department = department_name; }
+	void Deserialise(const std::string& csvline);
+	void setDepartment(std::string department_name);
 	void addProjectWorkload(Project* project_to_add);
 	std::string getDepartment();
-	const std::vector<Project*>& getProjectsOversee();
+	std::vector<Project*>& getProjectsOversee();
 private:
 	std::string department;
 	std::vector<Project*> projects_oversee;
 
 };
-
 class Admin :public User {
 
 public:

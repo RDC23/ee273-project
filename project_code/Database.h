@@ -20,6 +20,9 @@ public:
 
 private:
 	static Database* instance;
+	Student* getStudent(std::string name);
+	Supervisor* getSupervisor(std::string name);
+	Supervisor* getProject(std::string name);
 
 	Database();
 	virtual ~Database(); //implement logic to save all data to csv then free all pointer data
