@@ -11,7 +11,8 @@ class Project {
 public:
 	Project(std::string title, int module_code, std::string description, int capacity);
 	Project(const std::string& csvline); //constructs Project without Assosiations...
-	void Deserialise(const std::string& csvline);
+	void Associate(const std::string& csvline); //in user.cpp
+	std::string Serialise(); //in user.cpp
 	virtual ~Project(); //no need to free memory as database object manages lifetime of the Student, Supervisors etc
 	std::string getDescription();
 	int getMaxCapacity();

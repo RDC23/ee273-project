@@ -1,5 +1,6 @@
 #include "User.h"
-#include <vector>
+#include <stdio.h>
+
 
 User::User() = default;
 User::User(std::string name, std::string password, int id) {
@@ -52,6 +53,7 @@ Student::Student(const std::string& csvline) {
 
 
 		}
+		member_num++;
 	}
 }
 Student::~Student() = default;
@@ -72,7 +74,7 @@ std::vector<Project*>& Student::getMyProjectChoices() {
 std::string Student::getDegree() {
 	return this->degree;
 }
-std::string Student::setDegree(std::string degree) {
+void Student::setDegree(std::string degree) {
 	this->degree = degree;
 }
 Project* Student::getAllocatedProject() {
@@ -122,6 +124,31 @@ Project* Student::findProject(std::string project_name) {
 		});
 
 }
+void Student::Associate(const std::string& csvline) {
+	int member_num{ 1 };
+	std::string member;
+	std::stringstream ss(csvline);
+	while (std::getline(ss, member, ',')) {
+		if (member_num == 5) {
+			this->setAllocatedProject(DB.getProject(member));
+		}
+		else if(member_num > 5) {
+			this->addProjectToPreferences(DB.getProject(member));
+		}
+		member_num++;
+	}
+}
+std::string Student::Serialise() {
+	std::string ans = this->getName() + ',' +
+		this->getPassword() + ',' +
+		std::to_string(this->getID()) + ',' +
+		this->getDegree();
+	for (auto n : this->getMyProjectChoices()) {
+		ans += ',' + n->getTitle();
+ }
+	return ans;
+
+}
 
 Supervisor::Supervisor(std::string name, std::string password, int id, std::string department) {
 	this->setName(name);
@@ -169,7 +196,28 @@ std::string Supervisor::getDepartment() {
  std::vector<Project*>& Supervisor::getProjectsOversee() {
 	 return this->projects_oversee;
 }
+ void Supervisor::Associate(const std::string& csvline) {
+	 int member_num{ 1 };
+	std::string member;
+	std::stringstream ss(csvline);
+	while (std::getline(ss, member, ',')) {
+		if (member_num < 4) {
+			this->addProjectWorkload(DB.getProject(member));
+		}
+		member_num++;
+	}
+ }
+ std::string Supervisor::Serialise() {
+	 std::string ans = this->getName() + ',' +
+		 this->getPassword() + ',' +
+		 std::to_string(this->getID()) + ',' +
+		 this->getDepartment();
+	 for (auto n : this->getProjectsOversee()) {
+		 ans += ',' + n->getTitle();
+	 }
+	 return ans;
 
+ }
  Admin::Admin(std::string name, std::string password, int id, AllocationStrategy::Strategy strat) {
 	 this->setName(name);
 	 this->setPassword(password);
@@ -187,3 +235,32 @@ std::string Supervisor::getDepartment() {
  AllocationStrategy* Admin::getAlloactionStrategy() {
 	 return this->allocate_strategy;
  }
+
+ std::string Project::Serialise() {
+	 Supervisor* p = this->getSupervisor();
+	 std::string ans = this->getTitle() + ',' +
+		 std::to_string(this->getModuleCode()) + ',' +
+		 this->getDescription() + ',' +
+		 std::to_string(this->getMaxCapacity()) + ',' +
+		 this->getSupervisor()->getName();
+	 for (auto n : this->getStudents()) {
+		 ans += ',' + n->getName();
+	 }
+	 return ans;
+ }
+ void Project::Associate(const std::string& csvline) {
+	 int member_num{ 1 };
+	 std::string member;
+	 std::stringstream ss(csvline);
+	 while (std::getline(ss, member, ',')) {
+		 if (member_num == 5) {
+			 this->setSupervisor(DB.getSupervisor(member));
+		 }
+		 else if (member_num > 5) {
+			 this->addStudent(DB.getStudent(member));
+		 }
+		 member_num++;
+	 }
+
+ }
+

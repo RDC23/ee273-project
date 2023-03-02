@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Project.h"
 #include "AllocationStrategy.h"
+#include "Database.h"
 
 class User  { 
 
@@ -29,12 +30,13 @@ public:
 	Student(std::string name, std::string password, int id, std::string degree); //call the User constructor
 	Student(const std::string& cvsline); //constructor for reading from csv
 	virtual ~Student(); //no need to free memory as lifetime of pointed to object managed by Database	
-	void Deserialise(const std::string& csvline);
+	void Associate(const std::string& csvline);
+	std::string Serialise();
 	void displayAllocatedProject();
 	void displayMyProjectChoices();
     std::vector<Project*>& getMyProjectChoices(); 
 	std::string getDegree();
-	std::string setDegree(std::string degree);
+	void setDegree(std::string degree);
 	Project* getAllocatedProject();
 	Project* findProject(Project* to_find);
 	Project* findProject(std::string project_name); //get project pointer to access in vector
@@ -56,7 +58,8 @@ public:
 	Supervisor(std::string name, std::string password, int id, std::string department); //call User constructor
 	Supervisor(const std::string& csvline); //constructor for reading from csv - ... = unknown num parameters
 	virtual ~Supervisor();
-	void Deserialise(const std::string& csvline);
+	void Associate(const std::string& csvline);
+	std::string Serialise();
 	void setDepartment(std::string department_name);
 	void addProjectWorkload(Project* project_to_add);
 	std::string getDepartment();

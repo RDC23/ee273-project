@@ -17,13 +17,13 @@ public:
 	//	return instance;
 	//}
 	void loadDBfromCSV();
+	Student* getStudent(std::string name);
+	Supervisor* getSupervisor(std::string name);
+	Project* getProject(std::string name);
 
 private:
 	static Database* instance;
-	Student* getStudent(std::string name);
-	Supervisor* getSupervisor(std::string name);
-	Supervisor* getProject(std::string name);
-
+	
 	Database();
 	virtual ~Database(); //implement logic to save all data to csv then free all pointer data
 	Database(const Database&); //prevent multiple instances being created due to copy construction
@@ -35,3 +35,4 @@ private:
 
 //initialise the static instance variable as null in the Database.cpp file (doing so in header would create multiple instances
 //for every #inlcude, defeating purpose of singleton pattern
+Database DB; // this is just for now, it can go somewhere else later when load function is finished
