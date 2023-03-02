@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include "Project.h"
-
+#include <sstream>
 class Student;
 class Supervisor;
 
@@ -10,12 +10,14 @@ class Project {
 
 public:
 	Project(std::string title, int module_code, std::string description, int capacity);
-	Project(const std::string& csvline); //for object construction from csv - only one supervisor but N students ...
+	Project(const std::string& csvline); //constructs Project without Assosiations...
+	void Deserialise(const std::string& csvline);
 	virtual ~Project(); //no need to free memory as database object manages lifetime of the Student, Supervisors etc
 	std::string getDescription();
 	int getMaxCapacity();
+	void setMaxCapacity(int capacity);
     std::vector<Student*>& getStudents(); //possibly return this by const ref? Force other classes to use add/remove methods for encapsulation
-	std::vector<Student*>::iterator findStudent(Student* to_find);
+	Student*  findStudent(Student* to_find);
 	Supervisor* getSupervisor();
 	std::string getTitle();
 	int getModuleCode();
@@ -32,8 +34,9 @@ private:
 	int module_code{ 0 };
 	std::string description{ "" };
 	int maxCapacity{ 0 };
-	std::vector<Student*> students;
 	Supervisor* supervisor{ nullptr };
+	std::vector<Student*> students;
+	
 };
 
 
