@@ -77,31 +77,28 @@ void Project::setModuleCode(int module_code)
 	this->module_code = module_code;
 }
 
-void Project::setDesciption(std::string new_description)
-{
+void Project::setDesciption(std::string new_description){
 	this->description = new_description;
 }
 void Project::setMaxCapacity(int capacity) {
 	this->maxCapacity = capacity;
 }
 
-void Project::addStudent(Student* to_add)
-{
+void Project::addStudent(Student* to_add){
 	this->getStudents().push_back(to_add);
 }
-Student* Project::findStudent(Student* to_find) {
 
-	auto ptr = this->getStudents();
-	 return *find(ptr.begin(), ptr.end(), to_find);
+Student* Project::findStudent(Student* to_find) {
+	auto& ptr = this->getStudents();
+    return *find(ptr.begin(), ptr.end(), to_find);
 }
-void Project::removeStudent(Student* to_remove)
-{
-	auto ptr = this->getStudents();
+
+void Project::removeStudent(Student* to_remove){
+	auto& ptr = this->getStudents();
 	this->getStudents().erase(std::find(ptr.begin(),ptr.end(),to_remove)); //double check this
 }
 
-void Project::setSupervisor(Supervisor* supervisor)
-{
+void Project::setSupervisor(Supervisor* supervisor) {
 	this->supervisor = supervisor;
 }
 
