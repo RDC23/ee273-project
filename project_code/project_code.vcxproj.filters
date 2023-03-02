@@ -53,5 +53,19 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Database.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Project.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Student.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Supervisor.csv">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

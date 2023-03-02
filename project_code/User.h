@@ -75,6 +75,7 @@ public:
 	Admin(std::string name, std::string password, int id, AllocationStrategy::Strategy strat);
 	virtual ~Admin(); //do DELETE the strategy object as admin controls this lifecycle
 	void setAllocationStrategy(AllocationStrategy* strategy);
+	void setAllocationStrategy(AllocationStrategy::Strategy strategy_type);
 	AllocationStrategy* getAlloactionStrategy();
 
 private:
