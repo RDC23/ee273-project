@@ -3,10 +3,13 @@
 
 Project::Project(std::string title, int module_code, std::string description, int capacity)
 {
-	// constructor implementation goes here
+	this->title = title;
+	this->module_code = module_code;
+	this->description = description;
+	this->maxCapacity = capacity;
 }
 
-Project::Project(std::string title, int module_code, std::string description, int capacity, int supervisorID, int studentID, ...)
+Project::Project(const std::string& csvline)
 {
 	// constructor implementation goes here
 }
@@ -17,16 +20,16 @@ Project::~Project()
 }
 
 std::string Project::getDescription() {
-	// function implementation goes here
-	return "";
+	
+	return this->description;
 }
 
 int Project::getMaxCapacity() {
 	// function implementation goes here
-	return 1;
+	return this->maxCapacity;
 }
 
-std::vector<Student*> Project::getStudents() {
+std::vector<Student*>& Project::getStudents() {
 	return this->students;
 }
 
@@ -48,27 +51,31 @@ void Project::setTitle(std::string title) {
 
 void Project::setModuleCode(int module_code)
 {
-	// function implementation goes here
+	this->module_code = module_code;
 }
 
 void Project::setDesciption(std::string new_description)
 {
-	// function implementation goes here
+	this->description = new_description;
 }
 
 void Project::addStudent(Student* to_add)
 {
-	// function implementation goes here
+	this->getStudents().push_back(to_add);
 }
+std::vector<Student*>::iterator Project::findStudent(Student* to_find) {
 
+	auto ptr = this->getStudents();
+	return find(ptr.begin(), ptr.end(), to_find);
+}
 void Project::removeStudent(Student* to_remove)
 {
-	// function implementation goes here
+	this->getStudents().erase(this->findStudent(to_remove)); //double check this
 }
 
 void Project::setSupervisor(Supervisor* supervisor)
 {
-	// function implementation goes here
+	this->supervisor = supervisor;
 }
 
 bool Project::isFull() {
