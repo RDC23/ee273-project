@@ -83,12 +83,8 @@ std::vector<Project*>& Student::getMyProjectChoices() {
 std::string Student::getDegree() {
 	return this->degree;
 }
-<<<<<<< HEAD
-void Student::setDegree(std::string degree) {
-=======
 
-std::string Student::setDegree(std::string degree) {
->>>>>>> c45b9bbb6c253bfccd16fdb7f98c0be99c6eb360
+void Student::setDegree(std::string degree) {
 	this->degree = degree;
 }
 
@@ -148,10 +144,10 @@ void Student::Associate(const std::string& csvline) {
 	std::stringstream ss(csvline);
 	while (std::getline(ss, member, ',')) {
 		if (member_num == 5) {
-			this->setAllocatedProject(DB.getProject(member));
+			this->setAllocatedProject(Database::getInstance()->getProject(member));  //to access the database instance you have to use Database::getInstance(). Kind of like a global variable
 		}
 		else if(member_num > 5) {
-			this->addProjectToPreferences(DB.getProject(member));
+			this->addProjectToPreferences(Database::getInstance()->getProject(member));
 		}
 		member_num++;
 	}
@@ -226,7 +222,7 @@ std::string Supervisor::getDepartment() {
 	std::stringstream ss(csvline);
 	while (std::getline(ss, member, ',')) {
 		if (member_num < 4) {
-			this->addProjectWorkload(DB.getProject(member));
+			this->addProjectWorkload(Database::getInstance()->getProject(member));
 		}
 		member_num++;
 	}
@@ -293,10 +289,10 @@ std::string Supervisor::getDepartment() {
 	 std::stringstream ss(csvline);
 	 while (std::getline(ss, member, ',')) {
 		 if (member_num == 5) {
-			 this->setSupervisor(DB.getSupervisor(member));
+			 this->setSupervisor(Database::getInstance()->getSupervisor(member));
 		 }
 		 else if (member_num > 5) {
-			 this->addStudent(DB.getStudent(member));
+			 this->addStudent(Database::getInstance()->getStudent(member));
 		 }
 		 member_num++;
 	 }

@@ -1,8 +1,18 @@
 #include "Database.h"
 
+//declare singleton instance of the database 
+Database* db = Database::getInstance();
 
+Database* Database::getInstance(){ 
+	if (instance == nullptr) {
+		instance = new Database();
+		instance->loadDBfromCSV();
+	}
+	return instance;
+}
 
 void loadDBfromCSV();
+
 Student* Database::getStudent(std::string name) {
 	std::vector<Student>* ptr = &this->studentDB;
 	return &*std::find_if(ptr->begin(), ptr->end(), [&](Student student) {

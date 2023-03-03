@@ -8,14 +8,7 @@
 class Database {
 
 public:
-	static Database getInstance(); //if instance null then call loadDBcsv function, else return instance as demonstrated below
-	//	{
-	// if (instance == nullptr) {
-	//		instance = new Database();
-	//		instance->loadDBfromCSV;
-	//	}
-	//	return instance;
-	//}
+	static Database* getInstance();
 	void loadDBfromCSV();
 	Student* getStudent(std::string name);
 	Supervisor* getSupervisor(std::string name);
@@ -35,4 +28,4 @@ private:
 
 //initialise the static instance variable as null in the Database.cpp file (doing so in header would create multiple instances
 //for every #inlcude, defeating purpose of singleton pattern
-Database DB; // this is just for now, it can go somewhere else later when load function is finished
+
