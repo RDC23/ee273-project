@@ -12,6 +12,7 @@ public:
 	void printProjectsNotSelected(Student* student); //show all projects not in the student's preferences
 	void printListOfProjects();
 	int getProjectPickLimit();
+	const std::vector<Project>& getAllProjectsReadOnly();
 	Project* findProjectByTitle(std::string title);  //format both strings as lower/upper to not make case sensitive
 	Project* findProjectByModcode(int modcode);
 	bool isValidProjectTitle(const std::string);

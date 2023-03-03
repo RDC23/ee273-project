@@ -1,13 +1,16 @@
 #include <algorithm>
+#include <unordered_map>
 #include "UI.h"
 #include "Utils.h"
 
 //User UI methods
+
 UserUI::UserUI(DatabaseManager* dbm) {
 	this->dbm = dbm;
 }
 
 //Student UI methods
+
 StudentUI::StudentUI(Student* myStudent, DatabaseManager* dbm) : UserUI(dbm), myStudent(myStudent) {};
 
 void StudentUI::displayUI() {
@@ -142,7 +145,37 @@ void StudentUI::viewMyProjectChoices() {
 }
 
 void StudentUI::findOutMoreProject() {
+	std::cout << "Which project would you like to find out more details about?"
+		"The currently available projects are:" << std::endl;
+	//create a map (associative array) of int to project
+	const auto& projects_available = dbm->getAllProjectsReadOnly();
+	std::unordered_map<int, Project> int_to_project;	
 
+	//populate the map for easy indexing
+	for (int i = 1; i <= projects_available.size(); i++){
+		int_to_project[i] = projects_available[i];
+	}
+	//show the number and project
+	for (auto& enumerated_project : int_to_project) {
+		std::cout << enumerated_project.first << ". " << enumerated_project.second.getTitle() << std::endl;
+	}
+
+	//loop till quit
+	bool exit = false;
+	while (!exit) {
+		//get valid integer and print the details or an error message if non valid
+		int choice = getValidInteger("\nEnter the number corresponding with the project you want to view more details about (or '0' to quit): ");
+		if (int_to_project.count(choice)) {
+			int_to_project[choice].prettyPrint();
+		}
+		if (choice == 0) {
+			std::cout << "Exiting to main menu." << std::endl;
+			exit = true;
+		}
+		else{
+			std::cout << "That isn't a valid project number. " << std::endl;
+		}
+	}
 }
 
 void StudentUI::reOrderProjects() {
@@ -187,4 +220,86 @@ void StudentUI::viewAssignedProject() {
 		return;
 	}
 	std::cout << "You have been assigned to \"" << myStudent->getAllocatedProject() << "\"." << std::endl;
+}
+
+//Supervisor UI methods
+
+SupervisorUI::SupervisorUI(Supervisor* mySupervisor, DatabaseManager* dbm) : UserUI(dbm), mySupervisor(mySupervisor) {};
+
+void SupervisorUI::displayUI() {
+	std::cout << "Welcome to the Project Selection Portal for Supervisors!\n" << std::endl;
+	//show all options offered in the student options vector attribute
+	for (auto& option : this->options) {
+		std::cout << option.second << ". " << option.first << std::endl;
+	}
+}
+
+int SupervisorUI::getNumOptions() {
+	return int((this->options).size());
+};
+
+std::string SupervisorUI::getOptionName(int choice) {
+	std::string optionName;
+	for (auto& option : this->options) {
+		if (option.second == choice) {
+			return option.first;
+		}
+	}
+	return "Invalid option.";
+}
+
+void SupervisorUI::doSomething(int choice) {
+	switch (choice) {
+		case 1:
+			this->showProjectsOversee();
+			break;
+		case 2:
+			this->getProjectToEdit();
+			break;
+		default:
+			std::cout << "An invalid choice was entered" << std::endl;
+	}
+}
+
+void SupervisorUI::showProjectsOversee() {
+	std::cout << "You are currently a supervisor for the following projects:\n" << std::endl;
+	const auto& my_projs = mySupervisor->getProjectsOversee();
+	for (auto& proj : my_projs) {
+		std::cout << proj->getTitle() << std::endl;
+	}
+}
+
+void SupervisorUI::editProjectMetadata(Project* to_edit) {
+	//implement this function
+}
+
+void SupervisorUI::getProjectToEdit() {
+	std::cout << "You are currently supervising the following projects:\n" << std::endl;
+	//create a map (associative array) of int to project
+	auto& projects_available = mySupervisor->getProjectsOversee();
+	std::unordered_map<int, Project*> int_to_project;
+
+	//populate the map for easy indexing
+	for (int i = 1; i <= projects_available.size(); i++) {
+		int_to_project[i] = projects_available[i];
+	}
+	//show the number and project
+	for (auto& enumerated_project : int_to_project) {
+		std::cout << enumerated_project.first << ". " << enumerated_project.second->getTitle() << std::endl;
+	}
+	bool exit = false;
+	while (!exit) {
+		//get the project to edit
+		int choice = getValidInteger("Enter the number of the project you wish to edit the metadata of (or '0' to exit):");
+		if (choice == 0) {
+			std::cout << "Exiting the project editor and returning to the main menu." << std::endl;
+			exit = true;
+		}
+		if (int_to_project.count(choice)) { //it exists therefore a valid input 
+			editProjectMetadata(int_to_project[choice]);
+		}
+		else {
+			std::cout << "Project number entered isn't valid. Please try again or exit." << std::endl;
+		}
+	}
 }

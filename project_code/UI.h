@@ -65,7 +65,8 @@ public:
 	std::string getOptionName(int choice) override;
 	void doSomething(int choice) override;
 	void showProjectsOversee();
-	void editProjectMetadata();
+	void getProjectToEdit();
+	void editProjectMetadata(Project* proj_to_edit);
 	
 private:
 	Supervisor* mySupervisor{ nullptr };
@@ -74,7 +75,7 @@ private:
 		{"Show projects I am overseeing", 1},
 		{"Edit a project metadata", 2}
 	};
-
+	
 };
 
 class AdminUI : public UserUI {

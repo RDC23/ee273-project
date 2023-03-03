@@ -29,6 +29,7 @@ public:
 	void removeStudent(Student* to_remove);
 	void setSupervisor(Supervisor* supervisor);
 	bool isFull();
+	void prettyPrint(); ///show the title, description, capacity and supervisor all formatted in a nice block
 
 private:
 	std::string title{ "" };

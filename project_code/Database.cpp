@@ -1,6 +1,6 @@
 #include "Database.h"
 
-//declare singleton instance of the database 
+//instantiate the singleton instance of the database 
 Database* db = Database::getInstance();
 
 Database* Database::getInstance(){ 
