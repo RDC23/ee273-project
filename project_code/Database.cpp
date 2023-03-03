@@ -11,7 +11,44 @@ Database* Database::getInstance(){
 	return instance;
 }
 
-void loadDBfromCSV();
+void Database::loadDBfromCSV() {
+	std::string student, project, supervisor;
+	std::ifstream StudentStream("Student.csv");
+	std::ifstream ProjectStream("Project.csv");
+	std::ifstream SupervisorStream("Supevisor");
+
+	while (std::getline(StudentStream, student)) { // instantiate each student,project,teacher object 
+		this->studentDB.push_back(Student(student));
+	}
+	while (std::getline(ProjectStream, project)) {
+		this->projectDB.push_back(Project(project));
+	}
+	while (std::getline(StudentStream, supervisor)) {
+		this->supervisorDB.push_back(Supervisor(supervisor));
+	}
+
+	for (auto &n : this->studentDB) {
+		while (std::getline(StudentStream, student)) { // for each object in the vector, find the corresponding csv data
+			if (Student(student).getName() == n.getName()) {                                        //and map association
+				n.Associate(student);
+			 }
+		}
+	}
+	for (auto& n : this->projectDB) {
+		while (std::getline(ProjectStream, project)) {
+			if (Project(project).getTitle() == n.getTitle()) {      //this is genuinely the worst code ever written
+				n.Associate(project);
+			}
+		}
+	}
+	for (auto& n : this->supervisorDB) {
+		while (std::getline(SupervisorStream, supervisor)) { 
+			if (Supervisor(supervisor).getName() == n.getName()) {                                        
+				n.Associate(supervisor);
+			}
+		}
+	}
+}
 
 Student* Database::getStudent(std::string name) {
 	auto& student_db = this->studentDB;

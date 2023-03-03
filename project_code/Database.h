@@ -1,6 +1,7 @@
 #pragma once
 #include "Project.h"
 #include "User.h"
+#include <fstream>
 
 //employ singleton design pattern to ensure only one database instance ever exists in program state
 //https://refactoring.guru/design-patterns/singleton/cpp/example

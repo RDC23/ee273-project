@@ -11,6 +11,9 @@ User::User(std::string name, std::string password, int id) {
 }
 User::~User() = default;
 
+std::string User::getName() {
+	return this->full_name;
+}
 std::string User::getPassword() {
 	return this->password;
 }
