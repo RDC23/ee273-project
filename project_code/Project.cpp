@@ -1,5 +1,6 @@
 #include "Project.h"
-#
+#include "User.h"
+#include "Utils.h"
 
 Project::Project(std::string title, int module_code, std::string description, int capacity)
 {
@@ -9,8 +10,7 @@ Project::Project(std::string title, int module_code, std::string description, in
 	this->maxCapacity = capacity;
 }
 
-Project::Project(const std::string& csvline)
-{
+Project::Project(const std::string& csvline) {
 	int member_num{ 1 };
 	std::string member;
 	std::stringstream ss(csvline);
@@ -30,11 +30,13 @@ Project::Project(const std::string& csvline)
 		case 4:
 			this->setMaxCapacity(stoi(member));
 			break;
-		default:
+		case 5:
+			this->supervisor_identifier = stoi(member);
 			break;
-
-
+		default:
+			this->student_identifiers.push_back(stoi(member));
 		}
+		member_num++;
 	}
 }
 
@@ -106,8 +108,38 @@ bool Project::isFull() {
 	return (std::size(this->students) >= this->maxCapacity);
 }
 
+std::string Project::Serialise() {
+	//save all the definite fields in comma seperated format
+	std::string serial_string = this->getTitle() + ',' +
+		std::to_string(this->getModuleCode()) + ',' +
+		this->getDescription() + ',' +
+		std::to_string(this->getMaxCapacity()) + ',' +
+		std::to_string(this->getSupervisor()->getID());
+
+	//save the remaining projects
+	for (auto& student : this->getStudents()) {
+		serial_string += ',' + student->getID();
+	}
+	return serial_string;
+}
+
+void Project::prettyPrint() {
+	std::cout << this->getTitle() << " : (Module Code " << this->getModuleCode() << ")" << std::endl;
+	printLineSep();
+	std::cout << "Supervisor: " << this->getSupervisor()->getName() << std::endl;
+	std::cout << "Project description: ";
+	std::cout << this->getDescription() << std::endl;
+	std::cout << "Capacity: " << this->getMaxCapacity() << " students.\n" << std::endl;
+}
+
+int Project::getSupervisorIdentifier() {
+	return this->supervisor_identifier;
+}
 
 
+std::vector<int> Project::getStudentIdentifiers() {
+	return this->getStudentIdentifiers();
+}
 
 
 

@@ -18,6 +18,7 @@ public:
 	void setName(std::string name);
 	void setPassword(std::string password);
 	void setID(int id);
+	virtual std::string Serialise() = 0;
 private:
 	std::string full_name;
 	std::string password;
@@ -30,8 +31,7 @@ public:
 	Student(std::string name, std::string password, int id, std::string degree); //call the User constructor
 	Student(const std::string& cvsline); //constructor for reading from csv
 	virtual ~Student(); //no need to free memory as lifetime of pointed to object managed by Database	
-	void Associate(const std::string& csvline);
-	std::string Serialise();
+	std::string Serialise() override;
 	void displayAllocatedProject();
 	void displayMyProjectChoices();
     std::vector<Project*>& getMyProjectChoices(); 
@@ -39,14 +39,19 @@ public:
 	void setDegree(std::string degree);
 	Project* getAllocatedProject();
 	Project* findProject(Project* to_find);
-	Project* findProject(std::string project_name); //get project pointer to access in vector
+	Project* findProject(std::string project_name); 
 	void addProjectToPreferences(Project* project);
 	void setAllocatedProject(Project* to_allocate);
 	void removeProjectFromPreferences(Project* to_remove);
 	void removeProjectFromPreferences(std::string to_remove);
-	bool hasProject(std::string project_name); //check if this is in the project_choices vector 
+	bool hasProject(std::string project_name);
+	int getAllocatedIdenifier();
+	std::vector<int>& getPreferenceIdentifiers();
+
 
 private:
+	std::vector<int> preference_identifiers; //for assisting the serialisation process as pointer cannot be saved
+	int allocated_identifier{ 0 }; //for assisting the serialisation process as pointer cannot be saved
 	std::string degree;
 	Project* allocated{ nullptr };
 	std::vector<Project*> projects_choices;
@@ -58,13 +63,16 @@ public:
 	Supervisor(std::string name, std::string password, int id, std::string department); //call User constructor
 	Supervisor(const std::string& csvline); //constructor for reading from csv - ... = unknown num parameters
 	virtual ~Supervisor();
-	void Associate(const std::string& csvline);
-	std::string Serialise();
+	std::string Serialise() override;
 	void setDepartment(std::string department_name);
 	void addProjectWorkload(Project* project_to_add);
 	std::string getDepartment();
 	std::vector<Project*>& getProjectsOversee();
+	std::vector<int>& getProjectIdentifiers();
+
+
 private:
+	std::vector<int> project_identifiers; //for assisting the serialisation process as pointer cannot be saved
 	std::string department;
 	std::vector<Project*> projects_oversee;
 
@@ -72,13 +80,16 @@ private:
 class Admin :public User {
 
 public:
+	Admin() = default;
 	Admin(std::string name, std::string password, int id, AllocationStrategy::Strategy strat);
+	std::string Serialise() override;
 	virtual ~Admin(); //do DELETE the strategy object as admin controls this lifecycle
 	void setAllocationStrategy(AllocationStrategy* strategy);
 	void setAllocationStrategy(AllocationStrategy::Strategy strategy_type);
 	AllocationStrategy* getAlloactionStrategy();
 
 private:
+	std::string strategy_identifier; //for assisting the serialisation process as pointer cannot be saved
 	AllocationStrategy* allocate_strategy{ nullptr };
 };
 

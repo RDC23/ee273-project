@@ -37,3 +37,7 @@ std::string getValidString(const std::string message) {
     }
     return input;
 }
+
+void printLineSep() {
+    std::cout << "-----------------------------------------------" << std::endl;
+}

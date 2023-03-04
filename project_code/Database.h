@@ -2,31 +2,26 @@
 #include "Project.h"
 #include "User.h"
 #include <fstream>
-
-//employ singleton design pattern to ensure only one database instance ever exists in program state
-//https://refactoring.guru/design-patterns/singleton/cpp/example
+#include "AllocationStrategy.h"
 
 class Database {
 
 public:
-	static Database* getInstance();
+	Database(); //load in from csv and then construct the associations for each object
+	virtual ~Database(); //implement logic to save all data to csv then free all pointer data
 	void loadDBfromCSV();
 	Student* getStudent(std::string name);
 	Supervisor* getSupervisor(std::string name);
 	Project* getProject(std::string name);
+	std::vector<Project>& getProjects();
+	std::vector<Supervisor>& getSupervisors();
+	Admin* getAdmin();
 
-private:
-	static Database* instance;
-	
-	Database();
-	virtual ~Database(); //implement logic to save all data to csv then free all pointer data
+private:	
 	Database(const Database&); //prevent multiple instances being created due to copy construction
 	std::vector<Student> studentDB;
 	std::vector<Supervisor> supervisorDB;
 	std::vector<Project> projectDB;
-
+	Admin systemAdmin;
 };
-
-//initialise the static instance variable as null in the Database.cpp file (doing so in header would create multiple instances
-//for every #inlcude, defeating purpose of singleton pattern
 

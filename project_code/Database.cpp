@@ -1,53 +1,82 @@
+#include <unordered_map>
 #include "Database.h"
 
-//instantiate the singleton instance of the database 
-Database* db = Database::getInstance();
-
-Database* Database::getInstance(){ 
-	if (instance == nullptr) {
-		instance = new Database();
-		instance->loadDBfromCSV();
-	}
-	return instance;
+Database::Database() {
+	//when the database is created, load in all the pre-existing data
+	this->loadDBfromCSV();
 }
 
 void Database::loadDBfromCSV() {
+	//initialise stream variables and strings to hold intermediate strings for object constructors
 	std::string student, project, supervisor;
 	std::ifstream StudentStream("Student.csv");
 	std::ifstream ProjectStream("Project.csv");
-	std::ifstream SupervisorStream("Supevisor");
+	std::ifstream SupervisorStream("Supervisor.csv");
 
-	while (std::getline(StudentStream, student)) { // instantiate each student,project,teacher object 
-		this->studentDB.push_back(Student(student));
+	//initialise a map of student, project, and staff identifier to object for o(n) lookup
+	std::unordered_map<int, Supervisor*> id_to_supervisor;
+	std::unordered_map<int, Student*> id_to_student;
+	std::unordered_map<int, Project*> id_to_project;
+
+	//instantiate each student and add to map
+	while (std::getline(StudentStream, student)) { 
+		studentDB.push_back(Student(student));
+		//add id and student to map
+		id_to_student[studentDB.back().getID()] = &studentDB.back();
 	}
+
+	//instantiate each supervisor and add to map
+	while (std::getline(SupervisorStream, supervisor)) {
+		supervisorDB.push_back(Supervisor(supervisor));
+		//add id and supervisor to map
+		id_to_supervisor[supervisorDB.back().getID()] = &supervisorDB.back();
+	}
+
+	//instantiate each project and add to map
 	while (std::getline(ProjectStream, project)) {
-		this->projectDB.push_back(Project(project));
-	}
-	while (std::getline(StudentStream, supervisor)) {
-		this->supervisorDB.push_back(Supervisor(supervisor));
+		projectDB.push_back(Project(project));
+		//add id and supervisor to map
+		id_to_project[projectDB.back().getModuleCode()] = &projectDB.back();
 	}
 
-	for (auto &n : this->studentDB) {
-		while (std::getline(StudentStream, student)) { // for each object in the vector, find the corresponding csv data
-			if (Student(student).getName() == n.getName()) {                                        //and map association
-				n.Associate(student);
-			 }
+	//map the associations for students
+	for (auto& student : this->studentDB) {
+		//set the allocated project attribute
+		if (id_to_project.count(student.getAllocatedProject()->getModuleCode())) { //project still exists
+				student.setAllocatedProject(id_to_project[student.getAllocatedIdenifier()]);
 		}
-	}
-	for (auto& n : this->projectDB) {
-		while (std::getline(ProjectStream, project)) {
-			if (Project(project).getTitle() == n.getTitle()) {      //this is genuinely the worst code ever written
-				n.Associate(project);
+		else {
+			student.setAllocatedProject(nullptr);
+		}
+		//set the preferred projects if they still exist
+		for (auto& id : student.getPreferenceIdentifiers()) {
+			if (id_to_project.count(id)) {
+				student.addProjectToPreferences(id_to_project[id]);
+			}
+		}
+	}	
+
+	//map the associations for supervisors
+	for (auto& supervisor : this->supervisorDB) {
+		//set the oversee project attribute
+		for (auto& id : supervisor.getProjectIdentifiers()) {
+			if (id_to_project.count(id)) {
+				supervisor.addProjectWorkload(id_to_project[id]);
 			}
 		}
 	}
-	for (auto& n : this->supervisorDB) {
-		while (std::getline(SupervisorStream, supervisor)) { 
-			if (Supervisor(supervisor).getName() == n.getName()) {                                        
-				n.Associate(supervisor);
+
+	//map the associations for projects
+	for (auto& project : projectDB) {
+		//set the supervisor oversee attribute
+		project.setSupervisor(id_to_supervisor[project.getSupervisorIdentifier()]);
+		//set the students taking attribute
+		for (auto& id : project.getStudentIdentifiers()) {
+			if (id_to_student.count(id)) {
+				project.addStudent(id_to_student[id]);
 			}
 		}
-	}
+	}	
 }
 
 Student* Database::getStudent(std::string name) {
@@ -59,6 +88,7 @@ Student* Database::getStudent(std::string name) {
 	}
 	return nullptr;	
 }
+
 Supervisor* Database::getSupervisor(std::string name) {
 	auto& sup_db = this->supervisorDB;
 	auto sup_loc = std::find_if(sup_db.begin(), sup_db.end(), [&](Supervisor& supervisor) {
@@ -79,4 +109,8 @@ Project* Database::getProject(std::string name) {
 		return &*project_loc;
 	}
 	return nullptr; //we have not found the project
+}
+
+Admin* Database::getAdmin() {
+	return &this->systemAdmin;
 }

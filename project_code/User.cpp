@@ -1,6 +1,7 @@
 #include "User.h"
 #include <stdio.h>
 
+//METHODS FOR THE USER CLASS 
 
 User::User() = default;
 
@@ -33,6 +34,8 @@ void User::setID(int id) {
 	this->myID = id;
 }
 
+//METHODS FOR THE STUDENT CLASS
+
 Student::Student(std::string name, std::string password, int id, std::string degree) : User(name, password, id) { 
 	this->degree = degree;
 }
@@ -43,7 +46,6 @@ Student::Student(const std::string& csvline) {
 	std::stringstream ss(csvline);
 	while (std::getline(ss, member, ',')) {
 		switch (member_num) {
-
 		case 1:
 			this->setName(member);
 			break;
@@ -57,8 +59,11 @@ Student::Student(const std::string& csvline) {
 		case 4:
 			this->setDegree(member);
 			break;
-		default:
+		case 5:
+			this->allocated_identifier = stoi(member);
 			break;
+		default:
+			this->preference_identifiers.push_back(stoi(member));
 		}
 		member_num++;
 	}
@@ -95,7 +100,7 @@ Project* Student::getAllocatedProject() {
 	return this->allocated;
 }
 
-Project* Student::findProject(Project* to_find) { //double check this
+Project* Student::findProject(Project* to_find) {
 	auto& my_projects = this->getMyProjectChoices();
 	for (auto& proj : my_projects) {
 		if (proj == to_find) {
@@ -141,31 +146,37 @@ Project* Student::findProject(std::string project_name) {
 		return project->getTitle() == project_name;
 		});
 }
-void Student::Associate(const std::string& csvline) {
-	int member_num{ 1 };
-	std::string member;
-	std::stringstream ss(csvline);
-	while (std::getline(ss, member, ',')) {
-		if (member_num == 5) {
-			this->setAllocatedProject(Database::getInstance()->getProject(member));  //to access the database instance you have to use Database::getInstance(). Kind of like a global variable
-		}
-		else if(member_num > 5) {
-			this->addProjectToPreferences(Database::getInstance()->getProject(member));
-		}
-		member_num++;
-	}
-}
+
 std::string Student::Serialise() {
-	std::string ans = this->getName() + ',' +
+	std::string student_string = this->getName() + ',' +
 		this->getPassword() + ',' +
 		std::to_string(this->getID()) + ',' +
 		this->getDegree();
-	for (auto n : this->getMyProjectChoices()) {
-		ans += ',' + n->getTitle();
- }
-	return ans;
+	
+	//add an identifier for an allocated project, 0 if none exist
+	if (this->getAllocatedProject()!= nullptr) {
+		student_string += ',' + std::to_string(this->getAllocatedProject()->getModuleCode());
+	}
+	else {
+		student_string += ',' + '0';
+	}
 
+	//add the module code for each of the preferences
+	for (auto project : this->getMyProjectChoices()) {
+		student_string += ',' + project->getModuleCode();
+	}
+	return student_string;
 }
+
+int Student::getAllocatedIdenifier() {
+	return this->allocated_identifier;
+}
+
+std::vector<int>& Student::getPreferenceIdentifiers() {
+	return this->preference_identifiers;
+}
+
+//METHODS FOR THE SUPERVISOR CLASS
 
 Supervisor::Supervisor(std::string name, std::string password, int id, std::string department) {
 	this->setName(name);
@@ -195,14 +206,12 @@ Supervisor::Supervisor(const std::string& csvline) {
 			this->setDepartment(member);
 			break;
 		default:
-			break;
+			this->project_identifiers.push_back(stoi(member));			
 		}
 	}
 } 
 
-Supervisor::~Supervisor() {
-
-}
+Supervisor::~Supervisor() {}
 
 void Supervisor::setDepartment(std::string department_name) {
 	this->department = department;
@@ -219,34 +228,30 @@ std::string Supervisor::getDepartment() {
  std::vector<Project*>& Supervisor::getProjectsOversee() {
 	 return this->projects_oversee;
 }
- void Supervisor::Associate(const std::string& csvline) {
-	 int member_num{ 1 };
-	std::string member;
-	std::stringstream ss(csvline);
-	while (std::getline(ss, member, ',')) {
-		if (member_num < 4) {
-			this->addProjectWorkload(Database::getInstance()->getProject(member));
-		}
-		member_num++;
-	}
- }
+
  std::string Supervisor::Serialise() {
-	 std::string ans = this->getName() + ',' +
+	 std::string supervisor_string  = this->getName() + ',' +
 		 this->getPassword() + ',' +
 		 std::to_string(this->getID()) + ',' +
 		 this->getDepartment();
-	 for (auto n : this->getProjectsOversee()) {
-		 ans += ',' + n->getTitle();
-	 }
-	 return ans;
 
+	 for (auto proj : this->getProjectsOversee()) {
+		 supervisor_string += ',' + proj->getTitle();
+	 }
+	 return supervisor_string;
  }
- Admin::Admin(std::string name, std::string password, int id, AllocationStrategy::Strategy strat) {
+
+ std::vector<int>& Supervisor:: getProjectIdentifiers() {
+	 return this->project_identifiers;
+ }
+
+ //METHODS FOR ADMIN CLASS
+
+ Admin::Admin(std::string name, std::string password, int id, AllocationStrategy::Strategy strat = AllocationStrategy::SIMPLE) {
 	 this->setName(name);
 	 this->setPassword(password);
 	 this->setID(id);
-	 //this->allocate_strategy->SIMPLE;  //not sure what to assign here...
-
+	 this->setAllocationStrategy(strat);
  }
 
  Admin::~Admin() {
@@ -270,35 +275,13 @@ std::string Supervisor::getDepartment() {
 	 }
  }
 
+ std::string Admin::Serialise() {
+	 //do nothing as there should only be one Admin, pre_existing in the csv. Needs to be here though as the base class is abstract
+ }
+
  AllocationStrategy* Admin::getAlloactionStrategy() {
 	 return this->allocate_strategy;
  }
 
- std::string Project::Serialise() {
-	 Supervisor* p = this->getSupervisor();
-	 std::string ans = this->getTitle() + ',' +
-		 std::to_string(this->getModuleCode()) + ',' +
-		 this->getDescription() + ',' +
-		 std::to_string(this->getMaxCapacity()) + ',' +
-		 this->getSupervisor()->getName();
-	 for (auto n : this->getStudents()) {
-		 ans += ',' + n->getName();
-	 }
-	 return ans;
- }
- void Project::Associate(const std::string& csvline) {
-	 int member_num{ 1 };
-	 std::string member;
-	 std::stringstream ss(csvline);
-	 while (std::getline(ss, member, ',')) {
-		 if (member_num == 5) {
-			 this->setSupervisor(Database::getInstance()->getSupervisor(member));
-		 }
-		 else if (member_num > 5) {
-			 this->addStudent(Database::getInstance()->getStudent(member));
-		 }
-		 member_num++;
-	 }
-
- }
+ 
 

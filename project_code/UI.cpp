@@ -228,7 +228,7 @@ SupervisorUI::SupervisorUI(Supervisor* mySupervisor, DatabaseManager* dbm) : Use
 
 void SupervisorUI::displayUI() {
 	std::cout << "Welcome to the Project Selection Portal for Supervisors!\n" << std::endl;
-	//show all options offered in the student options vector attribute
+	//show all options offered in the supervisor options vector attribute
 	for (auto& option : this->options) {
 		std::cout << option.second << ". " << option.first << std::endl;
 	}
@@ -303,3 +303,43 @@ void SupervisorUI::getProjectToEdit() {
 		}
 	}
 }
+
+//Admin UI methods
+
+AdminUI::AdminUI(Admin* admin, DatabaseManager* dbm, Database* db) : UserUI(dbm), myAdmin(admin), db(db) {};
+
+void AdminUI::displayUI() {
+	std::cout << "Welcome to the Project Selection Portal for Admins!\n" << std::endl;
+	//show all options offered in the admin options vector attribute
+	for (auto& option : this->options) {
+		std::cout << option.second << ". " << option.first << std::endl;
+	}
+}
+
+int AdminUI::getNumOptions() {
+	return int((this->options).size());
+};
+
+std::string AdminUI::getOptionName(int choice) {
+	std::string optionName;
+	for (auto& option : this->options) {
+		if (option.second == choice) {
+			return option.first;
+		}
+	}
+	return "Invalid option.";
+}
+
+void AdminUI::doSomething(int choice) {
+	//implement
+
+}
+
+
+void AdminUI::automaticAllocate() {
+	std::cout << "Allocating students automatically...\n" << std::endl;
+	myAdmin->getAlloactionStrategy()->allocate();
+	
+}
+
+
