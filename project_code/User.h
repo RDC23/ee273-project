@@ -38,9 +38,9 @@ public:
 	std::string getDegree();
 	void setDegree(std::string degree);
 	Project* getAllocatedProject();
-	Project* findProject(Project* to_find);
-	Project* findProject(std::string project_name); 
-	void addProjectToPreferences(Project* project);
+	Project* findProject(Project* to_find); // O(logn)
+	Project* findProject(std::string project_name);   //O(logn)
+	void addProjectToPreferences(Project* project);  
 	void setAllocatedProject(Project* to_allocate);
 	void removeProjectFromPreferences(Project* to_remove);
 	void removeProjectFromPreferences(std::string to_remove);

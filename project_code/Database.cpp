@@ -78,7 +78,24 @@ void Database::loadDBfromCSV() {
 		}
 	}	
 }
+void Database::saveDBtoCSV() {
+	std::ofstream StudentStream("Student.csv"); //open files streams for each user class
+	std::ofstream ProjectStream("Project.csv");
+	std::ofstream SupervisorStream("Supervisor.csv");
 
+	for (auto& n : this->getStudents()) {  //go through each object of each vector and assign them as  serialised strings 
+		                                   //to the corresponding file stream
+		StudentStream << n.Serialise() << std::endl;
+	}
+	for (auto& n : this->getProjects()) {
+
+		ProjectStream << n.Serialise() << std::endl;
+	}
+	for (auto& n : this->getSupervisors()) {
+
+		SupervisorStream << n.Serialise() << std::endl;
+	}
+}
 Student* Database::getStudent(std::string name) {
 	auto& student_db = this->studentDB;
 	auto stud_loc = std::find_if(student_db.begin(), student_db.end(), [&](Student& student) {
@@ -119,7 +136,9 @@ std::vector<Project>& Database::getProjects() {
 	return this->projectDB;
 }
 
-
+std::vector<Student>& Database::getStudents() {
+	return this->studentDB;
+}
 std::vector<Supervisor>& Database::getSupervisors() {
 	return this->supervisorDB;
 }

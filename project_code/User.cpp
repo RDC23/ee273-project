@@ -154,16 +154,16 @@ std::string Student::Serialise() {
 		this->getDegree();
 	
 	//add an identifier for an allocated project, 0 if none exist
-	if (this->getAllocatedProject()!= nullptr) {
+	/*if (this->getAllocatedProject() != nullptr) {
 		student_string += ',' + std::to_string(this->getAllocatedProject()->getModuleCode());
 	}
 	else {
 		student_string += ',' + '0';
 	}
-
+	*/
 	//add the module code for each of the preferences
-	for (auto project : this->getMyProjectChoices()) {
-		student_string += ',' + project->getModuleCode();
+	for (auto& project : this->getMyProjectChoices()) {
+		student_string += ',' + std::to_string(project->getModuleCode());
 	}
 	return student_string;
 }
@@ -236,7 +236,7 @@ std::string Supervisor::getDepartment() {
 		 this->getDepartment();
 
 	 for (auto proj : this->getProjectsOversee()) {
-		 supervisor_string += ',' + proj->getModuleCode();
+		 supervisor_string += ',' + std::to_string(proj->getModuleCode());
 	 }
 	 return supervisor_string;
  }
