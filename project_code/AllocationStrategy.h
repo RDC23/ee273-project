@@ -1,4 +1,5 @@
 #pragma once
+class Database; //forward declare the database to prevent circular dependency
 
 //encapsulates different allocate strategies for runtime flexibility for admin class + decoupling of algorithm from class that uses 
 //https://refactoring.guru/design-patterns/strategy/cpp/example
@@ -11,20 +12,20 @@ public:
 		SIMPLE
 	};
 
-	virtual void allocate() = 0;
+	virtual void allocate(Database* db) = 0;
 };
 
 
 class galesShapely : public AllocationStrategy {
 
 public:
-	void allocate() override;   //implement this complex algorithm if time permits
+	void allocate(Database* db) override;   //implement this complex algorithm if time permits
 
 };
 
 class simpleAllocate : public AllocationStrategy {
 
 public:
-	void allocate() override;
+	void allocate(Database* db) override;
 
 };

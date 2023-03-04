@@ -1,11 +1,9 @@
-﻿  Database.cpp
+﻿  AllocationStrategy.cpp
+  Database.cpp
   DatabaseManager.cpp
   Project.cpp
   UI.cpp
   User.cpp
-  Utils.cpp
   main.cpp
   Generating Code...
-User.obj : error LNK2001: unresolved external symbol "public: virtual void __cdecl galesShapely::allocate(void)" (?allocate@galesShapely@@UEAAXXZ)
-User.obj : error LNK2001: unresolved external symbol "public: virtual void __cdecl simpleAllocate::allocate(void)" (?allocate@simpleAllocate@@UEAAXXZ)
-C:\Users\rdcsc\Desktop\ee273-project\project_code\x64\Debug\project_code.exe : fatal error LNK1120: 2 unresolved externals
+  project_code.vcxproj -> C:\Users\rdcsc\Desktop\ee273-project\project_code\x64\Debug\project_code.exe

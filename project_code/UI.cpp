@@ -335,11 +335,27 @@ void AdminUI::doSomething(int choice) {
 
 }
 
+void swapAllocationStrategy() {
+	//implement
+}
+
+void editStudent() {
+	//implement
+}
+
+void editSupervisor() {
+	//implement
+}
+
+void editProject() {
+	//implement
+}
+
 
 void AdminUI::automaticAllocate() {
 	std::cout << "Allocating students automatically...\n" << std::endl;
-	myAdmin->getAlloactionStrategy()->allocate();
-	
+	//call the allocation strategy class, passing it the database
+	myAdmin->getAlloactionStrategy()->allocate(db);	
 }
 
 

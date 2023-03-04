@@ -136,6 +136,7 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AllocationStrategy.cpp" />
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="main.cpp" />
