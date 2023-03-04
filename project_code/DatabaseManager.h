@@ -15,7 +15,7 @@ public:
 	const std::vector<Project>& getAllProjectsReadOnly();
 	Project* findProjectByTitle(std::string title);  //format both strings as lower/upper to not make case sensitive
 	Project* findProjectByModcode(int modcode);
-	bool isValidProjectTitle(const std::string);
+	bool isValidProjectTitle(const std::string title);
 
 
 private:

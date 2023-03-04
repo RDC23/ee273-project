@@ -1,10 +1,10 @@
 #pragma once
-#include "Project.h"
-#include "User.h"
 #include <fstream>
 #include "AllocationStrategy.h"
+#include "User.h"
+#include "Database.h"
 
-class Database {
+class Database{
 
 public:
 	Database(); //load in from csv and then construct the associations for each object

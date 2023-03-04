@@ -62,7 +62,7 @@ Supervisor* Project::getSupervisor() {
 	return this->supervisor;
 }
 
-std::string Project::getTitle(){
+std::string Project::getTitle() const{
 	return this->title;
 }
 
@@ -118,9 +118,13 @@ std::string Project::Serialise() {
 
 	//save the remaining projects
 	for (auto& student : this->getStudents()) {
-		serial_string += ',' + student->getID();
+		serial_string += ',' + std::to_string(student->getID());
 	}
 	return serial_string;
+}
+
+void Project::simplePrint() const {
+	std::cout << this->title << std::endl;
 }
 
 void Project::prettyPrint() {
@@ -138,7 +142,7 @@ int Project::getSupervisorIdentifier() {
 
 
 std::vector<int> Project::getStudentIdentifiers() {
-	return this->getStudentIdentifiers();
+	return this->student_identifiers;
 }
 
 

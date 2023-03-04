@@ -1,16 +1,11 @@
 ﻿  Database.cpp
-  main.cpp
+  DatabaseManager.cpp
   Project.cpp
   UI.cpp
   User.cpp
   Utils.cpp
+  main.cpp
   Generating Code...
-Database.obj : error LNK2019: unresolved external symbol "private: __cdecl Database::Database(void)" (??0Database@@AEAA@XZ) referenced in function "public: static class Database * __cdecl Database::getInstance(void)" (?getInstance@Database@@SAPEAV1@XZ)
-Database.obj : error LNK2001: unresolved external symbol "private: static class Database * Database::instance" (?instance@Database@@0PEAV1@EA)
-UI.obj : error LNK2019: unresolved external symbol "public: void __cdecl DatabaseManager::printProjectsNotSelected(class Student *)" (?printProjectsNotSelected@DatabaseManager@@QEAAXPEAVStudent@@@Z) referenced in function "public: void __cdecl StudentUI::addProjectToPreferences(void)" (?addProjectToPreferences@StudentUI@@QEAAXXZ)
-UI.obj : error LNK2019: unresolved external symbol "public: int __cdecl DatabaseManager::getProjectPickLimit(void)" (?getProjectPickLimit@DatabaseManager@@QEAAHXZ) referenced in function "public: void __cdecl StudentUI::addProjectToPreferences(void)" (?addProjectToPreferences@StudentUI@@QEAAXXZ)
-UI.obj : error LNK2019: unresolved external symbol "public: class Project * __cdecl DatabaseManager::findProjectByTitle(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?findProjectByTitle@DatabaseManager@@QEAAPEAVProject@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) referenced in function "public: void __cdecl StudentUI::addProjectToPreferences(void)" (?addProjectToPreferences@StudentUI@@QEAAXXZ)
-UI.obj : error LNK2019: unresolved external symbol "public: bool __cdecl DatabaseManager::isValidProjectTitle(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?isValidProjectTitle@DatabaseManager@@QEAA_NV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) referenced in function "public: void __cdecl StudentUI::addProjectToPreferences(void)" (?addProjectToPreferences@StudentUI@@QEAAXXZ)
 User.obj : error LNK2001: unresolved external symbol "public: virtual void __cdecl galesShapely::allocate(void)" (?allocate@galesShapely@@UEAAXXZ)
 User.obj : error LNK2001: unresolved external symbol "public: virtual void __cdecl simpleAllocate::allocate(void)" (?allocate@simpleAllocate@@UEAAXXZ)
-C:\Users\kisha\OneDrive\Documents\Visual Studio 2022\proj\ee273-project\project_code\x64\Debug\project_code.exe : fatal error LNK1120: 8 unresolved externals
+C:\Users\rdcsc\Desktop\ee273-project\project_code\x64\Debug\project_code.exe : fatal error LNK1120: 2 unresolved externals

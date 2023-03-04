@@ -137,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Database.cpp" />
+    <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="UI.cpp" />

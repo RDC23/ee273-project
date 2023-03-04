@@ -114,3 +114,22 @@ Project* Database::getProject(std::string name) {
 Admin* Database::getAdmin() {
 	return &this->systemAdmin;
 }
+
+std::vector<Project>& Database::getProjects() {
+	return this->projectDB;
+}
+
+
+std::vector<Supervisor>& Database::getSupervisors() {
+	return this->supervisorDB;
+}
+
+Database::~Database() {
+	//serialise students to csv
+
+	//serialise supervisors to csv
+
+	//serialise projects to csv
+
+	//free all dynamically allocated memory
+}

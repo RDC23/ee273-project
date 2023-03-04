@@ -236,7 +236,7 @@ std::string Supervisor::getDepartment() {
 		 this->getDepartment();
 
 	 for (auto proj : this->getProjectsOversee()) {
-		 supervisor_string += ',' + proj->getTitle();
+		 supervisor_string += ',' + proj->getModuleCode();
 	 }
 	 return supervisor_string;
  }
@@ -273,10 +273,6 @@ std::string Supervisor::getDepartment() {
 		default:
 			this->setAllocationStrategy(nullptr);
 	 }
- }
-
- std::string Admin::Serialise() {
-	 //do nothing as there should only be one Admin, pre_existing in the csv. Needs to be here though as the base class is abstract
  }
 
  AllocationStrategy* Admin::getAlloactionStrategy() {

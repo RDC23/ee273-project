@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Project.h"
 #include "AllocationStrategy.h"
-#include "Database.h"
+
 
 class User  { 
 
@@ -18,7 +18,7 @@ public:
 	void setName(std::string name);
 	void setPassword(std::string password);
 	void setID(int id);
-	virtual std::string Serialise() = 0;
+
 private:
 	std::string full_name;
 	std::string password;
@@ -31,7 +31,7 @@ public:
 	Student(std::string name, std::string password, int id, std::string degree); //call the User constructor
 	Student(const std::string& cvsline); //constructor for reading from csv
 	virtual ~Student(); //no need to free memory as lifetime of pointed to object managed by Database	
-	std::string Serialise() override;
+	std::string Serialise();
 	void displayAllocatedProject();
 	void displayMyProjectChoices();
     std::vector<Project*>& getMyProjectChoices(); 
@@ -63,7 +63,7 @@ public:
 	Supervisor(std::string name, std::string password, int id, std::string department); //call User constructor
 	Supervisor(const std::string& csvline); //constructor for reading from csv - ... = unknown num parameters
 	virtual ~Supervisor();
-	std::string Serialise() override;
+	std::string Serialise();
 	void setDepartment(std::string department_name);
 	void addProjectWorkload(Project* project_to_add);
 	std::string getDepartment();
@@ -82,7 +82,6 @@ class Admin :public User {
 public:
 	Admin() = default;
 	Admin(std::string name, std::string password, int id, AllocationStrategy::Strategy strat);
-	std::string Serialise() override;
 	virtual ~Admin(); //do DELETE the strategy object as admin controls this lifecycle
 	void setAllocationStrategy(AllocationStrategy* strategy);
 	void setAllocationStrategy(AllocationStrategy::Strategy strategy_type);
