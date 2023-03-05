@@ -75,8 +75,10 @@ void Student::displayMyProjectChoices() {
 	if (getMyProjectChoices().size() == 0) {
 		std::cout << "No projects have been added to your preferences list yet." << std::endl;
 	}
+	int counter = 1;
 	for (auto& project : this->getMyProjectChoices()) {
-		std::cout << project->getTitle() << std::endl;
+		std::cout << counter << ". " << project->getTitle() << std::endl;
+		counter++;
 	}
 }
 

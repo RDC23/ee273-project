@@ -14,16 +14,16 @@ public:
 	Student* getStudent(std::string name);
 	Supervisor* getSupervisor(std::string name);
 	Project* getProject(std::string name);
-	std::vector<Student>& getStudents();
-	std::vector<Project>& getProjects();
-	std::vector<Supervisor>& getSupervisors();
+	std::vector<Student*>& getStudents();
+	std::vector<Project*>& getProjects();
+	std::vector<Supervisor*>& getSupervisors();
 	Admin* getAdmin();
 
 private:	
 	Database(const Database&); //prevent multiple instances being created due to copy construction
-	std::vector<Student> studentDB;
-	std::vector<Supervisor> supervisorDB;
-	std::vector<Project> projectDB;
+	std::vector<Student*> studentDB;
+	std::vector<Supervisor*> supervisorDB;
+	std::vector<Project*> projectDB;
 	Admin systemAdmin;
 };
 

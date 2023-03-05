@@ -15,9 +15,9 @@ void DatabaseManager::printProjectsNotSelected(Student* student) {
 	const auto& student_picks = student->getMyProjectChoices();
 
 	for (auto& project : all_projects) {
-		if (std::find(student_picks.begin(), student_picks.end(), &project)==student_picks.end()){
+		if (std::find(student_picks.begin(), student_picks.end(), project)==student_picks.end()){
 			//the student already hasn't already selected this project so print it
-			project.simplePrint();
+			project->simplePrint();
 		}
 	}
 }
@@ -25,7 +25,7 @@ void DatabaseManager::printProjectsNotSelected(Student* student) {
 void DatabaseManager::printListOfProjects() {
 	const auto& all_projects = this->getAllProjectsReadOnly();
 	for (auto& proj : all_projects) {
-		proj.simplePrint();
+		proj->simplePrint();
 	}
 }
 
@@ -33,7 +33,7 @@ int DatabaseManager::getProjectPickLimit() {
 	return this->project_limit_pick;
 }
 
-const std::vector<Project>& DatabaseManager::getAllProjectsReadOnly() {
+const std::vector<Project*>& DatabaseManager::getAllProjectsReadOnly() {
 	return this->database->getProjects();
 }
 
@@ -44,11 +44,11 @@ Project* DatabaseManager::findProjectByTitle(std::string title) {
 	std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
 
 	for (auto& proj : all_projects) {
-		std::string proj_name = proj.getTitle();
+		std::string proj_name = proj->getTitle();
 		std::transform(proj_name.begin(), proj_name.end(), proj_name.begin(), [](unsigned char c) { return std::tolower(c); });
 		
 		if (s == proj_name) {
-			return &proj;
+			return proj;
 		}
 	}
 	//no project with this name found so return null pointer
@@ -58,8 +58,8 @@ Project* DatabaseManager::findProjectByTitle(std::string title) {
 Project* DatabaseManager::findProjectByModcode(int modcode) {
 	auto& all_projects = this->database->getProjects();
 	for (auto& proj : all_projects) {
-		if (proj.getModuleCode() == modcode) {
-			return &proj;
+		if (proj->getModuleCode() == modcode) {
+			return proj;
 		}
 	}
 	return nullptr;
@@ -71,7 +71,7 @@ bool DatabaseManager::isValidProjectTitle(const std::string title) {
 	std::string s = title;
 	std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
 	for (auto& proj : all_projects) {
-		std::string proj_name = proj.getTitle();
+		std::string proj_name = proj->getTitle();
 		std::transform(proj_name.begin(), proj_name.end(), proj_name.begin(), [](unsigned char c) { return std::tolower(c); });
 	
 		if (s == proj_name) {

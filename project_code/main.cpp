@@ -16,9 +16,12 @@ int main() {
 
 	while (true) {
 		int option = 0;
-		option = getValidInteger("Enter an option number: ");
-		if (option > 0 && option < ui->getNumOptions()) {
+		option = getValidInteger("\nEnter an option number: ");
+		if (option > 0 && option <= ui->getNumOptions()) {
 			ui->doSomething(option);
+		}
+		if (option == ui->getNumOptions()) {
+			break;
 		}
 		
 	}

@@ -15,10 +15,12 @@ StudentUI::StudentUI(Student* myStudent, DatabaseManager* dbm) : UserUI(dbm), my
 
 void StudentUI::displayUI() {
 	std::cout << "Welcome to the Project Selection Portal for Students, " <<myStudent->getName()<<".\n" << std::endl;
+	printLineSep();
 	//show all options offered in the student options vector attribute
 	for (auto& option : this->options) {
 		std::cout << option.second << ". " << option.first << std::endl;
 	}
+	printLineSep();
 }
 
 int StudentUI::getNumOptions() {
@@ -56,6 +58,9 @@ void StudentUI::doSomething(int choice) {
 		case 6:
 			this->viewAssignedProject();
 			break;
+		case 7:
+			std::cout << "See you again!" << std::endl;
+			return;
 		default:
 			std::cout << "Invalid action..." << std::endl;
 			return;
@@ -139,7 +144,7 @@ void StudentUI::removeProject(){
 }
 
 void StudentUI::viewMyProjectChoices() {
-	std::cout << "Current selected projects are:\n " << std::endl;
+	std::cout << "Currently selected projects are:\n " << std::endl;
 	myStudent->displayMyProjectChoices();
 }
 
@@ -147,16 +152,16 @@ void StudentUI::findOutMoreProject() {
 	std::cout << "Which project would you like to find out more details about?"
 		"The currently available projects are:" << std::endl;
 	//create a map (associative array) of int to project
-	const auto& projects_available = dbm->getAllProjectsReadOnly();
-	std::unordered_map<int, Project> int_to_project;	
+	auto& projects_available = dbm->getAllProjectsReadOnly();
+	std::unordered_map<int, Project*> int_to_project;	
 
 	//populate the map for easy indexing
 	for (int i = 1; i <= projects_available.size(); i++){
-		int_to_project[i] = projects_available[i];
+		int_to_project[i] = projects_available[i-1];
 	}
 	//show the number and project
 	for (auto& enumerated_project : int_to_project) {
-		std::cout << enumerated_project.first << ". " << enumerated_project.second.getTitle() << std::endl;
+		std::cout << enumerated_project.first << ". " << enumerated_project.second->getTitle() << std::endl;
 	}
 
 	//loop till quit
@@ -165,11 +170,12 @@ void StudentUI::findOutMoreProject() {
 		//get valid integer and print the details or an error message if non valid
 		int choice = getValidInteger("\nEnter the number corresponding with the project you want to view more details about (or '0' to quit): ");
 		if (int_to_project.count(choice)) {
-			int_to_project[choice].prettyPrint();
+			int_to_project[choice]->prettyPrint();
 		}
 		if (choice == 0) {
 			std::cout << "Exiting to main menu." << std::endl;
 			exit = true;
+			break;
 		}
 		else{
 			std::cout << "That isn't a valid project number. " << std::endl;
@@ -209,7 +215,7 @@ void StudentUI::reOrderProjects() {
 	}
 
 	//perform the swap (decrement index due to 0 indexed vector)
-	std::swap(myprojects.at(from--), myprojects.at(to--));
+	std::swap(myprojects.at(--from), myprojects.at(--to));
 }
 	
 
