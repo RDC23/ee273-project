@@ -14,7 +14,7 @@ UserUI::UserUI(DatabaseManager* dbm) {
 StudentUI::StudentUI(Student* myStudent, DatabaseManager* dbm) : UserUI(dbm), myStudent(myStudent) {};
 
 void StudentUI::displayUI() {
-	std::cout << "Welcome to the Project Selection Portal for Students, " <<myStudent->getName()<<".\n" << std::endl;
+	std::cout << "Welcome to the Project Selection Portal for Students, " <<myStudent->getName()<< std::endl;
 	printLineSep();
 	//show all options offered in the student options vector attribute
 	for (auto& option : this->options) {
@@ -78,14 +78,14 @@ void StudentUI::addProjectToPreferences() {
 		return;
 	}
 	//show the available projects to pick from
-	std::cout << "The available projects to choose from are as follows:" << std::endl;
+	std::cout << "\nThe available projects to choose from are as follows:\n" << std::endl;
 	dbm->printProjectsNotSelected(this->myStudent);
 
 	//loop until valid data is provided checking for quit or invalid data
 	bool quit = false;
 	while (!quit) {
 		std::string projectTitle;
-		projectTitle = getValidString("Enter the title of a project to add (or 'Q' to quit): ");
+		projectTitle = getValidString("\nEnter the title of a project to add (or 'Q' to quit): ");
 		if (projectTitle == "Q" || projectTitle == "q") {
 			std::cout << "Returning to the main menu." << std::endl;
 			quit = true;
@@ -107,6 +107,7 @@ void StudentUI::addProjectToPreferences() {
 		//project is found so add to student preferences
 		this->myStudent->addProjectToPreferences(project);
 		std::cout << "Successfully added project \"" << projectTitle << "\" to your preferences." << std::endl;
+		return; //omit this line for infinite loop, check with Kishan
 
 	}
 }
@@ -144,13 +145,18 @@ void StudentUI::removeProject(){
 }
 
 void StudentUI::viewMyProjectChoices() {
-	std::cout << "Currently selected projects are:\n " << std::endl;
+	if ((myStudent->getMyProjectChoices()).size() < 1) {
+		std::cout << "\nYou haven't added any projects to your preferences list yet" << std::endl;
+		return;
+	}
+
+	std::cout << "\nCurrently selected projects are:\n " << std::endl;
 	myStudent->displayMyProjectChoices();
 }
 
 void StudentUI::findOutMoreProject() {
-	std::cout << "Which project would you like to find out more details about?"
-		"The currently available projects are:" << std::endl;
+	std::cout << "\nWhich project would you like to find out more details about?"
+		" The projects currently being offered are:\n" << std::endl;
 	//create a map (associative array) of int to project
 	auto& projects_available = dbm->getAllProjectsReadOnly();
 	std::unordered_map<int, Project*> int_to_project;	
@@ -171,6 +177,7 @@ void StudentUI::findOutMoreProject() {
 		int choice = getValidInteger("\nEnter the number corresponding with the project you want to view more details about (or '0' to quit): ");
 		if (int_to_project.count(choice)) {
 			int_to_project[choice]->prettyPrint();
+			return; //omit this line for infinite loop, check with Kishan
 		}
 		if (choice == 0) {
 			std::cout << "Exiting to main menu." << std::endl;
@@ -188,10 +195,12 @@ void StudentUI::reOrderProjects() {
 	//no choices
 	if (myprojects.size() < 1) {
 		std::cout << "No projects have been selected." << std::endl;
+		return;
 	}
 	//only one choice, no swaps possible
 	if (myprojects.size() == 1) {
 		std::cout << "You have only got one project in your preferences list. No swaps are possible." << std::endl;
+		return;
 	}
 	std::cout << "Your currently selected projects, in order of preference are:\n " << std::endl;
 	myStudent->displayMyProjectChoices();

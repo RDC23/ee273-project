@@ -154,18 +154,22 @@ std::string Student::Serialise() {
 		this->getPassword() + ',' +
 		std::to_string(this->getID()) + ',' +
 		this->getDegree();
+
+	std::cout << this->getDegree();
 	
 	//add an identifier for an allocated project, 0 if none exist
-	/*if (this->getAllocatedProject() != nullptr) {
-		student_string += ',' + std::to_string(this->getAllocatedProject()->getModuleCode());
+	if (this->getAllocatedProject() != nullptr) {
+		student_string += ",";
+		student_string += std::to_string(this->getAllocatedProject()->getModuleCode());
 	}
 	else {
-		student_string += ',' + '0';
+		student_string += ",";
+		student_string += "0";
 	}
-	*/
 	//add the module code for each of the preferences
 	for (auto& project : this->getMyProjectChoices()) {
-		student_string += ',' + std::to_string(project->getModuleCode());
+		student_string += ",";
+		student_string += std::to_string(project->getModuleCode());
 	}
 	return student_string;
 }

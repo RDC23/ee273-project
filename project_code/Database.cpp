@@ -91,15 +91,15 @@ void Database::saveDBtoCSV() {
 
 	for (auto& n : this->getStudents()) {  //go through each object of each vector and assign them as  serialised strings 
 		                                   //to the corresponding file stream
-		StudentStream << n->Serialise() << std::endl;
+		StudentStream << n->Serialise() << "\n";
 	}
 	for (auto& n : this->getProjects()) {
 
-		ProjectStream << n->Serialise() << std::endl;
+		ProjectStream << n->Serialise() << "\n";
 	}
 	for (auto& n : this->getSupervisors()) {
 
-		SupervisorStream << n->Serialise() << std::endl;
+		SupervisorStream << n->Serialise() << "\n";
 	}
 }
 Student* Database::getStudent(std::string name) {

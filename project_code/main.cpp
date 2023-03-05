@@ -10,7 +10,7 @@ int main() {
 	Database* db = new Database;  //the constructor manages to successfully load and map associations
 	DatabaseManager dbm(db, 3);
 
-	UserUI* ui = new StudentUI(db->getStudent("Ross"), &dbm);
+	UserUI* ui = new StudentUI(db->getStudent("Kishan"), &dbm);
 	ui->displayUI();
 
 
