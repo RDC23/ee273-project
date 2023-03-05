@@ -80,7 +80,7 @@ private:
 class Admin :public User {
 
 public:
-	Admin() = default;
+	Admin();
 	Admin(std::string name, std::string password, int id, AllocationStrategy::Strategy strat);
 	virtual ~Admin(); //do DELETE the strategy object as admin controls this lifecycle
 	void setAllocationStrategy(AllocationStrategy* strategy);

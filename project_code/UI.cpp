@@ -14,7 +14,7 @@ UserUI::UserUI(DatabaseManager* dbm) {
 StudentUI::StudentUI(Student* myStudent, DatabaseManager* dbm) : UserUI(dbm), myStudent(myStudent) {};
 
 void StudentUI::displayUI() {
-	std::cout << "Welcome to the Project Selection Portal for Students!\n" << std::endl;
+	std::cout << "Welcome to the Project Selection Portal for Students, " <<myStudent->getName()<<".\n" << std::endl;
 	//show all options offered in the student options vector attribute
 	for (auto& option : this->options) {
 		std::cout << option.second << ". " << option.first << std::endl;
@@ -70,40 +70,39 @@ void StudentUI::addProjectToPreferences() {
 	if (currentPreferences.size() >= projectPickLimit) {
 		std::cout << "You have reached the maximum number of project choices ("
 			<< projectPickLimit << ").\nReturning to the main menu." << std::endl;
+		return;
+	}
+	//show the available projects to pick from
+	std::cout << "The available projects to choose from are as follows:" << std::endl;
+	dbm->printProjectsNotSelected(this->myStudent);
 
-		//show the available projects to pick from
-		std::cout << "The available projects to choose from are as follows:" << std::endl;
-		dbm->printProjectsNotSelected(this->myStudent);
-
-		//loop until valid data is provided checking for quit or invalid data
-		bool quit = false;
-		while (!quit) {
-			std::string projectTitle;
-			std::cout << "Enter the title of a project to add (or 'Q' to quit): ";
-			std::cin >> projectTitle;
-
-			if (projectTitle == "Q" || projectTitle == "q") {
-				std::cout << "Returning to the main menu." << std::endl;
-				quit = true;
-				continue;
-			}
-			if (!dbm->isValidProjectTitle(projectTitle)) {
-				std::cout << "Invalid project title. Please try again." << std::endl;
-				continue;
-			}
-			Project* project = dbm->findProjectByTitle(projectTitle);
-			if (!project) {
-				std::cout << "Unable to find project with title \"" << projectTitle << "\". Please try again." << std::endl;
-				continue;
-			}
-			if (myStudent->hasProject(projectTitle)) {
-				std::cout << "Project \"" << projectTitle << "\" is already in your project preferences." << std::endl;
-				continue;
-			}
-			//project is found so add to student preferences
-			this->myStudent->addProjectToPreferences(project);
-			std::cout << "Successfully added project \"" << projectTitle << "\" to your preferences." << std::endl;
+	//loop until valid data is provided checking for quit or invalid data
+	bool quit = false;
+	while (!quit) {
+		std::string projectTitle;
+		projectTitle = getValidString("Enter the title of a project to add (or 'Q' to quit): ");
+		if (projectTitle == "Q" || projectTitle == "q") {
+			std::cout << "Returning to the main menu." << std::endl;
+			quit = true;
+			continue;
 		}
+		if (!dbm->isValidProjectTitle(projectTitle)) {
+			std::cout << "Invalid project title. Please try again." << std::endl;
+			continue;
+		}
+		Project* project = dbm->findProjectByTitle(projectTitle);
+		if (!project) {
+			std::cout << "Unable to find project with title \"" << projectTitle << "\". Please try again." << std::endl;
+			continue;
+		}
+		if (myStudent->hasProject(projectTitle)) {
+			std::cout << "Project \"" << projectTitle << "\" is already in your project preferences." << std::endl;
+			continue;
+		}
+		//project is found so add to student preferences
+		this->myStudent->addProjectToPreferences(project);
+		std::cout << "Successfully added project \"" << projectTitle << "\" to your preferences." << std::endl;
+
 	}
 }
 

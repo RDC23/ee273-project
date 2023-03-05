@@ -70,13 +70,12 @@ bool DatabaseManager::isValidProjectTitle(const std::string title) {
 	//compare the strings both in lowercase for best search compatibility
 	std::string s = title;
 	std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
-
 	for (auto& proj : all_projects) {
 		std::string proj_name = proj.getTitle();
 		std::transform(proj_name.begin(), proj_name.end(), proj_name.begin(), [](unsigned char c) { return std::tolower(c); });
-
+	
 		if (s == proj_name) {
-			true;
+			return true;
 		}
 	}
 	//no project with this name found so return false

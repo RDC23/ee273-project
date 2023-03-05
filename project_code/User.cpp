@@ -8,7 +8,7 @@ User::User() = default;
 User::User(std::string name, std::string password, int id) {
 	this ->full_name = name;
 	this->password = password;
-	this->myID;
+	this->myID = id;
 }
 User::~User() = default;
 
@@ -208,13 +208,14 @@ Supervisor::Supervisor(const std::string& csvline) {
 		default:
 			this->project_identifiers.push_back(stoi(member));			
 		}
+		member_num++;
 	}
 } 
 
 Supervisor::~Supervisor() {}
 
 void Supervisor::setDepartment(std::string department_name) {
-	this->department = department;
+	this->department = department_name;
 }
 
 void Supervisor::addProjectWorkload(Project* project_to_add) {
@@ -246,6 +247,9 @@ std::string Supervisor::getDepartment() {
  }
 
  //METHODS FOR ADMIN CLASS
+ Admin::Admin() : User("admin", "totalpower", 999) {
+	 this->setAllocationStrategy(new galesShapely);
+ }
 
  Admin::Admin(std::string name, std::string password, int id, AllocationStrategy::Strategy strat = AllocationStrategy::SIMPLE) {
 	 this->setName(name);

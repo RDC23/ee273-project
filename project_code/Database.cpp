@@ -42,7 +42,7 @@ void Database::loadDBfromCSV() {
 	//map the associations for students
 	for (auto& student : this->studentDB) {
 		//set the allocated project attribute
-		if (id_to_project.count(student.getAllocatedProject()->getModuleCode())) { //project still exists
+		if (id_to_project.count(student.getAllocatedIdenifier())) { //project still exists
 				student.setAllocatedProject(id_to_project[student.getAllocatedIdenifier()]);
 		}
 		else {
