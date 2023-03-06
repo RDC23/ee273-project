@@ -122,6 +122,7 @@ void Student::setAllocatedProject(Project* to_allocate) {
 
 bool Student::hasProject(std::string project_name){
 	for (auto n : this->getMyProjectChoices()) {
+		//make both lowercase to increase match chances?
 
 		if (n->getTitle() == project_name) {
 			return true;

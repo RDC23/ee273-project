@@ -8,9 +8,9 @@
 int main() {
 	
 	Database* db = new Database;  //the constructor manages to successfully load and map associations
-	DatabaseManager dbm(db, 3);
+	DatabaseManager dbm(db, 2);
 
-	UserUI* ui = new StudentUI(db->getStudent("Kishan"), &dbm);
+	UserUI* ui = new SupervisorUI(db->getSupervisor("Christos"), &dbm);
 	ui->displayUI();
 
 

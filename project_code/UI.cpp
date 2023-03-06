@@ -141,7 +141,7 @@ void StudentUI::removeProject(){
 	}
 	//delegate the deletion of the project to the Student class
 	myStudent->removeProjectFromPreferences(choice);
-	std::cout << "Successfully removed project " << choice << " from your preferences." << std::endl;
+	std::cout << "Successfully removed project \"" << choice << "\" from your preferences." << std::endl;
 }
 
 void StudentUI::viewMyProjectChoices() {
@@ -285,6 +285,7 @@ void SupervisorUI::showProjectsOversee() {
 
 void SupervisorUI::editProjectMetadata(Project* to_edit) {
 	//implement this function
+	std::cout << "Implement me!";
 }
 
 void SupervisorUI::getProjectToEdit() {
@@ -295,7 +296,7 @@ void SupervisorUI::getProjectToEdit() {
 
 	//populate the map for easy indexing
 	for (int i = 1; i <= projects_available.size(); i++) {
-		int_to_project[i] = projects_available[i];
+		int_to_project[i] = projects_available[i-1];
 	}
 	//show the number and project
 	for (auto& enumerated_project : int_to_project) {
@@ -304,13 +305,15 @@ void SupervisorUI::getProjectToEdit() {
 	bool exit = false;
 	while (!exit) {
 		//get the project to edit
-		int choice = getValidInteger("Enter the number of the project you wish to edit the metadata of (or '0' to exit):");
+		int choice = getValidInteger("\nEnter the number of the project you wish to edit the metadata of (or '0' to exit):");
 		if (choice == 0) {
 			std::cout << "Exiting the project editor and returning to the main menu." << std::endl;
 			exit = true;
+			return;
 		}
 		if (int_to_project.count(choice)) { //it exists therefore a valid input 
 			editProjectMetadata(int_to_project[choice]);
+			return;
 		}
 		else {
 			std::cout << "Project number entered isn't valid. Please try again or exit." << std::endl;
