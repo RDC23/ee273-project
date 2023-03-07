@@ -10,6 +10,7 @@ public:
 	Database(); //load in from csv and then construct the associations for each object
 	virtual ~Database(); //implement logic to save all data to csv then free all pointer data
 	void loadDBfromCSV();
+	void LoadDB_THREAD();
 	void saveDBtoCSV();
 	Student* getStudent(std::string name);
 	Supervisor* getSupervisor(std::string name);

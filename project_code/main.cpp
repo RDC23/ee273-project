@@ -10,7 +10,7 @@ int main() {
 	Database* db = new Database;  //the constructor manages to successfully load and map associations
 	DatabaseManager dbm(db, 2);
 
-	UserUI* ui = new SupervisorUI(db->getSupervisor("Christos"), &dbm);
+	UserUI* ui = new StudentUI(db->getStudent("Kishan"), & dbm);
 	ui->displayUI();
 
 
@@ -27,6 +27,6 @@ int main() {
 	}
 	
 	
-
+	std:: cout << "\033[2J\033[1;1H";
 
 }
