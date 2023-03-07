@@ -1,4 +1,5 @@
 #include <unordered_map>
+#include <thread>
 #include "Database.h"
 
 Database::Database() {
@@ -119,6 +120,15 @@ Supervisor* Database::getSupervisor(std::string name) {
 		return supervisor->getName() == name; });
 	if (sup_loc != sup_db.end()) {
 		return *sup_loc; //deref iterator and return adderess of project in project DB vector
+	}
+	return nullptr;
+}
+
+Student* Database::findStudentByRegnum(int regnum) {
+	auto student_loc = std::find_if(studentDB.begin(), studentDB.end(), [&](Student* student) {return student->getID() == regnum;});
+	//if we have not found student, return nullptr, else the student pointer
+	if (student_loc != studentDB.end()) {
+		return *student_loc;
 	}
 	return nullptr;
 }

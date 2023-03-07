@@ -15,6 +15,7 @@ public:
 	Student* getStudent(std::string name);
 	Supervisor* getSupervisor(std::string name);
 	Project* getProject(std::string name);
+	Student* findStudentByRegnum(int regnum);
 	std::vector<Student*>& getStudents();
 	std::vector<Project*>& getProjects();
 	std::vector<Supervisor*>& getSupervisors();
@@ -27,4 +28,3 @@ private:
 	std::vector<Project*> projectDB;
 	Admin systemAdmin;
 };
-

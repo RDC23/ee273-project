@@ -1,10 +1,2 @@
-﻿  AllocationStrategy.cpp
-  Database.cpp
-  DatabaseManager.cpp
-  Project.cpp
-  UI.cpp
-H:\ee273-project\project_code\UI.cpp(392,2): error C2001: newline in constant
-H:\ee273-project\project_code\UI.cpp(393,1): error C2143: syntax error: missing ';' before '}'
-  User.cpp
-  main.cpp
-  Generating Code...
+﻿  UI.cpp
+  project_code.vcxproj -> C:\Users\rdcsc\Desktop\ee273-project\project_code\x64\Debug\project_code.exe

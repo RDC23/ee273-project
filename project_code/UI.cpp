@@ -389,7 +389,7 @@ void AdminUI::swapAllocationStrategy() {
 }
 
 void AdminUI::editStudentMetadata(Student* student_to_edit) {
-
+	std::cout << "Implement me!";
 }
 
 void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
@@ -401,6 +401,7 @@ void AdminUI::editProjectMetadata(Project* project_to_edit) {
 }
 
 void AdminUI::editStudent() {
+	clearScreen();
 	std::cout << "\nWhich student would you like to edit? The students currently in the database are: " << std::endl;
 	printLineSep();
 	for (auto& student : this->db->getStudents()) {
@@ -408,15 +409,17 @@ void AdminUI::editStudent() {
 	}
 	bool exit = false;
 	while (!exit) {
-		std::string name_to_find = getValidString("\nEnter the ID of the student you want to edit: ");
-		if (!db->getStudent(name_to_find)) {
+		int reg = getValidInteger("\nEnter the ID of the student you want to edit: ");
+		Student* student_to_loc = db->findStudentByRegnum(reg);
 
+		if (student_to_loc) {
+			editStudentMetadata(student_to_loc); //delegate the editing
+			break;
 		}
-
-
+		else {
+			std::cout << "Unable to locate a student with that registration number." << std::endl;
+		}
 	}
-
-
 }
 
 void AdminUI::editSupervisor() {
