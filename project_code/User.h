@@ -86,6 +86,7 @@ public:
 	void setAllocationStrategy(AllocationStrategy* strategy);
 	void setAllocationStrategy(AllocationStrategy::Strategy strategy_type);
 	AllocationStrategy* getAlloactionStrategy();
+	std::string getStratID();
 
 private:
 	std::string strategy_identifier; //for assisting the serialisation process as pointer cannot be saved

@@ -39,5 +39,5 @@ std::string getValidString(const std::string message) {
 }
 
 void printLineSep() {
-    std::cout << "-----------------------------------------------" << std::endl;
+    std::cout << "-------------------------------------------------------------" << std::endl;
 }

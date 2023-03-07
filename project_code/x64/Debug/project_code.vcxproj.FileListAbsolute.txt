@@ -1,1 +1,2 @@
 C:\Users\rdcsc\Desktop\ee273-project\project_code\x64\Debug\project_code.exe
+H:\ee273-project\project_code\x64\Debug\project_code.exe

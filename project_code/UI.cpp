@@ -348,23 +348,82 @@ std::string AdminUI::getOptionName(int choice) {
 }
 
 void AdminUI::doSomething(int choice) {
-	//implement
+	switch (choice) {
+	case 1:
+		this->automaticAllocate();
+		break;	
+	case 2:
+		this->swapAllocationStrategy();
+		break;
+	case 3:
+		this->editStudent();
+		break;
+	case 4:
+		this->editSupervisor();
+		break;
+	case 5:
+		this->editProject();
+		break;
+	case 6:
+		std::cout << "See you again!" << std::endl;
+		return;
+	default:
+		std::cout << "Invalid action..." << std::endl;
+		return;
+	}
 
 }
 
-void swapAllocationStrategy() {
+void AdminUI::swapAllocationStrategy() {
+	auto allocation_current = myAdmin->getAlloactionStrategy();
+
+	if (allocation_current == nullptr) {
+		//the admin has no strategy so none to swap (this should never happen)
+		std::cout << "\nYou don't have any preferred method for sorting the students." << std::endl;
+		return;
+	}
+	
+	std::cout << "Which allocation approach would you like to use? The options are:\n" << std::endl;
+
+	///FINISH
+}
+
+void AdminUI::editStudentMetadata(Student* student_to_edit) {
+
+}
+
+void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
+
+}
+
+void AdminUI::editProjectMetadata(Project* project_to_edit) {
+
+}
+
+void AdminUI::editStudent() {
+	std::cout << "\nWhich student would you like to edit? The students currently in the database are: " << std::endl;
+	printLineSep();
+	for (auto& student : this->db->getStudents()) {
+		std::cout << student->getName() << " : " << student->getID() << std::endl;
+	}
+	bool exit = false;
+	while (!exit) {
+		std::string name_to_find = getValidString("\nEnter the ID of the student you want to edit: ");
+		if (!db->getStudent(name_to_find)) {
+
+		}
+
+
+	}
+
+
+}
+
+void AdminUI::editSupervisor() {
 	//implement
 }
 
-void editStudent() {
-	//implement
-}
-
-void editSupervisor() {
-	//implement
-}
-
-void editProject() {
+void AdminUI::editProject() {
 	//implement
 }
 

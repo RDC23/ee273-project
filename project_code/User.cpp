@@ -290,5 +290,9 @@ std::string Supervisor::getDepartment() {
 	 return this->allocate_strategy;
  }
 
+ std::string Admin::getStratID() {
+	 return this->strategy_identifier;
+ }
+
  
 

@@ -5,6 +5,7 @@
 #include "User.h"
 #include "DatabaseManager.h"
 #include "Database.h"//provide interfaces with access to the database
+#include "Project.h" //might cause issues circular dependency
 
 //Each UI need access to:
 //	1) the object it provides a UI for so it can manipulate its attributes based on user input
@@ -91,6 +92,10 @@ public:
 	void editStudent();
 	void editSupervisor();
 	void editProject();
+	void editStudentMetadata(Student* student_to_edit);
+	void editSupervisorMetadata(Supervisor* supervisor_to_edit);
+	void editProjectMetadata(Project* project_to_edit);
+
 
 private:
 	Admin* myAdmin{ nullptr };
