@@ -172,71 +172,91 @@ void Database::LoadDB_THREAD() {
 	std::unordered_map<int, Student*> id_to_student;
 	std::unordered_map<int, Project*> id_to_project;
 
-
-	std::thread instantiateStudent();
-	std::thread instantiateSupervisor;
-	std::thread instantiateProject;
-
-	//instantiate each student and add to map
-
-	while (std::getline(StudentStream, student)) {
+	//here, student,supervisor & project instantiation in the database in split into three parallel operations.
+	// student instatiation thread.
+	std::thread instantiateStudent([&] 
+		{ while (std::getline(StudentStream, student)) {
 		studentDB.push_back(new Student(student));
 		//add id and student to map
 		id_to_student[studentDB.back()->getID()] = studentDB.back();
 	}
+		}
+	);
 
-	//instantiate each supervisor and add to map
-
-	while (std::getline(SupervisorStream, supervisor)) {
-		supervisorDB.push_back(new Supervisor(supervisor));
-		//add id and supervisor to map
-		id_to_supervisor[supervisorDB.back()->getID()] = supervisorDB.back();
-	}
+	
+	//supervisor instantiation thread
+	std::thread instantiateSupervisor([&] {
+		while (std::getline(SupervisorStream, supervisor)) {
+			supervisorDB.push_back(new Supervisor(supervisor));
+			//add id and supervisor to map
+			id_to_supervisor[supervisorDB.back()->getID()] = supervisorDB.back();
+		}
+		}
+	);
 
 	//instantiate each project and add to map
-	while (std::getline(ProjectStream, project)) {
-		projectDB.push_back(new Project(project));
-		//add id and supervisor to map
-		id_to_project[projectDB.back()->getModuleCode()] = projectDB.back();
-	}
+	std::thread instantiateProject([&] {
+		while (std::getline(ProjectStream, project)) {
+			projectDB.push_back(new Project(project));
+			//add id and supervisor to map
+			id_to_project[projectDB.back()->getModuleCode()] = projectDB.back();
+		}
+		}
+	);
+	// wait for all loops to execute, then merge processes into the main thread.
+	instantiateStudent.join();
+	instantiateSupervisor.join();
+	instantiateProject.join();
 
 	//map the associations for students
-	for (auto& student : this->studentDB) {
-		//set the allocated project attribute
-		if (id_to_project.count(student->getAllocatedIdenifier())) { //project still exists
-			student->setAllocatedProject(id_to_project[student->getAllocatedIdenifier()]);
-		}
-		else {
-			student->setAllocatedProject(nullptr);
-		}
-		//set the preferred projects if they still exist
-		for (auto& id : student->getPreferenceIdentifiers()) {
-			if (id_to_project.count(id)) {
-				student->addProjectToPreferences(id_to_project[id]);
+	std::thread AssociateStudents([&] {
+		for (auto& student : this->studentDB) {
+			//set the allocated project attribute
+			if (id_to_project.count(student->getAllocatedIdenifier())) { //project still exists
+				student->setAllocatedProject(id_to_project[student->getAllocatedIdenifier()]);
+			}
+			else {
+				student->setAllocatedProject(nullptr);
+			}
+			//set the preferred projects if they still exist
+			for (auto& id : student->getPreferenceIdentifiers()) {
+				if (id_to_project.count(id)) {
+					student->addProjectToPreferences(id_to_project[id]);
+				}
 			}
 		}
-	}
+		}
+	);
 
 	//map the associations for supervisors
-	for (auto& supervisor : this->supervisorDB) {
-		//set the oversee project attribute
-		for (auto& id : supervisor->getProjectIdentifiers()) {
-			if (id_to_project.count(id)) {
-				supervisor->addProjectWorkload(id_to_project[id]);
+	std::thread AssociateSupervisors([&] {
+		for (auto& supervisor : this->supervisorDB) {
+			//set the oversee project attribute
+			for (auto& id : supervisor->getProjectIdentifiers()) {
+				if (id_to_project.count(id)) {
+					supervisor->addProjectWorkload(id_to_project[id]);
+				}
 			}
 		}
-	}
+		}
+	);
 
 	//map the associations for projects
-	for (auto& project : projectDB) {
-		//set the supervisor oversee attribute
-		project->setSupervisor(id_to_supervisor[project->getSupervisorIdentifier()]);
-		//set the students taking attribute
-		for (auto& id : project->getStudentIdentifiers()) {
-			if (id_to_student.count(id)) {
-				project->addStudent(id_to_student[id]);
+	std::thread AssociateProjects([&] {
+		for (auto& project : projectDB) {
+			//set the supervisor oversee attribute
+			project->setSupervisor(id_to_supervisor[project->getSupervisorIdentifier()]);
+			//set the students taking attribute
+			for (auto& id : project->getStudentIdentifiers()) {
+				if (id_to_student.count(id)) {
+					project->addStudent(id_to_student[id]);
+				}
 			}
 		}
-	}
+		}
+	);
+	AssociateStudents.join();
+	AssociateSupervisors.join();
+	AssociateProjects.join();
 }
 
