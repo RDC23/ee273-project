@@ -155,8 +155,6 @@ std::string Student::Serialise() {
 		this->getPassword() + ',' +
 		std::to_string(this->getID()) + ',' +
 		this->getDegree();
-
-	std::cout << this->getDegree();
 	
 	//add an identifier for an allocated project, 0 if none exist
 	if (this->getAllocatedProject() != nullptr) {

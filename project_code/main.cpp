@@ -11,10 +11,10 @@ int main() {
 	DatabaseManager dbm(db, 2);
 
 	AdminUI* ui = new AdminUI(db->getAdmin(), &dbm, db);
-	ui->displayUI();
-
 
 	while (true) {
+		clearScreen();
+		ui->displayUI();
 		int option = 0;
 		option = getValidInteger("\nEnter an option number: ");
 		if (option > 0 && option <= ui->getNumOptions()) {

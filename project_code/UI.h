@@ -90,6 +90,7 @@ public:
 	void automaticAllocate();
 	void swapAllocationStrategy();
 	void editStudent();
+	Project* getValidProject(std::string prompt);
 	void editSupervisor();
 	void editProject();
 	void editStudentMetadata(Student* student_to_edit);
@@ -105,7 +106,8 @@ private:
 		{"Swap allocation strategy", 2},
 		{"Edit a student's data", 3},
 		{"Edit a supervisors's data", 4},
-		{"Edit a project's data", 5}
+		{"Edit a project's data", 5},
+		{"Exit application", 6}
 	};
 
 };

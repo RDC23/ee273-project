@@ -14,6 +14,7 @@ UserUI::UserUI(DatabaseManager* dbm) {
 StudentUI::StudentUI(Student* myStudent, DatabaseManager* dbm) : UserUI(dbm), myStudent(myStudent) {};
 
 void StudentUI::displayUI() {
+	clearScreen();
 	std::cout << "Welcome to the Project Selection Portal for Students, " <<myStudent->getName()<< std::endl;
 	printLineSep();
 	//show all options offered in the student options vector attribute
@@ -388,8 +389,69 @@ void AdminUI::swapAllocationStrategy() {
 	///FINISH
 }
 
+Project* AdminUI::getValidProject(std::string prompt) {
+	Project* proj = nullptr;
+	while (proj == nullptr) {
+		std::string title = getValidString(prompt);
+		proj = dbm->findProjectByTitle(title);
+		if (proj == nullptr) {
+			std::cout << "\nA project with that name wasn't found." << std::endl;
+		}
+	}
+	return proj;
+}
+
 void AdminUI::editStudentMetadata(Student* student_to_edit) {
-	std::cout << "Implement me!";
+	clearScreen();
+	std::vector<std::string> options = { "Name", "Password", "ID", "Allocated Project" };
+
+	std::cout << "What data belonging to " << student_to_edit->getName() << " would you like to edit?\n" << std::endl;
+	for (int i = 0; i<options.size(); i++){
+		std::cout << i+1 << ". " << options[i] << std::endl;
+	}
+	bool exit = false;
+	while (!exit) {
+		int choice = getValidInteger("\nEnter the number of the field to edit (or 0 to exit): ");
+		if (choice < 0 || choice > options.size()) {
+			std::cout << "\nThe number you entered does not match any provided in the options. Please try again." << std::endl;
+		}
+		switch (choice) {
+			case(0):
+				std::cout << "Exiting to the main menu." << std::endl;
+				return;
+			case(1):
+				//edit the name
+				std::cout << "\nWhat should " << student_to_edit->getName() << "'s name be changed to?" << std::endl;
+				student_to_edit->setName(getValidString("\nEnter the new name: "));
+				return;
+				break;
+			case(2):
+				//edit the password
+				std::cout << "\nWhat should " << student_to_edit->getName() << "'s password be changed to?" << std::endl;
+				student_to_edit->setPassword(getValidString("\nEnter the new password: "));
+				return;
+				break;
+			case(3):
+				//edit the ID
+				std::cout << "\nWhat should " << student_to_edit->getName() << "'s ID be changed to (integer code only) ?" << std::endl;
+				student_to_edit->setID(getValidInteger("\nEnter the new password: "));
+				return;
+				break;
+			case(4):
+				//edit the project allocated
+				std::cout << student_to_edit->getName() << " has been allocated: ";
+				if (student_to_edit->getAllocatedProject() == nullptr) {
+					std::cout << "No project.";
+				}
+				else {
+					std::cout << student_to_edit->getAllocatedProject()->getTitle();
+				}
+				std::cout << "\nWhat should the new project allocation be? The available choices are:\n";
+				dbm->printListOfProjects();
+				student_to_edit->setAllocatedProject(getValidProject("\nEnter the name of a project to allocate this student: "));
+				return;
+		}
+	}
 }
 
 void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {

@@ -15,7 +15,7 @@ int getValidInteger(const std::string message) {
             valid_input = true;  
         }
         else {
-            std::cout << "Invalid input. Please enter a valid integer." << std::endl;
+            std::cout << "\nInvalid input. Please enter a valid integer." << std::endl;
         }
     }
     return input;
@@ -31,7 +31,7 @@ std::string getValidString(const std::string message) {
         if (std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore();
-            std::cout << "Error parsing input data. Please try again." << std::endl;
+            std::cout << "\nError parsing input data. Please try again." << std::endl;
         }
         valid_input = true;
     }
@@ -39,7 +39,7 @@ std::string getValidString(const std::string message) {
 }
 
 void printLineSep() {
-    std::cout << "=====================================================================" << std::endl;
+    std::cout << "------------------------------------------------------------------------------------------" << std::endl;
 }
 
 void clearScreen() {
