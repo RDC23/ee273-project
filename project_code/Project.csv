@@ -1,3 +1,11 @@
-StudentAllocator,273,Allocate students to projects,10,456
-Chess,213,Make an interactive chess game,14,132
-Neural Network,584,Design a neural network,3,456
+Student Allocator,273,Allocate students to projects to maximise those with their first choice using C++,10,456
+Chess,213,Make an interactive chess game that supports custom rules,14,132
+Neural Network,584,Design a neural network that recognises animals,3,456
+Stock Analysis,927,Analyze stock market trends and predict future prices,5,367
+Social Network,521,Build a social media platform with customizable user profiles,3,891
+Language Translator,412,Develop a language translation system using AI algorithms,7,456
+Weather App,635,Create a weather app with real-time data and notifications,4,123
+E-commerce challenge,789,Design an e-commerce website with advanced search and filter options,6,456
+Food Delivery Service,456,Build an online platform for food ordering and delivery,4,789
+Virtual Assistant,234,Develop a smart virtual assistant that can perform multiple tasks,5,234
+Fitness Tracker,367,Design a fitness tracker that monitors user activity and provides health insights,3,678

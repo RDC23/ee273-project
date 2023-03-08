@@ -251,12 +251,11 @@ void StudentUI::reOrderProjects() {
 	std::swap(myprojects.at(--from), myprojects.at(--to));
 	std::cout << "\nSuccessfully swapped \"" << myprojects.at(to)->getTitle()  << "\" and \"" << myprojects.at(from)->getTitle() << "\".";
 	pause();
-}
-	
+}	
 
 void StudentUI::viewAssignedProject() {
 	if (myStudent->getAllocatedProject() == nullptr) {
-		std::cout << "\nYou have not yet been allocated any project by a supervisor." << std::endl;
+		std::cout << "\nYou have not yet been allocated any project yet. Please check back later!" << std::endl;
 		pause();
 		return;
 	}
@@ -270,7 +269,7 @@ void StudentUI::viewAssignedProject() {
 SupervisorUI::SupervisorUI(Supervisor* mySupervisor, DatabaseManager* dbm) : UserUI(dbm), mySupervisor(mySupervisor) {};
 
 void SupervisorUI::displayUI() {
-	std::cout << "Welcome to the Project Selection Portal for Supervisors!\n" << std::endl;
+	std::cout << "Welcome to the Project Selection Portal for Supervisors, " << mySupervisor->getName() << "!\n" << std::endl;
 	//show all options offered in the supervisor options vector attribute
 	for (auto& option : this->options) {
 		std::cout << option.second << ". " << option.first << std::endl;
@@ -288,7 +287,7 @@ std::string SupervisorUI::getOptionName(int choice) {
 			return option.first;
 		}
 	}
-	return "Invalid option.";
+	return "\nInvalid option.";
 }
 
 void SupervisorUI::doSomething(int choice) {
@@ -300,25 +299,60 @@ void SupervisorUI::doSomething(int choice) {
 			this->getProjectToEdit();
 			break;
 		default:
-			std::cout << "An invalid choice was entered" << std::endl;
+			std::cout << "\nAn invalid choice was entered" << std::endl;
+			pause();
 	}
 }
 
 void SupervisorUI::showProjectsOversee() {
-	std::cout << "You are currently a supervisor for the following projects:\n" << std::endl;
+	std::cout << "\nYou are currently a supervisor for the following projects:\n" << std::endl;
 	const auto& my_projs = mySupervisor->getProjectsOversee();
 	for (auto& proj : my_projs) {
 		std::cout << proj->getTitle() << std::endl;
 	}
+	pause();
 }
 
-void SupervisorUI::editProjectMetadata(Project* to_edit) {
-	//implement this function
-	std::cout << "Implement me!";
+void SupervisorUI::editProjectMetadata(Project* to_edit) { //add functionality to ensure new project data isnt a duplicate of an existing project
+	std::unordered_map<int, std::string> attributes{ { 1, "Title" }, {2, "Max Capacity"}, {3, "Module code"}, {4,"Description"} };
+	std::cout << "\n";
+	for (auto attribute : attributes) {
+		std::cout << attribute.first << ": " << attribute.second << std::endl;
+	}
+	int choice = 0;
+	bool exit = false;
+	while (!exit) {
+		int edit_num = getValidInteger("\nEnter the number corresponding to the project data you want to edit (or '0' to exit):");
+		if (edit_num <0 || edit_num>attributes.size()) {
+			std::cout << "That's not a valid number, please try again." << std::endl;
+		}
+		switch (edit_num) {
+			case(1):
+				to_edit->setTitle(getValidString("\nEnter the new title for this project: "));
+				std::cout << "\nChange to module title successful." << std::endl;
+				pause();
+				return;
+			case(2):
+				to_edit->setMaxCapacity(getValidInteger("\nEnter the new maximum limit of students who can take this module: ")); 
+				std::cout << "\nChange to module capacity successful." << std::endl;
+				pause();
+				return;
+			case(3):
+				to_edit->setModuleCode(getValidInteger("\nEnter the new module code of this module: "));
+				std::cout << "\nChange to module code successful." << std::endl;
+				pause();
+				return;
+			case(4):
+				to_edit->setTitle(getValidString("\nEnter the new title for this project: "));
+				std::cout << "\nChange to module description successful." << std::endl;
+				pause();
+				return;
+		}
+	}
 }
 
 void SupervisorUI::getProjectToEdit() {
-	std::cout << "You are currently supervising the following projects:\n" << std::endl;
+	std::cout << "\nYou are currently supervising the following projects:\n" << std::endl;
 	//create a map (associative array) of int to project
 	auto& projects_available = mySupervisor->getProjectsOversee();
 	std::unordered_map<int, Project*> int_to_project;
@@ -338,6 +372,7 @@ void SupervisorUI::getProjectToEdit() {
 		if (choice == 0) {
 			std::cout << "Exiting the project editor and returning to the main menu." << std::endl;
 			exit = true;
+			pause();
 			return;
 		}
 		if (int_to_project.count(choice)) { //it exists therefore a valid input 

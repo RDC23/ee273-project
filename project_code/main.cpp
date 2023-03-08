@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 #include "User.h"
 #include "UI.h"
 #include "Utils.h"
@@ -7,9 +8,7 @@
 
 
 int main() {
-	std::cout << "\033[48;5;24m"; // Set background color to a dark blue
-	std::cout << "\033[38;5;231m"; // Set text color to a light grey
-
+	setConsoleTheme();
 	//create the core data structures
 	Database* db = new Database;  
 	DatabaseManager dbm(db, 2);

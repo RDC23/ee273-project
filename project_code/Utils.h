@@ -11,3 +11,5 @@ void printLineSep();
 void clearScreen();
 
 void pause();
+
+void setConsoleTheme();
