@@ -8,9 +8,17 @@ Database::Database() {
 }
 
 Database::~Database() {
-	this->saveDBtoCSV();
-
-	//FREE ALL DYNAMIC MEMORY!!!!!!!!
+	this->saveDB_THREAD();
+	//free dynamic memory for each DB
+	for (auto& student : studentDB) {
+		delete student;
+	}
+	for (auto& supervisor : supervisorDB) {
+		delete supervisor;
+	}
+	for (auto& proj : projectDB) {
+		delete proj;
+	}
 }
 
 void Database::loadDBfromCSV() {
@@ -195,8 +203,9 @@ void Database::LoadDB_THREAD() {
 	std::unordered_map<int, Student*> id_to_student;
 	std::unordered_map<int, Project*> id_to_project;
 
-	//here, student,supervisor & project instantiation in the database in split into three parallel operations.
-	// student instatiation thread.
+	//here, student,supervisor & project instantiation in the database is split into three parallel operations.
+	
+	//student instatiation thread.
 	std::thread instantiateStudent([&] 
 		{ while (std::getline(StudentStream, student)) {
 		studentDB.push_back(new Student(student));
@@ -205,7 +214,6 @@ void Database::LoadDB_THREAD() {
 	}
 		}
 	);
-
 	
 	//supervisor instantiation thread
 	std::thread instantiateSupervisor([&] {
@@ -230,6 +238,8 @@ void Database::LoadDB_THREAD() {
 	instantiateStudent.join();
 	instantiateSupervisor.join();
 	instantiateProject.join();
+
+	//thread again to map associations
 
 	//map the associations for students
 	std::thread AssociateStudents([&] {
@@ -276,8 +286,10 @@ void Database::LoadDB_THREAD() {
 				}
 			}
 		}
-		}
+	}
 	);
+
+	//join the threads
 	AssociateStudents.join();
 	AssociateSupervisors.join();
 	AssociateProjects.join();

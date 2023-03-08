@@ -4,12 +4,14 @@
 #include "Utils.h"
 
 //User UI methods
+//---------------------------------------------------------------------------------------------------------------
 
 UserUI::UserUI(DatabaseManager* dbm) {
 	this->dbm = dbm;
 }
 
 //Student UI methods
+//---------------------------------------------------------------------------------------------------------------
 
 StudentUI::StudentUI(Student* myStudent, DatabaseManager* dbm) : UserUI(dbm), myStudent(myStudent) {};
 
@@ -75,7 +77,7 @@ void StudentUI::addProjectToPreferences() {
 	//ensure that the student has room for another project
 	if (currentPreferences.size() >= projectPickLimit) {
 		std::cout << "\nYou have reached the maximum number of project choices ("
-			<< projectPickLimit << ").\nReturning to the main menu.\n" << std::endl;
+			<< projectPickLimit << ")\n.\nReturning to the main menu.\n" << std::endl;
 		pause();
 		return;
 	}
@@ -117,40 +119,50 @@ void StudentUI::addProjectToPreferences() {
 	}
 }
 
-
-void StudentUI::removeProject(){
+void StudentUI::removeProject() {
 	//make sure choices are not empty
 	if (myStudent->getMyProjectChoices().size() == 0) {
-		std::cout << "You have not selected any projects so there are none to remove." << std::endl;
+		std::cout << "\nYou have not selected any projects so there are none to remove." << std::endl;
 		pause();
 		return;
 	}
+	//create a map (associative array) of int to project
+	auto& my_projects = myStudent->getMyProjectChoices();
+	std::unordered_map<int, Project*> int_to_project;
 
-	std::cout << "Which project would you like to remove from your preferences? The projects currently selected are: \n" << std::endl;
-	myStudent->displayMyProjectChoices();	
+	//populate the map for easy indexing
+	for (int i = 1; i <= my_projects.size(); i++) {
+		int_to_project[i] = my_projects[i - 1];
+	}
+	//show the number and project
+	std::cout << "\n";
+	for (auto& enumerated_project : int_to_project) {
+		std::cout << enumerated_project.first << ". " << enumerated_project.second->getTitle() << std::endl;
+	}
 
-	//loop until the user enters a valid project name from those in their selections
-	std::string choice;
-	bool valid_choice = false;
-	while (!valid_choice) {
-		choice = getValidString("Enter the name of the project you wish to remove from your preferences: ");
-		if (choice == "Q" || choice == "q") {
-			std::cout << "Returning to the main menu." << std::endl;
+	//loop till quit
+	bool exit = false;
+	while (!exit) {
+		//get valid integer and print the details or an error message if non valid
+		int choice = getValidInteger("\nEnter the number corresponding with the project you want to remove from your preferences (or '0' to quit): ");
+		if (int_to_project.count(choice)) {
+			myStudent->removeProjectFromPreferences(int_to_project[choice]);
+			std::cout << "\nSucessfully removed \"" << int_to_project[choice]->getTitle() << "\" from your preferences" << std::endl;
 			pause();
 			return;
 		}
-		if (!this->myStudent->hasProject(choice)) {
-			std::cout << "Invalid project name. Please try again." << std::endl;
+		if (choice == 0) {
+			std::cout << "\nExiting to main menu." << std::endl;
+			exit = true;
+			pause();
+			break;
 		}
 		else {
-			valid_choice = true;
+			std::cout << "That isn't a valid project number. " << std::endl;
 		}
-
 	}
-	//delegate the deletion of the project to the Student class
-	myStudent->removeProjectFromPreferences(choice);
-	std::cout << "Successfully removed project \"" << choice << "\" from your preferences." << std::endl;
 }
+
 
 void StudentUI::viewMyProjectChoices() {
 	if ((myStudent->getMyProjectChoices()).size() < 1) {
@@ -237,6 +249,8 @@ void StudentUI::reOrderProjects() {
 
 	//perform the swap (decrement index due to 0 indexed vector)
 	std::swap(myprojects.at(--from), myprojects.at(--to));
+	std::cout << "\nSuccessfully swapped \"" << myprojects.at(to)->getTitle()  << "\" and \"" << myprojects.at(from)->getTitle() << "\".";
+	pause();
 }
 	
 
@@ -251,6 +265,7 @@ void StudentUI::viewAssignedProject() {
 }
 
 //Supervisor UI methods
+//------------------------------------------------------------------------------------------------------------------------------
 
 SupervisorUI::SupervisorUI(Supervisor* mySupervisor, DatabaseManager* dbm) : UserUI(dbm), mySupervisor(mySupervisor) {};
 
@@ -336,6 +351,7 @@ void SupervisorUI::getProjectToEdit() {
 }
 
 //Admin UI methods
+//-----------------------------------------------------------------------------------------------------------------------
 
 AdminUI::AdminUI(Admin* admin, DatabaseManager* dbm, Database* db) : UserUI(dbm), myAdmin(admin), db(db) {};
 
