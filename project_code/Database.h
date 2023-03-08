@@ -20,6 +20,7 @@ public:
 	std::vector<Project*>& getProjects();
 	std::vector<Supervisor*>& getSupervisors();
 	Admin* getAdmin();
+	User* findUserWithCredentials(int username, std::string password);
 
 private:	
 	Database(const Database&); //prevent multiple instances being created due to copy construction

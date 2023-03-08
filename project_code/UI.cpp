@@ -148,11 +148,13 @@ void StudentUI::removeProject(){
 void StudentUI::viewMyProjectChoices() {
 	if ((myStudent->getMyProjectChoices()).size() < 1) {
 		std::cout << "\nYou haven't added any projects to your preferences list yet" << std::endl;
+		pause();
 		return;
 	}
 
 	std::cout << "\nCurrently selected projects are:\n " << std::endl;
 	myStudent->displayMyProjectChoices();
+	pause();
 }
 
 void StudentUI::findOutMoreProject() {
@@ -178,11 +180,13 @@ void StudentUI::findOutMoreProject() {
 		int choice = getValidInteger("\nEnter the number corresponding with the project you want to view more details about (or '0' to quit): ");
 		if (int_to_project.count(choice)) {
 			int_to_project[choice]->prettyPrint();
+			pause();
 			return; //omit this line for infinite loop, check with Kishan
 		}
 		if (choice == 0) {
 			std::cout << "Exiting to main menu." << std::endl;
 			exit = true;
+			pause();
 			break;
 		}
 		else{

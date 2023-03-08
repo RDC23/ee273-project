@@ -1,6 +1,7 @@
 #include "Utils.h"
 #include <iostream>
 #include <sstream>
+#include <stdio.h>
 
 int getValidInteger(const std::string message) {
     //ensures the user has correctly entered an integer, and returns this
@@ -44,4 +45,8 @@ void printLineSep() {
 
 void clearScreen() {
    std::cout << "\033[2J\033[1;1H";
+}
+
+void pause() {
+    std::cin.get();
 }

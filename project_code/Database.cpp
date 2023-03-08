@@ -4,7 +4,7 @@
 
 Database::Database() {
 	//when the database is created, load in all the pre-existing data
-	this->loadDBfromCSV();
+	this->LoadDB_THREAD();
 }
 
 Database::~Database() {
@@ -86,6 +86,29 @@ void Database::loadDBfromCSV() {
 		}
 	}
 }
+
+User* Database::findUserWithCredentials(int username, std::string password) {
+	User* person = nullptr;
+	//check the student database for a match
+	for (auto& student : this->studentDB) {
+		if ((student->getID() == username) && (student->getPassword() == password) ){
+			return student;
+		}
+	}
+	//check the supervisor database for a match
+	for (auto& supervisor : this->supervisorDB) {
+		if ((supervisor->getID() == username) && (supervisor->getPassword() == password)) {
+			return supervisor;
+		}
+	}
+	//check if these match the admin credentials
+	if ((username == this->systemAdmin.getID()) && (password == this->systemAdmin.getPassword())){
+		return &(this->systemAdmin);
+	}
+	//no match, return a nullptr
+	return nullptr;
+}
+
 void Database::saveDBtoCSV() {
 	std::ofstream StudentStream("Student.csv"); //open files streams for each user class
 	std::ofstream ProjectStream("Project.csv");

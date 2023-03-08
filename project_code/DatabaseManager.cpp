@@ -3,6 +3,7 @@
 #include "DatabaseManager.h"
 #include "Project.h"
 #include "User.h"
+#include "Utils.h"
 
 DatabaseManager::DatabaseManager(Database* myDatabase, int project_limit_pick) : database(myDatabase), project_limit_pick(project_limit_pick) {}
 
@@ -28,6 +29,19 @@ void DatabaseManager::printListOfProjects() {
 		proj->simplePrint();
 	}
 }
+
+User* DatabaseManager::authenticateAndFindUser() {
+	clearScreen();
+	std::cout << "Welcome to the login portal for project selection." << std::endl;
+	User* find_user = nullptr;
+	while (!find_user) {
+		int login_id = getValidInteger("\nEnter your unique ID: ");
+		std::string password = getValidString("\nEnter your password: ");
+		find_user = this->database->findUserWithCredentials(login_id, password);
+	}
+	return find_user;
+}
+
 
 int DatabaseManager::getProjectPickLimit() {
 	return this->project_limit_pick;
