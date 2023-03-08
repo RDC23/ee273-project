@@ -74,49 +74,55 @@ void StudentUI::addProjectToPreferences() {
 
 	//ensure that the student has room for another project
 	if (currentPreferences.size() >= projectPickLimit) {
-		std::cout << "You have reached the maximum number of project choices ("
-			<< projectPickLimit << ").\nReturning to the main menu." << std::endl;
+		std::cout << "\nYou have reached the maximum number of project choices ("
+			<< projectPickLimit << ").\nReturning to the main menu.\n" << std::endl;
+		pause();
 		return;
 	}
-	//show the available projects to pick from
-	std::cout << "\nThe available projects to choose from are as follows:\n" << std::endl;
-	dbm->printProjectsNotSelected(this->myStudent);
 
-	//loop until valid data is provided checking for quit or invalid data
-	bool quit = false;
-	while (!quit) {
-		std::string projectTitle;
-		projectTitle = getValidString("\nEnter the title of a project to add (or 'Q' to quit): ");
-		if (projectTitle == "Q" || projectTitle == "q") {
-			std::cout << "Returning to the main menu." << std::endl;
-			quit = true;
-			continue;
-		}
-		if (!dbm->isValidProjectTitle(projectTitle)) {
-			std::cout << "Invalid project title. Please try again." << std::endl;
-			continue;
-		}
-		Project* project = dbm->findProjectByTitle(projectTitle);
-		if (!project) {
-			std::cout << "Unable to find project with title \"" << projectTitle << "\". Please try again." << std::endl;
-			continue;
-		}
-		if (myStudent->hasProject(projectTitle)) {
-			std::cout << "Project \"" << projectTitle << "\" is already in your project preferences." << std::endl;
-			continue;
-		}
-		//project is found so add to student preferences
-		this->myStudent->addProjectToPreferences(project);
-		std::cout << "Successfully added project \"" << projectTitle << "\" to your preferences." << std::endl;
-		return; //omit this line for infinite loop, check with Kishan
+	//create a map (associative array) of int to project
+	auto projects_available = dbm->getProjectsNotSelected(this->myStudent);
+	std::unordered_map<int, Project*> int_to_project;
 
+	//populate the map for easy indexing
+	for (int i = 1; i <= projects_available.size(); i++) {
+		int_to_project[i] = projects_available[i - 1];
+	}
+	//show the number and project
+	std::cout << "\n";
+	for (auto& enumerated_project : int_to_project) {
+		std::cout << enumerated_project.first << ". " << enumerated_project.second->getTitle() << std::endl;
+	}
+
+	//loop till quit
+	bool exit = false;
+	while (!exit) {
+		//get valid integer and print the details or an error message if non valid
+		int choice = getValidInteger("\nEnter the number corresponding with the project you want to add to your preferences (or '0' to quit): ");
+		if (int_to_project.count(choice)) {
+			myStudent->addProjectToPreferences(int_to_project[choice]);
+			std::cout << "\nSucessfully added \"" << int_to_project[choice]->getTitle() << "\" to your preferences" << std::endl;
+			pause();
+			return;
+		}
+		if (choice == 0) {
+			std::cout << "\nExiting to main menu." << std::endl;
+			exit = true;
+			pause();
+			break;
+		}
+		else {
+			std::cout << "That isn't a valid project number. " << std::endl;
+		}
 	}
 }
+
 
 void StudentUI::removeProject(){
 	//make sure choices are not empty
 	if (myStudent->getMyProjectChoices().size() == 0) {
 		std::cout << "You have not selected any projects so there are none to remove." << std::endl;
+		pause();
 		return;
 	}
 
@@ -130,6 +136,7 @@ void StudentUI::removeProject(){
 		choice = getValidString("Enter the name of the project you wish to remove from your preferences: ");
 		if (choice == "Q" || choice == "q") {
 			std::cout << "Returning to the main menu." << std::endl;
+			pause();
 			return;
 		}
 		if (!this->myStudent->hasProject(choice)) {
@@ -199,15 +206,15 @@ void StudentUI::reOrderProjects() {
 	auto& myprojects = myStudent->getMyProjectChoices();
 	//no choices
 	if (myprojects.size() < 1) {
-		std::cout << "No projects have been selected." << std::endl;
+		std::cout << "\nNo projects have been selected." << std::endl;
 		return;
 	}
 	//only one choice, no swaps possible
 	if (myprojects.size() == 1) {
-		std::cout << "You have only got one project in your preferences list. No swaps are possible." << std::endl;
+		std::cout << "\nYou have only got one project in your preferences list. No swaps are possible." << std::endl;
 		return;
 	}
-	std::cout << "Your currently selected projects, in order of preference are:\n " << std::endl;
+	std::cout << "\nYour currently selected projects, in order of preference are:\n " << std::endl;
 	myStudent->displayMyProjectChoices();
 
 	int from{ 0 };
@@ -215,16 +222,16 @@ void StudentUI::reOrderProjects() {
 
 	//get from location
 	while (from <= 0 || from > myprojects.size()) {
-		from = getValidInteger("Enter the number of the project you wish to swap: ");
+		from = getValidInteger("\nEnter the number of the project you wish to swap: ");
 		if (from <= 0 || from > myprojects.size()) {
-			std::cout << "You don't have a project choice number " << from << ". Please try again." << std::endl;
+			std::cout << "\nYou don't have a project choice number " << from << ". Please try again." << std::endl;
 		}		
 	}
 	//get to location
 	while (to <= 0 || to > myprojects.size()) {
-		to = getValidInteger("Enter the number of the project you wish to swap it with: ");
+		to = getValidInteger("\nEnter the number of the project you wish to swap it with: ");
 		if (to <= 0 || to > myprojects.size()) {
-			std::cout << "You don't have a project choice number " << to << ". Please try again." << std::endl;
+			std::cout << "\nYou don't have a project choice number " << to << ". Please try again." << std::endl;
 		}
 	}
 
@@ -235,10 +242,12 @@ void StudentUI::reOrderProjects() {
 
 void StudentUI::viewAssignedProject() {
 	if (myStudent->getAllocatedProject() == nullptr) {
-		std::cout << "You have not yet been allocated any project by a supervisor." << std::endl;
+		std::cout << "\nYou have not yet been allocated any project by a supervisor." << std::endl;
+		pause();
 		return;
 	}
-	std::cout << "You have been assigned to \"" << myStudent->getAllocatedProject() << "\"." << std::endl;
+	std::cout << "\nYou have been assigned to \"" << myStudent->getAllocatedProject()->getTitle() << "\"." << std::endl;
+	pause();
 }
 
 //Supervisor UI methods

@@ -128,7 +128,7 @@ void Project::simplePrint() const {
 }
 
 void Project::prettyPrint() {
-	std::cout << this->getTitle() << " : (Module Code " << this->getModuleCode() << ")" << std::endl;
+	std::cout << "\n" << this->getTitle() << " : (Module Code " << this->getModuleCode() << ")" << std::endl;
 	printLineSep();
 	std::cout << "Supervisor: " << this->getSupervisor()->getName() << std::endl;
 	std::cout << "Project description: ";
