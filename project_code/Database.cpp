@@ -283,3 +283,35 @@ void Database::LoadDB_THREAD() {
 	AssociateProjects.join();
 }
 
+void Database::saveDB_THREAD() {
+	std::ofstream StudentStream("Student.csv"); //open files streams for each user class
+	std::ofstream ProjectStream("Project.csv");
+	std::ofstream SupervisorStream("Supervisor.csv");
+
+	std::thread saveStudents([&] {
+		for (auto& n : this->getStudents()) {  //go through each object of each vector and assign them as  serialised strings 
+			//to the corresponding file stream
+			StudentStream << n->Serialise() << "\n";
+		}
+		}
+	);
+	std::thread saveProjects([&] {
+		for (auto& n : this->getProjects()) {
+
+			ProjectStream << n->Serialise() << "\n";
+		}
+		}
+	);
+
+	std::thread saveSupervisors([&] {
+		for (auto& n : this->getSupervisors()) {
+
+			SupervisorStream << n->Serialise() << "\n";
+		}
+		}
+	);
+	saveStudents.join();
+	saveProjects.join();
+	saveSupervisors.join();
+}
+

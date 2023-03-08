@@ -11,6 +11,7 @@ public:
 	virtual ~Database(); //implement logic to save all data to csv then free all pointer data
 	void loadDBfromCSV();
 	void LoadDB_THREAD();
+	void saveDB_THREAD();
 	void saveDBtoCSV();
 	Student* getStudent(std::string name);
 	Supervisor* getSupervisor(std::string name);
