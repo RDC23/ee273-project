@@ -29,7 +29,8 @@ public:
 	void removeStudent(Student* to_remove);
 	void setSupervisor(Supervisor* supervisor);
 	bool isFull();
-	void simplePrint() const;
+	void simplePrint() const; //only the project name
+	void printStudents(); //print the students names in the module
 	void prettyPrint(); ///show the title, description, capacity and supervisor all formatted in a nice block
 	int getSupervisorIdentifier();
 	std::vector<int> getStudentIdentifiers();

@@ -74,7 +74,8 @@ private:
 	
 	std::vector<std::pair<std::string, int>> options = {
 		{"Show projects I am overseeing", 1},
-		{"Edit a project metadata", 2}
+		{"Edit a project metadata", 2},
+		{"Exit application", 3},
 	};
 	
 };

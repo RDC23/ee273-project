@@ -1,8 +1,10 @@
-#include "Utils.h"
 #include <Windows.h>
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
+#include <unordered_map>
+#include <vector>
+#include "Utils.h"
 
 int getValidInteger(const std::string message) {
     //ensures the user has correctly entered an integer, and returns this
@@ -41,7 +43,7 @@ std::string getValidString(const std::string message) {
 }
 
 void printLineSep() {
-    std::cout << "--------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << "----------------------------------------------------------------------------------" << std::endl;
 }
 
 
@@ -59,21 +61,16 @@ void setConsoleTheme() {
     CONSOLE_SCREEN_BUFFER_INFOEX consoleInfo;
     consoleInfo.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
     GetConsoleScreenBufferInfoEx(hConsole, &consoleInfo);
-    consoleInfo.ColorTable[0] = RGB(0, 0, 30);
+    consoleInfo.ColorTable[0] = RGB(50, 75, 75);
     SetConsoleScreenBufferInfoEx(hConsole, &consoleInfo);
 
     // Set console font
     CONSOLE_FONT_INFOEX fontInfo;
     fontInfo.cbSize = sizeof(CONSOLE_FONT_INFOEX);
     GetCurrentConsoleFontEx(hConsole, FALSE, &fontInfo);
-    fontInfo.dwFontSize.X = 10;
-    fontInfo.dwFontSize.Y = 16;
+    fontInfo.dwFontSize.X = 14;
+    fontInfo.dwFontSize.Y = 18;
     wcscpy_s(fontInfo.FaceName, L"Computer Modern");
     SetCurrentConsoleFontEx(hConsole, FALSE, &fontInfo);
-
-    //set the indentation and window size
-    HWND console = GetConsoleWindow();
-    RECT rect;
-    GetWindowRect(console, &rect);
-    SetWindowPos(console, NULL, 100, rect.top, 120 * 8, 40 * 16, SWP_NOZORDER | SWP_NOACTIVATE);
 }
+

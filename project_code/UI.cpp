@@ -298,6 +298,10 @@ void SupervisorUI::doSomething(int choice) {
 		case 2:
 			this->getProjectToEdit();
 			break;
+		case 3:
+			std::cout << "\nSigning out..." << std::endl;
+			pause();
+			return;
 		default:
 			std::cout << "\nAn invalid choice was entered" << std::endl;
 			pause();
@@ -307,16 +311,21 @@ void SupervisorUI::doSomething(int choice) {
 void SupervisorUI::showProjectsOversee() {
 	std::cout << "\nYou are currently a supervisor for the following projects:\n" << std::endl;
 	const auto& my_projs = mySupervisor->getProjectsOversee();
-	for (auto& proj : my_projs) {
-		std::cout << proj->getTitle() << std::endl;
+	//print project and students taking
+	for (int i = 0; i < my_projs.size(); i++) {
+		std::cout << i + 1 << ". " << (my_projs[i])->getTitle() << std::endl;
+		std::cout << "\nStudents Assigned:";
+		my_projs[i]->printStudents();
+		std::cout << "\n";
 	}
+	std::cout << "\n";
 	pause();
 }
 
 void SupervisorUI::editProjectMetadata(Project* to_edit) { //add functionality to ensure new project data isnt a duplicate of an existing project
 	std::unordered_map<int, std::string> attributes{ { 1, "Title" }, {2, "Max Capacity"}, {3, "Module code"}, {4,"Description"} };
 	std::cout << "\n";
-	for (auto attribute : attributes) {
+	for (auto& attribute : attributes) {
 		std::cout << attribute.first << ": " << attribute.second << std::endl;
 	}
 	int choice = 0;
@@ -333,17 +342,20 @@ void SupervisorUI::editProjectMetadata(Project* to_edit) { //add functionality t
 				pause();
 				return;
 			case(2):
+				std::cout << "This project can currently hold " << to_edit->getMaxCapacity() << " students.\n" << std::endl;
 				to_edit->setMaxCapacity(getValidInteger("\nEnter the new maximum limit of students who can take this module: ")); 
 				std::cout << "\nChange to module capacity successful." << std::endl;
 				pause();
 				return;
 			case(3):
+				std::cout << "The current module code for this project is '" << to_edit->getModuleCode() << "'.\n" << std::endl;
 				to_edit->setModuleCode(getValidInteger("\nEnter the new module code of this module: "));
 				std::cout << "\nChange to module code successful." << std::endl;
 				pause();
 				return;
 			case(4):
-				to_edit->setTitle(getValidString("\nEnter the new title for this project: "));
+				std::cout << "The current description for this project is: '" << to_edit->getDescription() << "'.\n" << std::endl;
+				to_edit->setDesciption(getValidString("\nEnter the new description for this project: "));
 				std::cout << "\nChange to module description successful." << std::endl;
 				pause();
 				return;

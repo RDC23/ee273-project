@@ -108,6 +108,17 @@ bool Project::isFull() {
 	return (std::size(this->students) >= this->maxCapacity);
 }
 
+void Project::printStudents() {
+	if (this->students.size() < 1) {
+		std::cout << " No students have been assigned to this module yet." << std::endl;
+		return;
+	}
+
+	for (auto& student : this->students) {
+		std::cout << student->getName() << ", ";
+	}
+}
+
 std::string Project::Serialise() {
 	//save all the definite fields in comma seperated format
 	std::string serial_string = this->getTitle() + ',' +
