@@ -10,6 +10,7 @@ public:
 	DatabaseManager(Database* myDatabase, int project_limit_pick=3);
 	virtual ~DatabaseManager();
 	std::vector<Project*> getProjectsNotSelected(Student* student); //show all projects not in the student's preferences
+	std::vector<Project*> getProjectsNotOverseen(Supervisor* sup);
 	void printListOfProjects();
 	int getProjectPickLimit();
 	const std::vector<Project*>& getAllProjectsReadOnly();

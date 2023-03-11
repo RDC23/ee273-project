@@ -571,10 +571,6 @@ void AdminUI::editStudentMetadata(Student* student_to_edit) {
 	}
 }
 
-void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
-
-}
-
 void AdminUI::editStudent() {
 	clearScreen();
 	std::cout << "\nWhich student would you like to edit? The students currently in the database are: " << std::endl;
@@ -585,7 +581,7 @@ void AdminUI::editStudent() {
 			std::cout << "(No allocated project)" << std::endl;
 		}
 		else {
-			std::cout << " (" << student->getAllocatedProject()->getTitle() << " )" << std::endl;
+			std::cout << " (" << student->getAllocatedProject()->getTitle() << ")" << std::endl;
 		}
 	}
 	bool exit = false;
@@ -603,8 +599,105 @@ void AdminUI::editStudent() {
 	}
 }
 
-void AdminUI::editProjectMetadata(Project* project_to_edit) {
+void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
+	clearScreen();
+	std::vector<std::string> options = { "Name", "Password", "ID", "Swap projects overseen" };
 
+	std::cout << "What data belonging to " << supervisor_to_edit->getName() << " would you like to edit?\n" << std::endl;
+	for (int i = 0; i < options.size(); i++) {
+		std::cout << i + 1 << ". " << options[i] << std::endl;
+	}
+	bool exit = false;
+	while (!exit) {
+		int choice = getValidInteger("\nEnter the number of the field to edit (or 0 to exit): ");
+		if (choice < 0 || choice > options.size()) {
+			std::cout << "\nThe number you entered does not match any provided in the options. Please try again." << std::endl;
+		}
+		switch (choice) {
+		case(0):
+			std::cout << "Exiting to the main menu." << std::endl;
+			return;
+		case(1):
+			//edit the name
+			std::cout << "\nWhat should " << supervisor_to_edit->getName() << "'s name be changed to?" << std::endl;
+			supervisor_to_edit->setName(getValidString("\nEnter the new name: "));
+			return;
+			break;
+		case(2):
+			//edit the password
+			std::cout << "\nWhat should " << supervisor_to_edit->getName() << "'s password be changed to?" << std::endl;
+			supervisor_to_edit->setPassword(getValidString("\nEnter the new password: "));
+			return;
+			break;
+		case(3):
+			//edit the ID
+			std::cout << "\nWhat should " << supervisor_to_edit->getName() << "'s ID be changed to (integer code only) ?" << std::endl;
+			supervisor_to_edit->setID(getValidInteger("\nEnter the new password: "));
+			return;
+			break;
+		case(4):
+			//edit the project allocated
+			std::cout << "\n" << supervisor_to_edit->getName() << " oversees the following projects:\n " << std::endl;
+			if (supervisor_to_edit->getProjectsOversee().size() == 0) {
+				std::cout << "This supervisor doesn't oversee any projects currently.\n";
+				pause();
+				return;
+			}
+			else {
+				//get and display current projects overseen
+				auto& projs = supervisor_to_edit->getProjectsOversee();
+				for (int i = 0; i < projs.size(); i++) {
+					std::cout << i + 1 << ". " << projs[i]->getTitle() << std::endl;
+				}
+				//get project FROM which to swap...
+				int from = 0;
+				Project* from_swap = nullptr;
+				while (from <= 0 || from > projs.size()) {
+					from = getValidInteger("\nWhich project should be swapped out for another one? Enter the corresponding number: ");
+					if (from <= 0 || from > projs.size()) {
+						std::cout << "That isn't a valid project number. Please try again." << std::endl;
+					}
+				}
+				from_swap = projs[from - 1];
+
+				//get projects TO swap with
+				clearScreen();
+				int to = 0;
+				Project* to_swap = nullptr;
+				auto all_projs = dbm->getProjectsNotOverseen(supervisor_to_edit);
+				std::cout << "\n";
+				for (int j = 0; j < all_projs.size(); j++) {
+					std::cout << j + 1 << ". " << all_projs[j]->getTitle() << std::endl;
+				}
+				printLineSep();
+				while (to <= 0 || to > all_projs.size()) {
+					to = getValidInteger("\nWhich project should this supervisor now oversee?: ");
+					if (to<= 0 || to > all_projs.size()) {
+						std::cout << "That isn't a valid project number. Please try again." << std::endl;
+					}
+				}
+				to_swap = all_projs[to - 1];
+
+				//swap the supervisors and projects (ensures a project always has a supervisor)
+				Supervisor* temp = to_swap->getSupervisor(); //temp hold supervisor written over
+				to_swap->setSupervisor(from_swap->getSupervisor());
+				from_swap->setSupervisor(temp);
+
+				//update the project pointers of supervisors
+				projs.erase(std::remove_if(projs.begin(), projs.end(), [&](Project* pro) {return pro == from_swap; }));
+				projs.push_back(to_swap);
+
+				auto& to_projects = to_swap->getSupervisor()->getProjectsOversee();
+				to_projects.erase(std::remove_if(to_projects.begin(), to_projects.end(), [&](Project* pro) {return pro == to_swap; }));
+				to_projects.push_back(from_swap);
+
+				std::cout << "\nSuccessfully swapped '" << from_swap->getTitle() << "' with '" << to_swap->getTitle() << "'. " << std::endl;
+				pause();
+				return;
+
+			}			
+		}
+	}
 }
 
 void AdminUI::editSupervisor() {
@@ -612,7 +705,7 @@ void AdminUI::editSupervisor() {
 	std::cout << "\nWhich supervisor would you like to edit? The supervisors currently in the database are: " << std::endl;
 	printLineSep();
 	for (auto& sup : this->db->getSupervisors()) {
-		std::cout << sup->getName() << " : " << sup->getID();
+		std::cout << sup->getName() << " : ID-" << sup->getID();
 		if (sup->getProjectsOversee().size() == 0) {
 			std::cout << "(No projects overseen)" << std::endl;
 		}
@@ -620,27 +713,31 @@ void AdminUI::editSupervisor() {
 			std::cout << " (";
 			auto& sup_projects = sup->getProjectsOversee();
 			for (int i = 0; i <sup_projects.size()-1; i++) {
-				sup_projects[i]->getTitle();
+				std::cout << sup_projects[i]->getTitle();
 				std::cout << ", ";
 			}
-			std::cout << sup_projects[sup_projects.size() - 1] << ")" << std::endl;
+			std::cout << sup_projects[sup_projects.size() - 1]->getTitle() << ")" << std::endl;
 		}
 	}
 	bool exit = false;
 	while (!exit) {
-		int reg = getValidInteger("\nEnter the ID of the student you want to edit: ");
-		Student* student_to_loc = db->findStudentByRegnum(reg);
+		int reg = getValidInteger("\nEnter the ID of the supervisor you want to edit: ");
+		Supervisor* sup_to_loc = db->findSupervisorByRegnum(reg);
 
-		if (student_to_loc) {
-			editStudentMetadata(student_to_loc); //delegate the editing
+		if (sup_to_loc) {
+			editSupervisorMetadata(sup_to_loc); //delegate the editing
 			break;
 		}
 		else {
-			std::cout << "Unable to locate a student with that registration number." << std::endl;
+			std::cout << "Unable to locate a supervisor with that registration number." << std::endl;
 		}
 	}
 }
 
+
+void AdminUI::editProjectMetadata(Project* project_to_edit) {
+
+}
 void AdminUI::editProject() {
 	//implement
 }

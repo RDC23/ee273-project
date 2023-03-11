@@ -164,6 +164,15 @@ Student* Database::findStudentByRegnum(int regnum) {
 	return nullptr;
 }
 
+Supervisor* Database::findSupervisorByRegnum(int regnum) {
+	auto sup_loc = std::find_if(supervisorDB.begin(), supervisorDB.end(), [&](Supervisor* sup) {return sup->getID() == regnum; });
+	//if we have not found student, return nullptr, else the student pointer
+	if (sup_loc != supervisorDB.end()) {
+		return *sup_loc;
+	}
+	return nullptr;
+}
+
 Project* Database::getProject(std::string name) {
 	//returns a pointer to a project in the database
 	auto& proj_db = this->projectDB;
