@@ -755,7 +755,26 @@ void AdminUI::automaticAllocate() {
 	 std::string password = getValidString("Enter Password: ");
 	 int id = getValidInteger("Enter Student ID: ");
 	 std::string degree = getValidString("Enter Degree: ");
-	 this->db.
+	 Student* newStudent = new Student(name, password, id, degree);
+	 auto& students = this->db->getStudents();
+	 students.push_back(newStudent);
+	 printLineSep();
+	 std::cout << "New Student Created! : " << newStudent->Serialise() << "\n" << std::endl;
+	 return newStudent;
 
 }
+
+ Supervisor *AdminUI::createSupervisor() {
+	 std::string name = getValidString("Enter Name: ");
+	 std::string password = getValidString("Enter Password: ");
+	 int id = getValidInteger("Enter Supervisor ID: ");
+	 std::string department = getValidString("Enter Department: ");
+	 Supervisor* newSupervisor = new Supervisor(name, password, id, department);
+	 auto& supervisors = this->db->getSupervisors();
+	 supervisors.push_back(newSupervisor);
+	 printLineSep();
+	 std::cout << "New Student Created! : " << newSupervisor->Serialise() << "\n" << std::endl;
+	 return newSupervisor;
+
+ }
 
