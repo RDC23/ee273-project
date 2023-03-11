@@ -17,6 +17,7 @@ public:
 	Supervisor* getSupervisor(std::string name);
 	Project* getProject(std::string name);
 	Student* findStudentByRegnum(int regnum);
+	Supervisor* findSupervisorByRegnum(int regnum);
 	std::vector<Student*>& getStudents();
 	std::vector<Project*>& getProjects();
 	std::vector<Supervisor*>& getSupervisors();

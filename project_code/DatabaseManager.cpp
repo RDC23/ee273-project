@@ -7,6 +7,20 @@
 
 DatabaseManager::DatabaseManager(Database* myDatabase, int project_limit_pick) : database(myDatabase), project_limit_pick(project_limit_pick) {}
 
+std::vector<Project*> DatabaseManager::getProjectsNotOverseen(Supervisor* sup) {
+	const auto& all_projects = this->getAllProjectsReadOnly();
+	const auto& sup_oversee = sup->getProjectsOversee();
+	std::vector<Project*> not_oversee;
+
+	for (auto& project : all_projects) {
+		if (std::find(sup_oversee.begin(), sup_oversee.end(), project) == sup_oversee.end()) {
+			//the student already hasn't already selected this project so print it
+			not_oversee.push_back(project);
+		}
+	}
+	return not_oversee;
+}
+
 DatabaseManager::~DatabaseManager() {
 	delete this->database;
 }

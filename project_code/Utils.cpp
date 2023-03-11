@@ -61,7 +61,7 @@ void setConsoleTheme() {
     CONSOLE_SCREEN_BUFFER_INFOEX consoleInfo;
     consoleInfo.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
     GetConsoleScreenBufferInfoEx(hConsole, &consoleInfo);
-    consoleInfo.ColorTable[0] = RGB(50, 75, 75);
+    consoleInfo.ColorTable[0] = RGB(0, 0, 50);
     SetConsoleScreenBufferInfoEx(hConsole, &consoleInfo);
 
     // Set console font
@@ -70,7 +70,7 @@ void setConsoleTheme() {
     GetCurrentConsoleFontEx(hConsole, FALSE, &fontInfo);
     fontInfo.dwFontSize.X = 14;
     fontInfo.dwFontSize.Y = 18;
-    wcscpy_s(fontInfo.FaceName, L"Computer Modern");
+    wcscpy_s(fontInfo.FaceName, L"Consolas");
     SetCurrentConsoleFontEx(hConsole, FALSE, &fontInfo);
 }
 
