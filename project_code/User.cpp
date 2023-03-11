@@ -10,11 +10,13 @@ User::User(std::string name, std::string password, int id) {
 	this->password = password;
 	this->myID = id;
 }
+
 User::~User() = default;
 
 std::string User::getName() {
 	return this->full_name;
 }
+
 std::string User::getPassword() {
 	return this->password;
 }
@@ -30,6 +32,7 @@ void User::setName(std::string name) {
 void User::setPassword(std::string password) {
 	this->password = password;
 }
+
 void User::setID(int id) {
 	this->myID = id;
 }
@@ -252,7 +255,7 @@ std::string Supervisor::getDepartment() {
  }
 
  //METHODS FOR ADMIN CLASS
- Admin::Admin() : User("admin", "totalpower", 999) {
+ Admin::Admin() : User("Admin", "totalpower", 999) {
 	 this->setAllocationStrategy(new galesShapely);
  }
 

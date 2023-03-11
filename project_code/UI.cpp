@@ -433,22 +433,40 @@ void AdminUI::doSomething(int choice) {
 		this->swapAllocationStrategy();
 		break;
 	case 3:
-		this->editStudent();
+		this->resetStudentAllocation();
 		break;
 	case 4:
-		this->editSupervisor();
+		this->editStudent();
 		break;
 	case 5:
-		this->editProject();
+		this->editSupervisor();
 		break;
 	case 6:
+		this->editProject();
+		break;
+	case 7:
 		std::cout << "See you again!" << std::endl;
+		pause();
 		return;
 	default:
 		std::cout << "Invalid action..." << std::endl;
+		pause();
 		return;
 	}
 
+}
+
+void AdminUI::resetStudentAllocation() {
+	//clear the students allocated field
+	for (auto& student : db->getStudents()) {
+		student->setAllocatedProject(nullptr);
+	}
+	//clear the project allocated students field
+	for (auto& proj : db->getProjects()) {
+		proj->getStudents().clear();
+	}
+	std::cout << "\nSuccessfully reset the project allocation.\n" << std::endl;
+	pause();
 }
 
 void AdminUI::swapAllocationStrategy() {
@@ -459,10 +477,29 @@ void AdminUI::swapAllocationStrategy() {
 		std::cout << "\nYou don't have any preferred method for sorting the students." << std::endl;
 		return;
 	}
-	
-	std::cout << "Which allocation approach would you like to use? The options are:\n" << std::endl;
 
-	///FINISH
+	std::cout << "\nWhich allocation approach would you like to use? The options are:" << std::endl;
+	std::cout << "\n1. Optimal allocation\n2. Simple allocation\n" << std::endl;
+	int choice = 0;
+	while (choice != 1 && choice != 2) {
+		choice = getValidInteger("Enter the number of the allocation type you wish to use: ");
+
+		if (choice < 1 || choice >2) {
+			std::cout << "That number doesn't correspond with any allocation approach. Please try again.\n" << std::endl;
+		}
+	}
+	switch (choice) {
+	case 1:
+		myAdmin->setAllocationStrategy(new galesShapely);
+		std::cout << "\nSuccessfully swapped your allocation strategy!\n" << std::endl;
+		pause();
+		return;
+	case 2:
+		myAdmin->setAllocationStrategy(new simpleAllocate);
+		std::cout << "\nSuccessfully swapped your allocation strategy!\n" << std::endl;
+		pause();
+		return;
+	}
 }
 
 Project* AdminUI::getValidProject(std::string prompt) {
@@ -515,16 +552,20 @@ void AdminUI::editStudentMetadata(Student* student_to_edit) {
 				break;
 			case(4):
 				//edit the project allocated
-				std::cout << student_to_edit->getName() << " has been allocated: ";
+				std::cout << "\n" << student_to_edit->getName() << " has been allocated: ";
 				if (student_to_edit->getAllocatedProject() == nullptr) {
-					std::cout << "No project.";
+					std::cout << "No project.\n";
 				}
 				else {
-					std::cout << student_to_edit->getAllocatedProject()->getTitle();
+					std::cout << student_to_edit->getAllocatedProject()->getTitle() << "\n";
 				}
 				std::cout << "\nWhat should the new project allocation be? The available choices are:\n";
+				printLineSep();
 				dbm->printListOfProjects();
 				student_to_edit->setAllocatedProject(getValidProject("\nEnter the name of a project to allocate this student: "));
+				std::cout << "\nSuccessfully allocated " << student_to_edit->getName() << " to"
+					" '" << student_to_edit->getAllocatedProject()->getTitle() << "'." << std::endl;
+				pause();
 				return;
 		}
 	}
@@ -534,16 +575,18 @@ void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
 
 }
 
-void AdminUI::editProjectMetadata(Project* project_to_edit) {
-
-}
-
 void AdminUI::editStudent() {
 	clearScreen();
 	std::cout << "\nWhich student would you like to edit? The students currently in the database are: " << std::endl;
 	printLineSep();
 	for (auto& student : this->db->getStudents()) {
-		std::cout << student->getName() << " : " << student->getID() << std::endl;
+		std::cout << student->getName() << " : " << student->getID();
+		if (student->getAllocatedProject() == nullptr) {
+			std::cout << "(No allocated project)" << std::endl;
+		}
+		else {
+			std::cout << " (" << student->getAllocatedProject()->getTitle() << " )" << std::endl;
+		}
 	}
 	bool exit = false;
 	while (!exit) {
@@ -560,8 +603,42 @@ void AdminUI::editStudent() {
 	}
 }
 
+void AdminUI::editProjectMetadata(Project* project_to_edit) {
+
+}
+
 void AdminUI::editSupervisor() {
-	//implement
+	clearScreen();
+	std::cout << "\nWhich supervisor would you like to edit? The supervisors currently in the database are: " << std::endl;
+	printLineSep();
+	for (auto& sup : this->db->getSupervisors()) {
+		std::cout << sup->getName() << " : " << sup->getID();
+		if (sup->getProjectsOversee().size() == 0) {
+			std::cout << "(No projects overseen)" << std::endl;
+		}
+		else {
+			std::cout << " (";
+			auto& sup_projects = sup->getProjectsOversee();
+			for (int i = 0; i <sup_projects.size()-1; i++) {
+				sup_projects[i]->getTitle();
+				std::cout << ", ";
+			}
+			std::cout << sup_projects[sup_projects.size() - 1] << ")" << std::endl;
+		}
+	}
+	bool exit = false;
+	while (!exit) {
+		int reg = getValidInteger("\nEnter the ID of the student you want to edit: ");
+		Student* student_to_loc = db->findStudentByRegnum(reg);
+
+		if (student_to_loc) {
+			editStudentMetadata(student_to_loc); //delegate the editing
+			break;
+		}
+		else {
+			std::cout << "Unable to locate a student with that registration number." << std::endl;
+		}
+	}
 }
 
 void AdminUI::editProject() {
