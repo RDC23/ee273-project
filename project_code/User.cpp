@@ -13,6 +13,12 @@ User::User(std::string name, std::string password, int id) {
 
 User::~User() = default;
 
+void Supervisor::removeProject(Project* to_remove) {
+	auto& my_projs = this->projects_oversee;
+	auto it = std::remove_if(my_projs.begin(), my_projs.end(), [&](Project* rem) {return rem == to_remove; });
+	my_projs.erase(it, my_projs.end());
+}
+
 std::string User::getName() {
 	return this->full_name;
 }

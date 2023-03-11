@@ -163,7 +163,6 @@ void StudentUI::removeProject() {
 	}
 }
 
-
 void StudentUI::viewMyProjectChoices() {
 	if ((myStudent->getMyProjectChoices()).size() < 1) {
 		std::cout << "\nYou haven't added any projects to your preferences list yet" << std::endl;
@@ -659,9 +658,9 @@ void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
 					}
 				}
 				from_swap = projs[from - 1];
-
-				//get projects TO swap with
 				clearScreen();
+
+				//get projects TO swap with..
 				int to = 0;
 				Project* to_swap = nullptr;
 				auto all_projs = dbm->getProjectsNotOverseen(supervisor_to_edit);
@@ -672,28 +671,26 @@ void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
 				printLineSep();
 				while (to <= 0 || to > all_projs.size()) {
 					to = getValidInteger("\nWhich project should this supervisor now oversee?: ");
-					if (to<= 0 || to > all_projs.size()) {
+					if (to <= 0 || to > all_projs.size()) {
 						std::cout << "That isn't a valid project number. Please try again." << std::endl;
 					}
 				}
 				to_swap = all_projs[to - 1];
 
-				//swap the supervisors and projects (ensures a project always has a supervisor)
-				Supervisor* temp = to_swap->getSupervisor(); //temp hold supervisor written over
-				to_swap->setSupervisor(from_swap->getSupervisor());
-				from_swap->setSupervisor(temp);
+				Supervisor* old_supervisor_to_project = to_swap->getSupervisor();
+				to_swap->setSupervisor(supervisor_to_edit);
+				from_swap->setSupervisor(old_supervisor_to_project);
 
-				//update the project pointers of supervisors
-				projs.erase(std::remove_if(projs.begin(), projs.end(), [&](Project* pro) {return pro == from_swap; }));
-				projs.push_back(to_swap);
+				old_supervisor_to_project->removeProject(to_swap);
+				old_supervisor_to_project->addProjectWorkload(from_swap);
+				supervisor_to_edit->removeProject(from_swap);
+				supervisor_to_edit->addProjectWorkload(to_swap);
 
-				auto& to_projects = to_swap->getSupervisor()->getProjectsOversee();
-				to_projects.erase(std::remove_if(to_projects.begin(), to_projects.end(), [&](Project* pro) {return pro == to_swap; }));
-				to_projects.push_back(from_swap);
 
 				std::cout << "\nSuccessfully swapped '" << from_swap->getTitle() << "' with '" << to_swap->getTitle() << "'. " << std::endl;
 				pause();
 				return;
+
 
 			}			
 		}
