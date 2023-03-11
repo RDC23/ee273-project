@@ -652,4 +652,13 @@ void AdminUI::automaticAllocate() {
 	myAdmin->getAlloactionStrategy()->allocate(db);	
 }
 
+ Student *AdminUI::createStudent() {
+
+	 std::string name = getValidString("Enter Name: ");
+	 std::string password = getValidString("Enter Password: ");
+	 int id = getValidInteger("Enter Student ID: ");
+	 std::string degree = getValidString("Enter Degree: ");
+	 this->db.
+
+}
 

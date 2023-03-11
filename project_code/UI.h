@@ -98,7 +98,8 @@ public:
 	void editStudentMetadata(Student* student_to_edit);
 	void editSupervisorMetadata(Supervisor* supervisor_to_edit);
 	void editProjectMetadata(Project* project_to_edit);
-
+	Student* createStudent();
+	Student* createSupervisor();
 
 private:
 	Admin* myAdmin{ nullptr };
