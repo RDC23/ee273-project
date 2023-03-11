@@ -66,6 +66,7 @@ public:
 	std::string Serialise();
 	void setDepartment(std::string department_name);
 	void addProjectWorkload(Project* project_to_add);
+	void removeProject(Project* to_remove);
 	std::string getDepartment();
 	std::vector<Project*>& getProjectsOversee();
 	std::vector<int>& getProjectIdentifiers();

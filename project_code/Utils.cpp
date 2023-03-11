@@ -43,9 +43,8 @@ std::string getValidString(const std::string message) {
 }
 
 void printLineSep() {
-    std::cout << "----------------------------------------------------------------------------------" << std::endl;
+    std::cout << "--------------------------------------------------------------------------------------" << std::endl;
 }
-
 
 void clearScreen() {
    std::cout << "\033[2J\033[1;1H";
