@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 class Database; //forward declare the database to prevent circular dependency
 
 //encapsulates different allocate strategies for runtime flexibility for admin class + decoupling of algorithm from class that uses 
