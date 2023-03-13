@@ -21,6 +21,7 @@ void simpleAllocate::allocate(Database* db) {
 			for (auto& project : projects) {
 				if (!(*project)->isFull()) {
 					(*student)->setAllocatedProject(*project);
+					(*project)->addStudent(*student);
 					break;
 				}
 			}
@@ -42,12 +43,14 @@ void galesShapely::allocate(Database* db) {
 
 				if (!preference->isFull()) {
 					student->setAllocatedProject(preference);
+					preference->addStudent(student);
 					break;
 				}
 			}
 			for (auto& project : db->getProjects()) {
 				if (!project->isFull()){
 					student->setAllocatedProject(project);
+					project->addStudent(student);
 				}
 			}
 		}
