@@ -445,6 +445,10 @@ void AdminUI::doSomething(int choice) {
 		this->editProject();
 		break;
 	case 7:
+		this->createUser();
+		break;
+
+	case 8:
 		std::cout << "See you again!" << std::endl;
 		pause();
 		return;
@@ -759,12 +763,17 @@ void AdminUI::automaticAllocate() {
 		 auto& students = this->db->getStudents();
 		 students.push_back(newStudent);
 		 printLineSep();
-		 std::cout << "New Student Created! : " << newStudent->Serialise() << "\n" << std::endl;
+		 std::cout << "New Student Created! : " << newStudent->getName() << "\n" << std::endl;
 		 return newStudent;
 	 }
 
 	 else {
+		 
+		 std::cout << "The student " << 
+			 this->db->findStudentByRegnum(id)->getName()<<
+           "already exists!" << "\n" << std::endl;
 		 return this->db->findStudentByRegnum(id);
+
 	 }
 
 }
@@ -774,12 +783,21 @@ void AdminUI::automaticAllocate() {
 	 std::string password = getValidString("Enter Password: ");
 	 int id = getValidInteger("Enter Supervisor ID: ");
 	 std::string department = getValidString("Enter Department: ");
-	 Supervisor* newSupervisor = new Supervisor(name, password, id, department);
-	 auto& supervisors = this->db->getSupervisors();
-	 supervisors.push_back(newSupervisor);
-	 printLineSep();
-	 std::cout << "New Student Created! : " << newSupervisor->Serialise() << "\n" << std::endl;
-	 return newSupervisor;
+	 if (this->db->findSupervisorByRegnum(id) == nullptr) {
+		 Supervisor* newSupervisor = new Supervisor(name, password, id, department);
+		 auto& supervisors = this->db->getSupervisors();
+		 supervisors.push_back(newSupervisor);
+		 printLineSep();
+		 std::cout << "New Student Created! : " << newSupervisor->Serialise() << "\n" << std::endl;
+		 return newSupervisor;
+	 }
+
+	 else {
+		 std::cout << "The supervisor " <<
+			 this->db->findSupervisorByRegnum(id)->getName() <<
+			 "already exists!" << "\n" << std::endl;
+		 return this->db->findSupervisorByRegnum(id);
+	 }
 
  }
 
@@ -810,3 +828,44 @@ void AdminUI::automaticAllocate() {
 	 eraseFromProjects.join();
  }
 
+ void AdminUI::createUser() {
+	 clearScreen();
+	 std::vector<std::string> options = { "Student", "Supervisor" };
+
+	 std::cout << "What would you like to add?\n" << std::endl;
+	 for (int i = 0; i < options.size(); i++) {
+		 std::cout << i + 1 << ". " << options[i] << std::endl;
+	 }
+	 bool exit = false;
+	 while (!exit) {
+		 int choice = getValidInteger("\nEnter the number of the field to edit (or 0 to exit): ");
+		 if (choice < 0 || choice > options.size()) {
+			 std::cout << "\nThe number you entered does not match any provided in the options. Please try again." << std::endl;
+		 }
+
+		 switch (choice) {
+
+		 case 0:
+			 std::cout << "Exiting to the main menu." << std::endl;
+			 exit = true;
+			 pause();
+			 return;
+			 break;
+		 case 1:
+			 createStudent();
+			 pause();
+			 return;
+			 break;
+		 case 2:
+			 createSupervisor();
+			 pause();
+			 return;
+			 break;
+		 default:
+			 std::cout << "Invalid action..." << std::endl;
+			 pause();
+			 return;
+
+		 }
+	 }
+ }
