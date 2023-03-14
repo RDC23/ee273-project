@@ -95,6 +95,7 @@ public:
 	Project* getValidProject(std::string prompt);
 	void editSupervisor();
 	void editProject();
+	void resetAllocated();
 	void editStudentMetadata(Student* student_to_edit);
 	void editSupervisorMetadata(Supervisor* supervisor_to_edit);
 	void editProjectMetadata(Project* project_to_edit);
@@ -111,7 +112,8 @@ private:
 		{"Edit a student's data", 4},
 		{"Edit a supervisors's data", 5},
 		{"Edit a project's data", 6},
-		{"Exit application", 7}
+		{"Reset Student Allocation", 7},
+		{"Exit application", 9}
 	};
 
 };

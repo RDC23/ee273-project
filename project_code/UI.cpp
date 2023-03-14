@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <unordered_map>
+#include <thread>
 #include "UI.h"
 #include "Utils.h"
 
@@ -657,7 +658,7 @@ void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
 						std::cout << "That isn't a valid project number. Please try again." << std::endl;
 					}
 				}
-				from_swap = projs[from - 1];
+				from_swap = projs[from - int(1)];
 				clearScreen();
 
 				//get projects TO swap with..
@@ -675,7 +676,7 @@ void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
 						std::cout << "That isn't a valid project number. Please try again." << std::endl;
 					}
 				}
-				to_swap = all_projs[to - 1];
+				to_swap = all_projs[to - int(1)];
 
 				Supervisor* old_supervisor_to_project = to_swap->getSupervisor();
 				to_swap->setSupervisor(supervisor_to_edit);
@@ -752,12 +753,19 @@ void AdminUI::automaticAllocate() {
 	 std::string password = getValidString("Enter Password: ");
 	 int id = getValidInteger("Enter Student ID: ");
 	 std::string degree = getValidString("Enter Degree: ");
-	 Student* newStudent = new Student(name, password, id, degree);
-	 auto& students = this->db->getStudents();
-	 students.push_back(newStudent);
-	 printLineSep();
-	 std::cout << "New Student Created! : " << newStudent->Serialise() << "\n" << std::endl;
-	 return newStudent;
+
+	 if (this->db->findStudentByRegnum(id) == nullptr) {
+		 Student* newStudent = new Student(name, password, id, degree);
+		 auto& students = this->db->getStudents();
+		 students.push_back(newStudent);
+		 printLineSep();
+		 std::cout << "New Student Created! : " << newStudent->Serialise() << "\n" << std::endl;
+		 return newStudent;
+	 }
+
+	 else {
+		 return this->db->findStudentByRegnum(id);
+	 }
 
 }
 
@@ -773,5 +781,32 @@ void AdminUI::automaticAllocate() {
 	 std::cout << "New Student Created! : " << newSupervisor->Serialise() << "\n" << std::endl;
 	 return newSupervisor;
 
+ }
+
+ void AdminUI::resetAllocated() {
+
+	 std::thread eraseFromStudent([&] {
+		 for (auto& student : this->db->getStudents()) {
+
+			 student->setAllocatedProject(nullptr);
+
+		 }
+		 }
+	 );
+
+	 std::thread eraseFromProjects([&] {
+		 for (auto& project : this->db->getProjects()) {
+
+			 for (auto& student : project->getStudents()) {
+
+				 project->removeStudent(student);
+			 }
+
+		 }
+		 }
+		 );
+ 
+	 eraseFromStudent.join();
+	 eraseFromProjects.join();
  }
 
