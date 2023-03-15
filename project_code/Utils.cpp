@@ -60,7 +60,7 @@ void setConsoleTheme() {
     CONSOLE_SCREEN_BUFFER_INFOEX consoleInfo;
     consoleInfo.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
     GetConsoleScreenBufferInfoEx(hConsole, &consoleInfo);
-    consoleInfo.ColorTable[0] = RGB(0, 0, 50);
+    consoleInfo.ColorTable[0] = RGB(20, 15, 75);
     SetConsoleScreenBufferInfoEx(hConsole, &consoleInfo);
 
     // Set console font

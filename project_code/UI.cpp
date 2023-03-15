@@ -763,11 +763,69 @@ void AdminUI::editSupervisor() {
 }
 
 
-void AdminUI::editProjectMetadata(Project* project_to_edit) {
+void AdminUI::editProjectMetadata(Project* to_edit) {
+	std::unordered_map<int, std::string> attributes{ { 1, "Title" }, {2, "Max Capacity"}, {3, "Module code"}, {4,"Description"} };
+	std::cout << "\n";
+	for (auto& attribute : attributes) {
+		std::cout << attribute.first << ": " << attribute.second << std::endl;
+	}
+	int choice = 0;
+	bool exit = false;
+	while (!exit) {
+		int edit_num = getValidInteger("\nEnter the number corresponding to the project data you want to edit (or '0' to exit):");
+		if (edit_num <0 || edit_num>attributes.size()) {
+			std::cout << "That's not a valid number, please try again." << std::endl;
+		}
+		switch (edit_num) {
+		case(1):
+			to_edit->setTitle(getValidString("\nEnter the new title for this project: "));
+			std::cout << "Change to module title successful." << std::endl;
+			pause();
+			return;
+		case(2):
+			std::cout << "This project can currently hold " << to_edit->getMaxCapacity() << " students.\n" << std::endl;
+			to_edit->setMaxCapacity(getValidInteger("Enter the new maximum limit of students who can take this module: "));
+			std::cout << "Change to module capacity successful." << std::endl;
+			pause();
+			return;
+		case(3):
+			std::cout << "The current module code for this project is '" << to_edit->getModuleCode() << "'.\n" << std::endl;
+			to_edit->setModuleCode(getValidInteger("\nEnter the new module code of this module: "));
+			std::cout << "Change to module code successful." << std::endl;
+			pause();
+			return;
+		case(4):
+			std::cout << "The current description for this project is: '" << to_edit->getDescription() << "'.\n" << std::endl;
+			to_edit->setDesciption(getValidString("\nEnter the new description for this project: "));
+			std::cout << "Change to module description successful." << std::endl;
+			pause();
+			return;
+		}
+	}
 
 }
 void AdminUI::editProject() {
-	//implement
+	clearScreen();
+	auto& projects = db->getProjects();
+	for (int i = 0; i < projects.size(); i++) {
+		std::cout << i+1 << ": " << projects[i]->getTitle() << std::endl;
+	}
+	int choice=-1;
+	while (choice<0 || choice>projects.size()) {
+		choice = getValidInteger("\nEnter the number corresponding with the project you wish to edit (or '0') to exit:");
+		if (choice == 0) {
+			std::cout << "\nReturning to the main menu..." << std::endl;
+			pause();
+			return;
+		}
+
+		else if (choice<0 || choice>projects.size()) {
+			std::cout << "\nThe number you entered doesn't match any of those listed above." << std::endl;
+		}
+		else {
+			editProjectMetadata(projects[choice - 1]);
+		}
+	}
 }
 
 
@@ -916,8 +974,6 @@ void AdminUI::automaticAllocate() {
 
  Project* AdminUI::createProject() {
 
-
-
 	 std::string title = getValidString("Enter Title: ");
 	 int code = getValidInteger("Enter Module Code: ");
 	 std::string desc = getValidString("Enter Description: ");
@@ -933,7 +989,7 @@ void AdminUI::automaticAllocate() {
 	 }
 
 	 else {
-		 std::cout << "The supervisor " <<
+		 std::cout << "The project " <<
 			 this->db->getProject(title)->getTitle() <<
 			 "already exists!" << "\n" << std::endl;
 		 return this->db->getProject(title);
