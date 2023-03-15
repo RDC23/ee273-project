@@ -33,29 +33,33 @@ void simpleAllocate::allocate(Database* db) {
 
 void galesShapely::allocate(Database* db) {
 
-	
+
 
 	for (auto& student : db->getStudents()) { //for every student
-		
+
 		if (student->getAllocatedProject() == nullptr) { // if no project allocated
 
 			for (auto& preference : student->getMyProjectChoices()) {
 
-				if (!preference->isFull()) {
+				if (!(preference->isFull())) {
 					student->setAllocatedProject(preference);
 					preference->addStudent(student);
 					break;
+
 				}
+
 			}
+
 			for (auto& project : db->getProjects()) {
-				if (!project->isFull()){
+				if (!(project->isFull())) {
 					student->setAllocatedProject(project);
 					project->addStudent(student);
+					break;
 				}
 			}
+
 		}
+		else { return; }
 
 	}
-
-
 }
