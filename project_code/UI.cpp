@@ -445,7 +445,7 @@ void AdminUI::doSomething(int choice) {
 		this->editProject();
 		break;
 	case 7:
-		this->createUser();
+		this->createNew();
 		break;
 
 	case 8:
@@ -828,9 +828,9 @@ void AdminUI::automaticAllocate() {
 	 eraseFromProjects.join();
  }
 
- void AdminUI::createUser() {
+ void AdminUI::createNew() {
 	 clearScreen();
-	 std::vector<std::string> options = { "Student", "Supervisor" };
+	 std::vector<std::string> options = { "Student", "Supervisor","Project" };
 
 	 std::cout << "What would you like to add?\n" << std::endl;
 	 for (int i = 0; i < options.size(); i++) {
@@ -861,6 +861,11 @@ void AdminUI::automaticAllocate() {
 			 pause();
 			 return;
 			 break;
+		 case 3:
+			 createProject();
+			 pause();
+			 return;
+			 break;
 		 default:
 			 std::cout << "Invalid action..." << std::endl;
 			 pause();
@@ -868,4 +873,31 @@ void AdminUI::automaticAllocate() {
 
 		 }
 	 }
+ }
+
+ Project* AdminUI::createProject() {
+
+
+
+	 std::string title = getValidString("Enter Title: ");
+	 int code = getValidInteger("Enter Module Code: ");
+	 std::string desc = getValidString("Enter Description: ");
+	 int capacity = getValidInteger("Enter Capacity:  ");
+
+	 if (this->db->getProject(title) == nullptr) {
+		 Project* newProject = new Project(title, code, desc, capacity);
+		 auto& projects = this->db->getProjects();
+		 projects.push_back(newProject);
+		 printLineSep();
+		 std::cout << "New Project Created! : " << newProject->getTitle() << "\n" << std::endl;
+		 return newProject;
+	 }
+
+	 else {
+		 std::cout << "The supervisor " <<
+			 this->db->getProject(title)->getTitle() <<
+			 "already exists!" << "\n" << std::endl;
+		 return this->db->getProject(title);
+	 }
+
  }

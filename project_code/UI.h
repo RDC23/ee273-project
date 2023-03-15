@@ -99,7 +99,8 @@ public:
 	void editStudentMetadata(Student* student_to_edit);
 	void editSupervisorMetadata(Supervisor* supervisor_to_edit);
 	void editProjectMetadata(Project* project_to_edit);
-	void createUser();
+	void createNew();
+	Project* createProject();
 	Student* createStudent();
 	Supervisor* createSupervisor();
 
