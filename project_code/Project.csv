@@ -3,10 +3,10 @@ Chess,213,Make an interactive chess game that supports custom rules,14,678
 Machine Learning 101,584,Design a neural network that recognises animals,3,132
 Stock Analysis,927,Analyze stock market trends and predict future prices,5,367
 Social Network,521,Build a social media platform with customizable user profiles,3,891
-Language Translator,412,Develop a language translation system using AI algorithms,7,456
+Language Translator,412,Develop a language translation system using AI algorithms,7,496
 Weather App,635,Create a weather app with real-time data and notifications,4,456
-E-commerce challenge,789,Design an e-commerce website with advanced search and filter options,6,456
+E-commerce challenge,789,Design an e-commerce website with advanced search and filter options,6,417
 Food Delivery Service,456,Build an online platform for food ordering and delivery,4,789
 Virtual Assistant,234,Develop a smart virtual assistant that can perform multiple tasks,5,456
 Fitness Tracker,367,Design a fitness tracker that monitors user activity and provides health insights,3,234
-Neural Newtork,595,Create a Turing-Complete Neural Network in C++,4,0
+Neural Newtork,595,Create a Turing-Complete Neural Network in C++,456

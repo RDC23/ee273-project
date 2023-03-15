@@ -100,6 +100,7 @@ public:
 	void editSupervisorMetadata(Supervisor* supervisor_to_edit);
 	void editProjectMetadata(Project* project_to_edit);
 	void createNew();
+	void showStudentsAndAllocations();
 	Project* createProject();
 	Student* createStudent();
 	Supervisor* createSupervisor();
@@ -115,7 +116,8 @@ private:
 		{"Edit a supervisors's data", 5},
 		{"Edit a project's data", 6},
 		{"Create new user", 7},
-		{"Exit application", 8}
+		{"Show students and allocations", 8},
+		{"Exit application", 9}
 	};
 
 };

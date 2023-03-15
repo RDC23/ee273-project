@@ -447,8 +447,10 @@ void AdminUI::doSomething(int choice) {
 	case 7:
 		this->createNew();
 		break;
-
 	case 8:
+		this->showStudentsAndAllocations();
+		break;
+	case 9:
 		std::cout << "See you again!" << std::endl;
 		pause();
 		return;
@@ -582,7 +584,7 @@ void AdminUI::editStudent() {
 	for (auto& student : this->db->getStudents()) {
 		std::cout << student->getName() << " : " << student->getID();
 		if (student->getAllocatedProject() == nullptr) {
-			std::cout << "(No allocated project)" << std::endl;
+			std::cout << " (No allocated project)" << std::endl;
 		}
 		else {
 			std::cout << " (" << student->getAllocatedProject()->getTitle() << ")" << std::endl;
@@ -590,7 +592,14 @@ void AdminUI::editStudent() {
 	}
 	bool exit = false;
 	while (!exit) {
-		int reg = getValidInteger("\nEnter the ID of the student you want to edit: ");
+		int reg = getValidInteger("\nEnter the ID of the student you want to edit (or '0' to exit): ");
+
+		if (reg == 0) { //return early
+			std::cout << "Returning to the main menu." << std::endl;
+			pause();
+			return;
+		}
+
 		Student* student_to_loc = db->findStudentByRegnum(reg);
 
 		if (student_to_loc) {
@@ -702,6 +711,23 @@ void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
 	}
 }
 
+void AdminUI::showStudentsAndAllocations() {
+	clearScreen();
+	std::cout << "Current Allocations" << std::endl;
+	printLineSep();
+	for (auto& student : db->getStudents()) {
+		std::cout << student->getName() << "(" << student->getDegree() << ") : ";
+		if (student->getAllocatedProject() != nullptr) {
+			std::cout << student->getAllocatedProject()->getTitle() << std::endl;
+					}
+		else {
+			std::cout << "No project allocation" << std::endl;
+		}
+	}
+	pause();
+	return;
+}
+
 void AdminUI::editSupervisor() {
 	clearScreen();
 	std::cout << "\nWhich supervisor would you like to edit? The supervisors currently in the database are: " << std::endl;
@@ -748,14 +774,27 @@ void AdminUI::editProject() {
 void AdminUI::automaticAllocate() {
 	std::cout << "Allocating students automatically...\n" << std::endl;
 	//call the allocation strategy class, passing it the database
-	myAdmin->getAlloactionStrategy()->allocate(db);	
+	myAdmin->getAlloactionStrategy()->allocate(db);
+
+	std::cout << "Allocation complete!" << std::endl;
+	pause();
+	return;
 }
 
  Student *AdminUI::createStudent() {
 
 	 std::string name = getValidString("Enter Name: ");
 	 std::string password = getValidString("Enter Password: ");
-	 int id = getValidInteger("Enter Student ID: ");
+	 
+	 //force a non zero regnum as this key is used to exit a menu (so would not allow search)
+	 int id = 0;
+	 while (!id) {
+		 id = getValidInteger("Enter Student ID: ");
+		 if (!id) {
+			 std::cout << "\nPlease enter a longer registration number - starting in 20** (** = year of start) then 5 extra digits." << std::endl;
+		 }
+	 }
+
 	 std::string degree = getValidString("Enter Degree: ");
 
 	 if (this->db->findStudentByRegnum(id) == nullptr) {
