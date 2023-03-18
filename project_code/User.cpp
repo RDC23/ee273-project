@@ -1,3 +1,10 @@
+/*EE273 Group Project
+Name: User.cpp
+Program: Project Allocation
+Authors: Ross Cathcart & Kishan Maharaj
+Last Updated: 18/03/2023
+*/
+
 #include "User.h"
 #include <stdio.h>
 

@@ -1,1 +1,10 @@
-﻿  project_code.vcxproj -> C:\Users\rdcsc\Desktop\ee273-project\project_code\x64\Debug\project_code.exe
+﻿  AllocationStrategy.cpp
+  Database.cpp
+  DatabaseManager.cpp
+  main.cpp
+  Project.cpp
+  UI.cpp
+  User.cpp
+  Utils.cpp
+  Generating Code...
+  project_code.vcxproj -> C:\Users\kisha\OneDrive\Documents\Visual Studio 2022\proj\ee273-project\project_code\x64\Debug\project_code.exe

@@ -1,3 +1,11 @@
+/*EE273 Group Project
+Name: AllocationStrategy.cpp
+Program: Project Allocation
+Authors: Ross Cathcart & Kishan Maharaj
+Last Updated: 18/03/2023
+*/
+
+
 #include "AllocationStrategy.h"
 #include "Database.h"
 

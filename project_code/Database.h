@@ -1,3 +1,10 @@
+/*EE273 Group Project
+Name: Database.h
+Program: Project Allocation
+Authors: Ross Cathcart & Kishan Maharaj
+Last Updated: 18/03/2023
+*/
+
 #pragma once
 #include <fstream>
 #include "AllocationStrategy.h"

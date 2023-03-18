@@ -1,3 +1,14 @@
+/*EE273 Group Project
+Name: Database.cpp
+Program: Project Allocation
+Authors: Ross Cathcart & Kishan Maharaj 
+Last Updated: 18/03/2023
+*/
+
+
+
+
+
 #include <unordered_map>
 #include <thread>
 #include "Database.h"

@@ -1,3 +1,10 @@
+/*EE273 Group Project
+Name: AllocationStrategy.h
+Program: Project Allocation
+Authors: Ross Cathcart & Kishan Maharaj
+Last Updated: 18/03/2023
+*/
+
 #pragma once
 #include <algorithm>
 class Database; //forward declare the database to prevent circular dependency

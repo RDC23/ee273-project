@@ -1,3 +1,11 @@
+/*EE273 Group Project
+Name: UI.cpp
+Program: Project Allocation
+Authors: Ross Cathcart & Kishan Maharaj
+Last Updated: 18/03/2023
+*/
+
+
 #include <algorithm>
 #include <unordered_map>
 #include <thread>

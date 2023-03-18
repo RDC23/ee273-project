@@ -1,3 +1,11 @@
+/*EE273 Group Project
+Name: Utils.cpp
+Program: Project Allocation
+Authors: Ross Cathcart & Kishan Maharaj
+Last Updated: 18/03/2023
+*/
+
+
 #include <Windows.h>
 #include <iostream>
 #include <sstream>
