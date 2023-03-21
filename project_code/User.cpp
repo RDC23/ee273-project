@@ -134,6 +134,7 @@ void Student::addProjectToPreferences(Project* project) {
 
 void Student::setAllocatedProject(Project* to_allocate) {
 	this->allocated = to_allocate;
+	
 }
 
 bool Student::hasProject(std::string project_name){
@@ -284,6 +285,9 @@ std::string Supervisor::getDepartment() {
  }
 
  void Admin::setAllocationStrategy(AllocationStrategy* strategy) {
+	 if (this->allocate_strategy != nullptr) {
+		 delete this->allocate_strategy;	
+	 }
 	 this->allocate_strategy = strategy;
  }
 

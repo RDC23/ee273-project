@@ -57,17 +57,17 @@ void galesShapely::allocate(Database* db) {
 				}
 
 			}
-
-			for (auto& project : db->getProjects()) {
-				if (!(project->isFull())) {
-					student->setAllocatedProject(project);
-					project->addStudent(student);
-					break;
+			if (student->getAllocatedProject() == nullptr) {
+				for (auto& project : db->getProjects()) {
+					if (!(project->isFull())) {
+						student->setAllocatedProject(project);
+						project->addStudent(student);
+						break;
+					}
 				}
+
 			}
 
 		}
-		else { return; }
-
 	}
 }
