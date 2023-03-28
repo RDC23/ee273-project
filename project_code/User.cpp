@@ -21,8 +21,10 @@ User::User(std::string name, std::string password, int id) {
 User::~User() = default;
 
 void Supervisor::removeProject(Project* to_remove) {
-	auto& my_projs = this->projects_oversee;
+	auto& my_projs = this->projects_oversee; //get projects by ref
+	//binary stl search through these projects and append if project matches the input arguments.
 	auto it = std::remove_if(my_projs.begin(), my_projs.end(), [&](Project* rem) {return rem == to_remove; });
+	//delete appended project.
 	my_projs.erase(it, my_projs.end());
 }
 
@@ -57,11 +59,11 @@ Student::Student(std::string name, std::string password, int id, std::string deg
 }
 
 Student::Student(const std::string& csvline) {
-	int member_num{ 1 };
-	std::string member;
-	std::stringstream ss(csvline);
-	while (std::getline(ss, member, ',')) {
-		switch (member_num) {
+	int member_num{ 1 }; //keep track of string position.
+	std::string member; //holds the csv position.
+	std::stringstream ss(csvline); //holds csvline
+	while (std::getline(ss, member, ',')) { //go through each csvline
+		switch (member_num) { //depending on position:
 		case 1:
 			this->setName(member);
 			break;
@@ -81,7 +83,7 @@ Student::Student(const std::string& csvline) {
 		default:
 			this->preference_identifiers.push_back(stoi(member));
 		}
-		member_num++;
+		member_num++; //increment string position 
 	}
 }
 
@@ -149,22 +151,23 @@ bool Student::hasProject(std::string project_name){
 }
 
 void Student::removeProjectFromPreferences(Project* to_remove) {
-	auto& proj = this->getMyProjectChoices();
+	auto& proj = this->getMyProjectChoices();//retrieve projects
 	proj.erase(std::find(proj.begin(), proj.end(), to_remove));
 }
 
 void Student::removeProjectFromPreferences(std::string to_remove) {
-	auto& myproj = this->getMyProjectChoices();
+	auto& myproj = this->getMyProjectChoices();//fetch choices
 	myproj.erase(std::remove_if(myproj.begin(), myproj.end(), [&](Project* project) {
 		return project->getTitle() == to_remove;
-		}), myproj.end());
+		}), myproj.end()); //find project with argument name, return iterator and
+	                       //delete at this location
 }
 
 Project* Student::findProject(std::string project_name) {
 	auto& ptr = this->getMyProjectChoices();
 	return *std::find_if(ptr.begin(), ptr.end(), [&](Project* project) {
 		return project->getTitle() == project_name;
-		});
+		}); //return dereferenced iterator if project name matches argument
 }
 
 std::string Student::Serialise() {
@@ -201,15 +204,15 @@ std::vector<int>& Student::getPreferenceIdentifiers() {
 //METHODS FOR THE SUPERVISOR CLASS
 
 Supervisor::Supervisor(std::string name, std::string password, int id, std::string department) {
-	this->setName(name);
+	this->setName(name); 
 	this->setPassword(password);
 	this->setID(id);
 	this->department = department;
 } 
 
 Supervisor::Supervisor(const std::string& csvline) {
-	int member_num{ 1 };
-	std::string member;
+	int member_num{ 1 }; //track string position
+	std::string member; 
 	std::stringstream ss(csvline);
 	while (std::getline(ss, member, ',')) {
 		switch (member_num) {
@@ -229,8 +232,8 @@ Supervisor::Supervisor(const std::string& csvline) {
 			break;
 		default:
 			this->project_identifiers.push_back(stoi(member));			
-		}
-		member_num++;
+		}//depending on position pass data members into new supervisor
+		member_num++; //increment position
 	}
 } 
 
@@ -268,10 +271,10 @@ std::string Supervisor::getDepartment() {
 	 return this->project_identifiers;
  }
 
- //METHODS FOR ADMIN CLASS
- Admin::Admin() : User("Admin", "totalpower", 999) {
-	 this->setAllocationStrategy(new galesShapely);
- }
+ //METHODS FOR ADMIN CLASS //only one exists!
+ Admin::Admin() : User("Admin", "totalpower", 999) { //<-- this password
+	 this->setAllocationStrategy(new galesShapely); // default gale shapely
+ } //default admin 
 
  Admin::Admin(std::string name, std::string password, int id, AllocationStrategy::Strategy strat = AllocationStrategy::SIMPLE) {
 	 this->setName(name);

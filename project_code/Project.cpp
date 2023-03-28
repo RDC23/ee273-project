@@ -18,11 +18,11 @@ Project::Project(std::string title, int module_code, std::string description, in
 }
 
 Project::Project(const std::string& csvline) {
-	int member_num{ 1 };
-	std::string member;
-	std::stringstream ss(csvline);
+	int member_num{ 1 }; //track line position
+	std::string member; //hold line position
+	std::stringstream ss(csvline); //feed in csvline
 	while (std::getline(ss, member, ',')) {
-		switch (member_num) {
+		switch (member_num) { //depending on position
 
 		case 1:
 			this->setTitle(member);
@@ -50,7 +50,7 @@ Project::Project(const std::string& csvline) {
 Project::~Project()
 {
 	// destructor implementation goes here
-}
+}//database mamages lifecycle, so this is unneccessary
 
 std::string Project::getDescription() {
 	
@@ -103,8 +103,9 @@ Student* Project::findStudent(Student* to_find) {
 }
 
 void Project::removeStudent(Student* to_remove){
-	auto& ptr = this->getStudents();
-	this->getStudents().erase(std::find(ptr.begin(),ptr.end(),to_remove)); //double check this
+	auto& ptr = this->getStudents();//fetch student list
+	this->getStudents().erase(std::find(ptr.begin(),ptr.end(),to_remove)); 
+	//find iterator for the student to be removed then delete (using STL algorithms)
 }
 
 void Project::setSupervisor(Supervisor* supervisor) {
