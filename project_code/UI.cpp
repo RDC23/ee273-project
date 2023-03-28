@@ -25,6 +25,7 @@ UserUI::UserUI(DatabaseManager* dbm) {
 StudentUI::StudentUI(Student* myStudent, DatabaseManager* dbm) : UserUI(dbm), myStudent(myStudent) {};
 
 void StudentUI::displayUI() {
+	//print customised welcome message and loop through available options
 	clearScreen();
 	std::cout << "Welcome to the Project Selection Portal for Students, " <<myStudent->getName()<< std::endl;
 	printLineSep();
@@ -36,12 +37,12 @@ void StudentUI::displayUI() {
 }
 
 int StudentUI::getNumOptions() {
-	//allows main to validate the choice of doSomething() entered by the user
+	//allows main to validate the range of the choice of doSomething() entered by the user
 	return int((this->options).size());
 }
 
 std::string StudentUI::getOptionName(int choice) {
-	std::string optionName;
+	//indexes the hash map using the second (numeric value) to return the first string value (option name)
 	for (auto& option : this->options) {
 		if (option.second == choice) {
 			return option.first;
@@ -51,6 +52,7 @@ std::string StudentUI::getOptionName(int choice) {
 }
 
 void StudentUI::doSomething(int choice) {
+	//acts as a multiplexer to call the appropriate UI function based on the user input
 	switch (choice) {
 		case 1:
 			this->addProjectToPreferences();
@@ -71,6 +73,7 @@ void StudentUI::doSomething(int choice) {
 			this->viewAssignedProject();
 			break;
 		case 7:
+			//exit statement to return to main menu
 			std::cout << "See you again!" << std::endl;
 			return;
 		default:
@@ -80,6 +83,9 @@ void StudentUI::doSomething(int choice) {
 }
 
 void StudentUI::addProjectToPreferences() {
+	//loops through the current projects the student has and provides a numerical method
+	//for adding new projects
+
 	int projectPickLimit = dbm->getProjectPickLimit();
 	auto& currentPreferences = myStudent->getMyProjectChoices();
 
@@ -99,7 +105,7 @@ void StudentUI::addProjectToPreferences() {
 	for (int i = 1; i <= projects_available.size(); i++) {
 		int_to_project[i] = projects_available[i - 1];
 	}
-	//show the number and project
+	//show the number and respective project
 	std::cout << "\n";
 	for (auto& enumerated_project : int_to_project) {
 		std::cout << enumerated_project.first << ". " << enumerated_project.second->getTitle() << std::endl;
@@ -129,6 +135,8 @@ void StudentUI::addProjectToPreferences() {
 }
 
 void StudentUI::removeProject() {
+	//provides an enumerated method of removing a project from those in preference list
+
 	//make sure choices are not empty
 	if (myStudent->getMyProjectChoices().size() == 0) {
 		std::cout << "\nYou have not selected any projects so there are none to remove." << std::endl;
@@ -173,6 +181,7 @@ void StudentUI::removeProject() {
 }
 
 void StudentUI::viewMyProjectChoices() {
+	//loop through project preferences and display these to the console
 	if ((myStudent->getMyProjectChoices()).size() < 1) {
 		std::cout << "\nYou haven't added any projects to your preferences list yet" << std::endl;
 		pause();
@@ -185,6 +194,7 @@ void StudentUI::viewMyProjectChoices() {
 }
 
 void StudentUI::findOutMoreProject() {
+	//displays a more detailed description of the selected project (e.g. the name, description)
 	std::cout << "\nWhich project would you like to find out more details about?"
 		" The projects currently being offered are:\n" << std::endl;
 	//create a map (associative array) of int to project
@@ -223,8 +233,10 @@ void StudentUI::findOutMoreProject() {
 }
 
 void StudentUI::reOrderProjects() {
+	//allows the user to edit the order of projects in their preferences list
+
 	auto& myprojects = myStudent->getMyProjectChoices();
-	//no choices
+	//handle no choices case + early return
 	if (myprojects.size() < 1) {
 		std::cout << "\nNo projects have been selected." << std::endl;
 		return;
@@ -262,6 +274,7 @@ void StudentUI::reOrderProjects() {
 }	
 
 void StudentUI::viewAssignedProject() {
+	//display the name of the assigned project (or inform user that none have been allocated)
 	if (myStudent->getAllocatedProject() == nullptr) {
 		std::cout << "\nYou have not yet been allocated any project yet. Please check back later!" << std::endl;
 		pause();
@@ -277,6 +290,7 @@ void StudentUI::viewAssignedProject() {
 SupervisorUI::SupervisorUI(Supervisor* mySupervisor, DatabaseManager* dbm) : UserUI(dbm), mySupervisor(mySupervisor) {};
 
 void SupervisorUI::displayUI() {
+	//print customised welcome message and loop through available options
 	std::cout << "Welcome to the Project Selection Portal for Supervisors, " << mySupervisor->getName() << "!\n" << std::endl;
 	//show all options offered in the supervisor options vector attribute
 	for (auto& option : this->options) {
@@ -285,10 +299,12 @@ void SupervisorUI::displayUI() {
 }
 
 int SupervisorUI::getNumOptions() {
+	//returns the number of available options
 	return int((this->options).size());
 };
 
 std::string SupervisorUI::getOptionName(int choice) {
+	//return string key in map (project name from number)
 	std::string optionName;
 	for (auto& option : this->options) {
 		if (option.second == choice) {
@@ -299,6 +315,7 @@ std::string SupervisorUI::getOptionName(int choice) {
 }
 
 void SupervisorUI::doSomething(int choice) {
+	//call function based on the user input
 	switch (choice) {
 		case 1:
 			this->showProjectsOversee();
@@ -317,6 +334,7 @@ void SupervisorUI::doSomething(int choice) {
 }
 
 void SupervisorUI::showProjectsOversee() {
+	//display the name and students in the projects overseen by the supervisor
 	std::cout << "\nYou are currently a supervisor for the following projects:\n" << std::endl;
 	const auto& my_projs = mySupervisor->getProjectsOversee();
 	//print project and students taking
@@ -330,7 +348,8 @@ void SupervisorUI::showProjectsOversee() {
 	pause();
 }
 
-void SupervisorUI::editProjectMetadata(Project* to_edit) { //add functionality to ensure new project data isnt a duplicate of an existing project
+void SupervisorUI::editProjectMetadata(Project* to_edit) { 
+	//provides a method to edit a projects' metadata
 	std::unordered_map<int, std::string> attributes{ { 1, "Title" }, {2, "Max Capacity"}, {3, "Module code"}, {4,"Description"} };
 	std::cout << "\n";
 	for (auto& attribute : attributes) {
@@ -372,6 +391,8 @@ void SupervisorUI::editProjectMetadata(Project* to_edit) { //add functionality t
 }
 
 void SupervisorUI::getProjectToEdit() {
+	//provides a numerical method of retrieving the project to edit
+
 	std::cout << "\nYou are currently supervising the following projects:\n" << std::endl;
 	//create a map (associative array) of int to project
 	auto& projects_available = mySupervisor->getProjectsOversee();
@@ -411,6 +432,7 @@ void SupervisorUI::getProjectToEdit() {
 AdminUI::AdminUI(Admin* admin, DatabaseManager* dbm, Database* db) : UserUI(dbm), myAdmin(admin), db(db) {};
 
 void AdminUI::displayUI() {
+	//show the admin welcome message and available options
 	std::cout << "Welcome to the Project Selection Portal for Admins!\n" << std::endl;
 	//show all options offered in the admin options vector attribute
 	for (auto& option : this->options) {
@@ -419,10 +441,12 @@ void AdminUI::displayUI() {
 }
 
 int AdminUI::getNumOptions() {
+	//return the options count which are available
 	return int((this->options).size());
 };
 
 std::string AdminUI::getOptionName(int choice) {
+	//return the key of the hash map
 	std::string optionName;
 	for (auto& option : this->options) {
 		if (option.second == choice) {
@@ -433,6 +457,7 @@ std::string AdminUI::getOptionName(int choice) {
 }
 
 void AdminUI::doSomething(int choice) {
+	//call the function based on the choice entered by the user
 	switch (choice) {
 	case 1:
 		this->automaticAllocate();
@@ -471,6 +496,8 @@ void AdminUI::doSomething(int choice) {
 }
 
 void AdminUI::resetStudentAllocation() {
+	//for every student, remove the project allocated field. For every project, remove the allocated students
+
 	//clear the students allocated field
 	for (auto& student : db->getStudents()) {
 		student->setAllocatedProject(nullptr);
@@ -484,6 +511,7 @@ void AdminUI::resetStudentAllocation() {
 }
 
 void AdminUI::swapAllocationStrategy() {
+	//allow the user to select a new method of allocating students from those provided
 	auto allocation_current = myAdmin->getAlloactionStrategy();
 
 	if (allocation_current == nullptr) {
@@ -517,6 +545,7 @@ void AdminUI::swapAllocationStrategy() {
 }
 
 Project* AdminUI::getValidProject(std::string prompt) {
+	//search for a project by name. Return a pointer to this if found, or null otherwise
 	Project* proj = nullptr;
 	while (proj == nullptr) {
 		std::string title = getValidString(prompt);
@@ -529,6 +558,7 @@ Project* AdminUI::getValidProject(std::string prompt) {
 }
 
 void AdminUI::editStudentMetadata(Student* student_to_edit) {
+	//allow an editable student to be edited using the setters of the student
 	clearScreen();
 	std::vector<std::string> options = { "Name", "Password", "ID", "Allocated Project" };
 
@@ -586,6 +616,7 @@ void AdminUI::editStudentMetadata(Student* student_to_edit) {
 }
 
 void AdminUI::editStudent() {
+	//locate a student to edit and pass this to the attributes editor function above
 	clearScreen();
 	std::cout << "\nWhich student would you like to edit? The students currently in the database are: " << std::endl;
 	printLineSep();
@@ -621,6 +652,7 @@ void AdminUI::editStudent() {
 }
 
 void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
+	//edit the fields of the supervisor class using the setters 
 	clearScreen();
 	std::vector<std::string> options = { "Name", "Password", "ID", "Swap projects overseen" };
 
@@ -699,10 +731,12 @@ void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
 				}
 				to_swap = all_projs[to - int(1)];
 
+				//correct the supervisor pointers and correct the supervisors pointed at by the projects
 				Supervisor* old_supervisor_to_project = to_swap->getSupervisor();
 				to_swap->setSupervisor(supervisor_to_edit);
 				from_swap->setSupervisor(old_supervisor_to_project);
 
+				//correct the projects pointed at by the supervisors
 				old_supervisor_to_project->removeProject(to_swap);
 				old_supervisor_to_project->addProjectWorkload(from_swap);
 				supervisor_to_edit->removeProject(from_swap);
@@ -720,6 +754,7 @@ void AdminUI::editSupervisorMetadata(Supervisor* supervisor_to_edit) {
 }
 
 void AdminUI::showStudentsAndAllocations() {
+	//display all students with allocated project (or none if allocation not taken place)
 	clearScreen();
 	std::cout << "Current Allocations" << std::endl;
 	printLineSep();
@@ -737,6 +772,7 @@ void AdminUI::showStudentsAndAllocations() {
 }
 
 void AdminUI::editSupervisor() {
+	//find the supervisor to edit then pass this to the edit metadata function
 	clearScreen();
 	std::cout << "\nWhich supervisor would you like to edit? The supervisors currently in the database are: " << std::endl;
 	printLineSep();
@@ -772,6 +808,8 @@ void AdminUI::editSupervisor() {
 
 
 void AdminUI::editProjectMetadata(Project* to_edit) {
+	//edit a projects' metadata using the setters
+
 	std::unordered_map<int, std::string> attributes{ { 1, "Title" }, {2, "Max Capacity"}, {3, "Module code"}, {4,"Description"} };
 	std::cout << "\n";
 	for (auto& attribute : attributes) {
@@ -813,6 +851,7 @@ void AdminUI::editProjectMetadata(Project* to_edit) {
 
 }
 void AdminUI::editProject() {
+	//find a project to edit then pass this to the attribute/ metadata editing method
 	clearScreen();
 	auto& projects = db->getProjects();
 	for (int i = 0; i < projects.size(); i++) {
@@ -838,6 +877,8 @@ void AdminUI::editProject() {
 
 
 void AdminUI::automaticAllocate() {
+	//perform automatic allocation
+
 	std::cout << "Allocating students automatically...\n" << std::endl;
 	//call the allocation strategy class, passing it the database
 	myAdmin->getAlloactionStrategy()->allocate(db);
@@ -848,6 +889,7 @@ void AdminUI::automaticAllocate() {
 }
 
  Student *AdminUI::createStudent() {
+	 //create a new student and add them to the database
 
 	 std::string name = getValidString("Enter Name: ");
 	 std::string password = getValidString("Enter Password: ");
@@ -884,6 +926,8 @@ void AdminUI::automaticAllocate() {
 }
 
  Supervisor *AdminUI::createSupervisor() {
+	 //create a new supervisor then add them to the database
+
 	 std::string name = getValidString("Enter Name: ");
 	 std::string password = getValidString("Enter Password: ");
 	 int id = getValidInteger("Enter Supervisor ID: ");
@@ -907,33 +951,31 @@ void AdminUI::automaticAllocate() {
  }
 
  void AdminUI::resetAllocated() {
+	 //reset the allocated fields using threading
 
 	 std::thread eraseFromStudent([&] {
 		 for (auto& student : this->db->getStudents()) {
-
 			 student->setAllocatedProject(nullptr);
-
 		 }
-		 }
+	 }
 	 );
 
 	 std::thread eraseFromProjects([&] {
 		 for (auto& project : this->db->getProjects()) {
-
 			 for (auto& student : project->getStudents()) {
-
 				 project->removeStudent(student);
 			 }
-
 		 }
-		 }
-		 );
+	 }
+	 );
  
 	 eraseFromStudent.join();
 	 eraseFromProjects.join();
  }
 
  void AdminUI::createNew() {
+	 //provides a portal for creating new new users (calls the correct creation class function)
+	 
 	 clearScreen();
 	 std::vector<std::string> options = { "Student", "Supervisor","Project" };
 
@@ -981,6 +1023,7 @@ void AdminUI::automaticAllocate() {
  }
 
  Project* AdminUI::createProject() {
+	 //provides an interface for creating new projects
 
 	 std::string title = getValidString("Enter Title: ");
 	 int code = getValidInteger("Enter Module Code: ");

@@ -15,9 +15,10 @@ Last Updated: 18/03/2023
 #include "Utils.h"
 
 int getValidInteger(const std::string message) {
-    //ensures the user has correctly entered an integer, and returns this
+    //returns a valid integer and handles exceptions when creating this
     int input;
     bool valid_input = false;
+    //loop until valid input
     while (!valid_input) {
         std::cout << message;
         std::string strinput;
@@ -34,9 +35,10 @@ int getValidInteger(const std::string message) {
 }
 
 std::string getValidString(const std::string message) {
-    //gets valid string data
+    //returns a valid string and handles exceptions when creating this 
     std::string input;
     bool valid_input = false;
+    //loop until valid input
     while (!valid_input) {
         std::cout << message;
         std::getline(std::cin, input);
@@ -51,33 +53,38 @@ std::string getValidString(const std::string message) {
 }
 
 void printLineSep() {
+    //prints a pattern to act as a divider in the terminal
     std::cout << "--------------------------------------------------------------------------------------" << std::endl;
 }
 
 void clearScreen() {
+    //text code to clear the console 
    std::cout << "\033[2J\033[1;1H";
 }
 
 void pause() {
+    //stalls the code and waits for "enter" press before continuing code execution
     std::cin.get();
 }
 
 void setConsoleTheme() {
-    // Set console colors
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    //uses the <windows.h> API and classes provided to set console attributes
+    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    //set console colours
     CONSOLE_SCREEN_BUFFER_INFOEX consoleInfo;
     consoleInfo.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
-    GetConsoleScreenBufferInfoEx(hConsole, &consoleInfo);
+    GetConsoleScreenBufferInfoEx(console, &consoleInfo);
     consoleInfo.ColorTable[0] = RGB(20, 15, 75);
-    SetConsoleScreenBufferInfoEx(hConsole, &consoleInfo);
+    SetConsoleScreenBufferInfoEx(console, &consoleInfo);
 
-    // Set console font
+    //set console font
     CONSOLE_FONT_INFOEX fontInfo;
     fontInfo.cbSize = sizeof(CONSOLE_FONT_INFOEX);
-    GetCurrentConsoleFontEx(hConsole, FALSE, &fontInfo);
+    GetCurrentConsoleFontEx(console, FALSE, &fontInfo);
     fontInfo.dwFontSize.X = 14;
     fontInfo.dwFontSize.Y = 18;
     wcscpy_s(fontInfo.FaceName, L"Consolas");
-    SetCurrentConsoleFontEx(hConsole, FALSE, &fontInfo);
+    SetCurrentConsoleFontEx(console, FALSE, &fontInfo);
 }
 
