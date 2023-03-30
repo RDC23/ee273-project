@@ -793,9 +793,17 @@ void AdminUI::editSupervisor() {
 	}
 	bool exit = false;
 	while (!exit) {
-		int reg = getValidInteger("\nEnter the ID of the supervisor you want to edit: ");
+		int reg = getValidInteger("\nEnter the ID of the supervisor you want to edit (or 0 to exit): ");
 		Supervisor* sup_to_loc = db->findSupervisorByRegnum(reg);
 
+		if (reg == 0) {
+			std::cout << "Exiting to the main menu." << std::endl;
+			exit = true;
+			pause();
+			return;
+			break;
+
+		}
 		if (sup_to_loc) {
 			editSupervisorMetadata(sup_to_loc); //delegate the editing
 			break;
