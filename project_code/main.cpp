@@ -56,7 +56,7 @@ int main() {
 		
 	}
 	
-	
 	clearScreen();
+ delete ui;
 
 }
