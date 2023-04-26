@@ -5,6 +5,7 @@ This project saw the creation of a software application in C++ which employs an 
 Admin user login details are:
 
 Username: totalpower
+
 Password: 999
 
 Other user sample credentials can be found in the respective csv files in the project code to allow you to log in as a different user base.
