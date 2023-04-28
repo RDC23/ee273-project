@@ -363,6 +363,15 @@ void SupervisorUI::editProjectMetadata(Project* to_edit) {
 			std::cout << "That's not a valid number, please try again." << std::endl;
 		}
 		switch (edit_num) {
+
+		case(0):
+			std::cout << "Exiting the project editor and returning to the main menu." << std::endl;
+			exit = true;
+			pause();
+			return;
+
+			return;
+
 			case(1):
 				to_edit->setTitle(getValidString("\nEnter the new title for this project: "));
 				std::cout << "\nChange to module title successful." << std::endl;
